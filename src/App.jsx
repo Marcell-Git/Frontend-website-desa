@@ -26,6 +26,11 @@ import PengaduanList from './pages/Pengaduan/PengaduanList.jsx'
 import PengaduanDetail from './pages/Pengaduan/PengaduanDetail.jsx'
 import AnakKosList from './pages/AnakKos/AnakKosList.jsx'
 import AnakKosForm from './pages/AnakKos/AnakKosForm.jsx'
+import AuditLogList from './pages/AuditLog/AuditLogList.jsx'
+import AuditLogDetail from './pages/AuditLog/AuditLogDetail.jsx'
+import LaporanPage from './pages/Laporan/LaporanPage.jsx'
+import UserList from './pages/UserManagement/UserList.jsx'
+import UserForm from './pages/UserManagement/UserForm.jsx'
 
 export default function App() {
   return (
@@ -73,6 +78,12 @@ export default function App() {
         <Route path="/pengumuman/:id/edit" element={<PengumumanForm />} />
         <Route path="/pengaduan" element={<PengaduanList />} />
         <Route path="/pengaduan/:id" element={<PengaduanDetail />} />
+        <Route path="/laporan" element={<LaporanPage />} />
+        <Route path="/audit-log" element={<AuditLogList />} />
+        <Route path="/audit-log/:id" element={<AuditLogDetail />} />
+        <Route path="/user-management" element={<UserList />} />
+        <Route path="/user-management/baru" element={<UserForm />} />
+        <Route path="/user-management/:id/edit" element={<UserForm />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

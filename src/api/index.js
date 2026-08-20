@@ -142,3 +142,71 @@ export const pengaduanApi = {
   downloadBukti: (id) =>
     client.get(`/pengaduan/${id}/bukti`, { responseType: 'blob' }),
 }
+
+export const auditLogApi = {
+  list: (params) =>
+    client.get('/audit-logs', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/audit-logs/${id}`).then((r) => r.data.data),
+}
+
+export const reportApi = {
+  kas: (params) => client.get('/reports/kas', { params }).then((r) => r.data.data),
+  iuran: (params) => client.get('/reports/iuran', { params }).then((r) => r.data.data),
+  pengeluaran: (params) => client.get('/reports/pengeluaran', { params }).then((r) => r.data.data),
+  keuangan: (params) => client.get('/reports/keuangan', { params }).then((r) => r.data.data),
+}
+
+function buildExportUrl(base, params) {
+  const q = new URLSearchParams()
+  if (params.bulan) q.set('bulan', params.bulan)
+  if (params.tahun) q.set('tahun', params.tahun)
+  if (params.tanggal_mulai) q.set('tanggal_mulai', params.tanggal_mulai)
+  if (params.tanggal_akhir) q.set('tanggal_akhir', params.tanggal_akhir)
+  if (params.jenis_iuran_id) q.set('jenis_iuran_id', params.jenis_iuran_id)
+  if (params.kategori_pengeluaran_id) q.set('kategori_pengeluaran_id', params.kategori_pengeluaran_id)
+  const qs = q.toString()
+  return qs ? `${base}?${qs}` : base
+}
+
+function downloadBlob(url, filename) {
+  return client.get(url, { responseType: 'blob' }).then((res) => {
+    const blob = new Blob([res.data])
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = filename
+    link.click()
+    URL.revokeObjectURL(link.href)
+  })
+}
+
+export const rolesApi = {
+  list: () => client.get('/roles').then((r) => r.data.data),
+}
+
+export const userApi = {
+  list: (params) =>
+    client.get('/users', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/users/${id}`).then((r) => r.data.data),
+  create: (body) => client.post('/users', body).then((r) => r.data.data),
+  update: (id, body) =>
+    client.put(`/users/${id}`, body).then((r) => r.data.data),
+  updateStatus: (id, body) =>
+    client.patch(`/users/${id}/status`, body).then((r) => r.data.data),
+  resetPassword: (id, body) =>
+    client.patch(`/users/${id}/password`, body).then((r) => r.data.data),
+}
+
+export const exportApi = {
+  kasPdf: (params) =>
+    downloadBlob(buildExportUrl('/export/kas/pdf', params), `laporan-kas-${Date.now()}.pdf`),
+  kasExcel: (params) =>
+    downloadBlob(buildExportUrl('/export/kas/excel', params), `laporan-kas-${Date.now()}.xlsx`),
+  iuranPdf: (params) =>
+    downloadBlob(buildExportUrl('/export/iuran/pdf', params), `laporan-iuran-${Date.now()}.pdf`),
+  iuranExcel: (params) =>
+    downloadBlob(buildExportUrl('/export/iuran/excel', params), `laporan-iuran-${Date.now()}.xlsx`),
+  pengeluaranPdf: (params) =>
+    downloadBlob(buildExportUrl('/export/pengeluaran/pdf', params), `laporan-pengeluaran-${Date.now()}.pdf`),
+  pengeluaranExcel: (params) =>
+    downloadBlob(buildExportUrl('/export/pengeluaran/excel', params), `laporan-pengeluaran-${Date.now()}.xlsx`),
+}
