@@ -100,6 +100,15 @@ export default function Layout() {
               </div>
             )}
 
+            <PermissionGate permission="pengumuman:view">
+              <div className="pt-3">
+                <div className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-emerald-400">
+                  Informasi
+                </div>
+                <NavItem to="/pengumuman" label="Pengumuman" />
+              </div>
+            </PermissionGate>
+
             <div className="pt-3">
               <div className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-emerald-400">
                 Akun

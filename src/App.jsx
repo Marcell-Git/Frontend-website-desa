@@ -20,6 +20,8 @@ import KategoriPengeluaranList from './pages/Keuangan/KategoriPengeluaranList.js
 import KategoriPengeluaranForm from './pages/Keuangan/KategoriPengeluaranForm.jsx'
 import PengeluaranList from './pages/Keuangan/PengeluaranList.jsx'
 import PengeluaranForm from './pages/Keuangan/PengeluaranForm.jsx'
+import PengumumanList from './pages/Pengumuman/PengumumanList.jsx'
+import PengumumanForm from './pages/Pengumuman/PengumumanForm.jsx'
 
 export default function App() {
   return (
@@ -59,6 +61,9 @@ export default function App() {
         <Route path="/pengeluaran" element={<PengeluaranList />} />
         <Route path="/pengeluaran/baru" element={<PengeluaranForm />} />
         <Route path="/pengeluaran/:id/edit" element={<PengeluaranForm />} />
+        <Route path="/pengumuman" element={<PengumumanList />} />
+        <Route path="/pengumuman/baru" element={<PengumumanForm />} />
+        <Route path="/pengumuman/:id/edit" element={<PengumumanForm />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

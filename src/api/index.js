@@ -102,3 +102,15 @@ export const pengeluaranApi = {
   remove: (id) =>
     client.delete(`/pengeluaran/${id}`).then((r) => r.data.data),
 }
+
+export const pengumumanApi = {
+  list: (params) =>
+    client.get('/pengumuman', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/pengumuman/${id}`).then((r) => r.data.data),
+  create: (body) =>
+    client.post('/pengumuman', body).then((r) => r.data.data),
+  update: (id, body) =>
+    client.put(`/pengumuman/${id}`, body).then((r) => r.data.data),
+  remove: (id) =>
+    client.delete(`/pengumuman/${id}`).then((r) => r.data.data),
+}
