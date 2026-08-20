@@ -10,6 +10,16 @@ import KKDetail from './pages/KK/KKDetail.jsx'
 import AnggotaList from './pages/Anggota/AnggotaList.jsx'
 import AnggotaForm from './pages/Anggota/AnggotaForm.jsx'
 import AnggotaMove from './pages/Anggota/AnggotaMove.jsx'
+import KasList from './pages/Keuangan/KasList.jsx'
+import KasForm from './pages/Keuangan/KasForm.jsx'
+import JenisIuranList from './pages/Keuangan/JenisIuranList.jsx'
+import JenisIuranForm from './pages/Keuangan/JenisIuranForm.jsx'
+import IuranList from './pages/Keuangan/IuranList.jsx'
+import IuranForm from './pages/Keuangan/IuranForm.jsx'
+import KategoriPengeluaranList from './pages/Keuangan/KategoriPengeluaranList.jsx'
+import KategoriPengeluaranForm from './pages/Keuangan/KategoriPengeluaranForm.jsx'
+import PengeluaranList from './pages/Keuangan/PengeluaranList.jsx'
+import PengeluaranForm from './pages/Keuangan/PengeluaranForm.jsx'
 
 export default function App() {
   return (
@@ -34,6 +44,21 @@ export default function App() {
         <Route path="/anggota/baru" element={<AnggotaForm />} />
         <Route path="/anggota/:id/edit" element={<AnggotaForm />} />
         <Route path="/anggota/:id/pindah" element={<AnggotaMove />} />
+        <Route path="/kas" element={<KasList />} />
+        <Route path="/kas/baru" element={<KasForm />} />
+        <Route path="/kas/:id/edit" element={<KasForm />} />
+        <Route path="/jenis-iuran" element={<JenisIuranList />} />
+        <Route path="/jenis-iuran/baru" element={<JenisIuranForm />} />
+        <Route path="/jenis-iuran/:id/edit" element={<JenisIuranForm />} />
+        <Route path="/iuran" element={<IuranList />} />
+        <Route path="/iuran/baru" element={<IuranForm />} />
+        <Route path="/iuran/:id/edit" element={<IuranForm />} />
+        <Route path="/kategori-pengeluaran" element={<KategoriPengeluaranList />} />
+        <Route path="/kategori-pengeluaran/baru" element={<KategoriPengeluaranForm />} />
+        <Route path="/kategori-pengeluaran/:id/edit" element={<KategoriPengeluaranForm />} />
+        <Route path="/pengeluaran" element={<PengeluaranList />} />
+        <Route path="/pengeluaran/baru" element={<PengeluaranForm />} />
+        <Route path="/pengeluaran/:id/edit" element={<PengeluaranForm />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

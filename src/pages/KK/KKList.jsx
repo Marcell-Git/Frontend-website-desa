@@ -20,7 +20,7 @@ export default function KKList() {
   const { can } = useAuth()
   const navigate = useNavigate()
 
-  const [data, setData] = useState({ data: [], pagination: {} })
+  const [data, setData] = useState(() => ({ data: [], pagination: {} }))
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
@@ -33,7 +33,7 @@ export default function KKList() {
     setError('')
     kkApi
       .list({ search: search || undefined, page, limit: 10 })
-      .then((res) => setData(res))
+      .then((res) => setData(res ?? { data: [], pagination: {} }))
       .catch((err) => setError(errorMessage(err)))
       .finally(() => setLoading(false))
   }, [search, page])
@@ -58,7 +58,6 @@ export default function KKList() {
   const submitSearch = (e) => {
     e.preventDefault()
     setPage(1)
-    load()
   }
 
   return (

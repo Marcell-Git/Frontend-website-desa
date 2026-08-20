@@ -77,6 +77,29 @@ export default function Layout() {
               </div>
             )}
 
+            {(can('kas:view') || can('iuran:view') || can('pengeluaran:view') || can('jenis-iuran:view') || can('kategori-pengeluaran:view')) && (
+              <div className="pt-3">
+                <div className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-emerald-400">
+                  Keuangan
+                </div>
+                <PermissionGate permission="kas:view">
+                  <NavItem to="/kas" label="Rekap Kas" />
+                </PermissionGate>
+                <PermissionGate permission="iuran:view">
+                  <NavItem to="/iuran" label="Rekap Iuran" />
+                </PermissionGate>
+                <PermissionGate permission="pengeluaran:view">
+                  <NavItem to="/pengeluaran" label="Rekap Pengeluaran" />
+                </PermissionGate>
+                <PermissionGate permission="jenis-iuran:view">
+                  <NavItem to="/jenis-iuran" label="Jenis Iuran" />
+                </PermissionGate>
+                <PermissionGate permission="kategori-pengeluaran:view">
+                  <NavItem to="/kategori-pengeluaran" label="Kategori Pengeluaran" />
+                </PermissionGate>
+              </div>
+            )}
+
             <div className="pt-3">
               <div className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-emerald-400">
                 Akun

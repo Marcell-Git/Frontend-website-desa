@@ -72,7 +72,6 @@ export default function AnggotaList() {
   const submitSearch = (e) => {
     e.preventDefault()
     setPage(1)
-    load()
   }
 
   const formatTanggal = (t) => {

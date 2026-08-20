@@ -1,5 +1,9 @@
 import client from './client.js'
 
+function normalizePaginated(d) {
+  return { data: d?.data ?? [], pagination: d?.pagination ?? {} }
+}
+
 export const authApi = {
   login: (email, password) =>
     client.post('/auth/login', { email, password }).then((r) => r.data.data),
@@ -19,7 +23,7 @@ export const dashboardApi = {
 
 export const kkApi = {
   list: (params) =>
-    client.get('/kartu-keluarga', { params }).then((r) => r.data.data),
+    client.get('/kartu-keluarga', { params }).then((r) => r.data.data).then(normalizePaginated),
   get: (id) => client.get(`/kartu-keluarga/${id}`).then((r) => r.data.data),
   create: (body) =>
     client.post('/kartu-keluarga', body).then((r) => r.data.data),
@@ -31,7 +35,7 @@ export const kkApi = {
 
 export const anggotaApi = {
   list: (params) =>
-    client.get('/anggota', { params }).then((r) => r.data.data),
+    client.get('/anggota', { params }).then((r) => r.data.data).then(normalizePaginated),
   get: (id) => client.get(`/anggota/${id}`).then((r) => r.data.data),
   create: (body) => client.post('/anggota', body).then((r) => r.data.data),
   update: (id, body) =>
@@ -43,4 +47,58 @@ export const anggotaApi = {
     client
       .patch(`/anggota/${id}/pindah`, { kartu_keluarga_id: kartuKeluargaId })
       .then((r) => r.data.data),
+}
+
+export const kasApi = {
+  list: (params) =>
+    client.get('/kas', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/kas/${id}`).then((r) => r.data.data),
+  create: (body) => client.post('/kas', body).then((r) => r.data.data),
+  update: (id, body) =>
+    client.put(`/kas/${id}`, body).then((r) => r.data.data),
+  remove: (id) => client.delete(`/kas/${id}`).then((r) => r.data.data),
+}
+
+export const jenisIuranApi = {
+  list: (params) =>
+    client.get('/jenis-iuran', { params }).then((r) => r.data.data).then(normalizePaginated),
+  create: (body) =>
+    client.post('/jenis-iuran', body).then((r) => r.data.data),
+  update: (id, body) =>
+    client.put(`/jenis-iuran/${id}`, body).then((r) => r.data.data),
+  remove: (id) =>
+    client.delete(`/jenis-iuran/${id}`).then((r) => r.data.data),
+}
+
+export const iuranApi = {
+  list: (params) =>
+    client.get('/iuran', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/iuran/${id}`).then((r) => r.data.data),
+  create: (body) => client.post('/iuran', body).then((r) => r.data.data),
+  update: (id, body) =>
+    client.put(`/iuran/${id}`, body).then((r) => r.data.data),
+  remove: (id) => client.delete(`/iuran/${id}`).then((r) => r.data.data),
+}
+
+export const kategoriPengeluaranApi = {
+  list: (params) =>
+    client.get('/kategori-pengeluaran', { params }).then((r) => r.data.data).then(normalizePaginated),
+  create: (body) =>
+    client.post('/kategori-pengeluaran', body).then((r) => r.data.data),
+  update: (id, body) =>
+    client.put(`/kategori-pengeluaran/${id}`, body).then((r) => r.data.data),
+  remove: (id) =>
+    client.delete(`/kategori-pengeluaran/${id}`).then((r) => r.data.data),
+}
+
+export const pengeluaranApi = {
+  list: (params) =>
+    client.get('/pengeluaran', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/pengeluaran/${id}`).then((r) => r.data.data),
+  create: (body) =>
+    client.post('/pengeluaran', body).then((r) => r.data.data),
+  update: (id, body) =>
+    client.put(`/pengeluaran/${id}`, body).then((r) => r.data.data),
+  remove: (id) =>
+    client.delete(`/pengeluaran/${id}`).then((r) => r.data.data),
 }
