@@ -31,6 +31,10 @@ import AuditLogDetail from './pages/AuditLog/AuditLogDetail.jsx'
 import LaporanPage from './pages/Laporan/LaporanPage.jsx'
 import UserList from './pages/UserManagement/UserList.jsx'
 import UserForm from './pages/UserManagement/UserForm.jsx'
+import RoleList from './pages/RoleManagement/RoleList.jsx'
+import RoleForm from './pages/RoleManagement/RoleForm.jsx'
+import RoleDetail from './pages/RoleManagement/RoleDetail.jsx'
+import SettingsPage from './pages/Settings/SettingsPage.jsx'
 
 export default function App() {
   return (
@@ -84,6 +88,11 @@ export default function App() {
         <Route path="/user-management" element={<UserList />} />
         <Route path="/user-management/baru" element={<UserForm />} />
         <Route path="/user-management/:id/edit" element={<UserForm />} />
+        <Route path="/role-management" element={<RoleList />} />
+        <Route path="/role-management/baru" element={<RoleForm />} />
+        <Route path="/role-management/:id" element={<RoleDetail />} />
+        <Route path="/role-management/:id/edit" element={<RoleForm />} />
+        <Route path="/pengaturan" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

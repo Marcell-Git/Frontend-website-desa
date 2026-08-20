@@ -127,6 +127,12 @@ export default function Layout() {
                 <PermissionGate permission="user:view">
                   <NavItem to="/user-management" label="Manajemen User" />
                 </PermissionGate>
+                <PermissionGate permission="role:view">
+                  <NavItem to="/role-management" label="Manajemen Role" />
+                </PermissionGate>
+                <PermissionGate permission="website-settings:view">
+                  <NavItem to="/pengaturan" label="Pengaturan" />
+                </PermissionGate>
               </div>
             </PermissionGate>
 

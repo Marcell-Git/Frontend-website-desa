@@ -26,7 +26,7 @@ export default function UserForm() {
   const [errors, setErrors] = useState({})
 
   useEffect(() => {
-    rolesApi.list().then(setRoles).catch(() => {})
+    rolesApi.list({ limit: 100 }).then((res) => setRoles(res.data)).catch(() => {})
   }, [])
 
   useEffect(() => {

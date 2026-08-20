@@ -180,7 +180,33 @@ function downloadBlob(url, filename) {
 }
 
 export const rolesApi = {
-  list: () => client.get('/roles').then((r) => r.data.data),
+  list: (params) =>
+    client.get('/roles', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/roles/${id}`).then((r) => r.data.data),
+  create: (body) => client.post('/roles', body).then((r) => r.data.data),
+  update: (id, body) => client.put(`/roles/${id}`, body).then((r) => r.data.data),
+  remove: (id) => client.delete(`/roles/${id}`).then((r) => r.data.data),
+  getPermissions: (id) => client.get(`/roles/${id}/permissions`).then((r) => r.data.data),
+  updatePermissions: (id, body) => client.put(`/roles/${id}/permissions`, body).then((r) => r.data.data),
+}
+
+export const permissionsApi = {
+  list: () => client.get('/permissions').then((r) => r.data.data),
+}
+
+export const settingsApi = {
+  get: () => client.get('/website-settings').then((r) => r.data.data),
+  update: (body) => client.put('/website-settings', body).then((r) => r.data.data),
+  uploadLogo: (formData) =>
+    client.post('/website-settings/logo', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 30000,
+    }).then((r) => r.data.data),
+  uploadFavicon: (formData) =>
+    client.post('/website-settings/favicon', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 30000,
+    }).then((r) => r.data.data),
 }
 
 export const userApi = {
@@ -194,6 +220,7 @@ export const userApi = {
     client.patch(`/users/${id}/status`, body).then((r) => r.data.data),
   resetPassword: (id, body) =>
     client.patch(`/users/${id}/password`, body).then((r) => r.data.data),
+  remove: (id) => client.delete(`/users/${id}`).then((r) => r.data.data),
 }
 
 export const exportApi = {

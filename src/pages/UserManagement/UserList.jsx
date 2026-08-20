@@ -32,9 +32,11 @@ export default function UserList() {
   const [resetConfirm, setResetConfirm] = useState('')
   const [resetLoading, setResetLoading] = useState(false)
   const [resetError, setResetError] = useState('')
+  const [deleteUser, setDeleteUser] = useState(null)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
-    rolesApi.list().then(setRoles).catch(() => {})
+    rolesApi.list({ limit: 100 }).then((res) => setRoles(res.data)).catch(() => {})
   }, [])
 
   const load = useCallback(() => {
@@ -97,6 +99,20 @@ export default function UserList() {
   const submitSearch = (e) => {
     e.preventDefault()
     setPage(1)
+  }
+
+  const handleDelete = async () => {
+    if (!deleteUser) return
+    setDeleting(true)
+    try {
+      await userApi.remove(deleteUser.id)
+      setDeleteUser(null)
+      load()
+    } catch (err) {
+      alert(errorMessage(err))
+    } finally {
+      setDeleting(false)
+    }
   }
 
   return (
@@ -214,6 +230,14 @@ export default function UserList() {
                               {item.status ? 'Nonaktifkan' : 'Aktifkan'}
                             </button>
                           )}
+                          {can('user:delete') && (
+                            <button
+                              onClick={() => setDeleteUser(item)}
+                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
+                            >
+                              Hapus
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -273,6 +297,15 @@ export default function UserList() {
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={!!deleteUser}
+        title="Hapus Pengguna"
+        message={`Yakin ingin menghapus pengguna "${deleteUser?.nama}"?`}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteUser(null)}
+        loading={deleting}
+      />
     </div>
   )
 }
