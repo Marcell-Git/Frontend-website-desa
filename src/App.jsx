@@ -22,6 +22,10 @@ import PengeluaranList from './pages/Keuangan/PengeluaranList.jsx'
 import PengeluaranForm from './pages/Keuangan/PengeluaranForm.jsx'
 import PengumumanList from './pages/Pengumuman/PengumumanList.jsx'
 import PengumumanForm from './pages/Pengumuman/PengumumanForm.jsx'
+import PengaduanList from './pages/Pengaduan/PengaduanList.jsx'
+import PengaduanDetail from './pages/Pengaduan/PengaduanDetail.jsx'
+import AnakKosList from './pages/AnakKos/AnakKosList.jsx'
+import AnakKosForm from './pages/AnakKos/AnakKosForm.jsx'
 
 export default function App() {
   return (
@@ -46,6 +50,9 @@ export default function App() {
         <Route path="/anggota/baru" element={<AnggotaForm />} />
         <Route path="/anggota/:id/edit" element={<AnggotaForm />} />
         <Route path="/anggota/:id/pindah" element={<AnggotaMove />} />
+        <Route path="/anak-kos" element={<AnakKosList />} />
+        <Route path="/anak-kos/baru" element={<AnakKosForm />} />
+        <Route path="/anak-kos/:id/edit" element={<AnakKosForm />} />
         <Route path="/kas" element={<KasList />} />
         <Route path="/kas/baru" element={<KasForm />} />
         <Route path="/kas/:id/edit" element={<KasForm />} />
@@ -64,6 +71,8 @@ export default function App() {
         <Route path="/pengumuman" element={<PengumumanList />} />
         <Route path="/pengumuman/baru" element={<PengumumanForm />} />
         <Route path="/pengumuman/:id/edit" element={<PengumumanForm />} />
+        <Route path="/pengaduan" element={<PengaduanList />} />
+        <Route path="/pengaduan/:id" element={<PengaduanDetail />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

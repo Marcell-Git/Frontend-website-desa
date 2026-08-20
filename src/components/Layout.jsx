@@ -54,7 +54,7 @@ export default function Layout() {
             </div>
             <div>
               <div className="font-semibold text-white">SIM RT Tegalyoso</div>
-              <div className="text-xs text-emerald-300">RT 26 / RW 07</div>
+              <div className="text-xs text-emerald-300">RT 26</div>
             </div>
           </div>
 
@@ -63,7 +63,7 @@ export default function Layout() {
               <NavItem to="/dashboard" label="Dashboard" end />
             </PermissionGate>
 
-            {(can('kartu-keluarga:view') || can('anggota:view')) && (
+            {(can('kartu-keluarga:view') || can('anggota:view') || can('anak-kos:view')) && (
               <div className="pt-3">
                 <div className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-emerald-400">
                   Master Data
@@ -73,6 +73,9 @@ export default function Layout() {
                 </PermissionGate>
                 <PermissionGate permission="anggota:view">
                   <NavItem to="/anggota" label="Anggota Keluarga" />
+                </PermissionGate>
+                <PermissionGate permission="anak-kos:view">
+                  <NavItem to="/anak-kos" label="Anak Kos" />
                 </PermissionGate>
               </div>
             )}
@@ -106,6 +109,9 @@ export default function Layout() {
                   Informasi
                 </div>
                 <NavItem to="/pengumuman" label="Pengumuman" />
+                <PermissionGate permission="pengaduan:view">
+                  <NavItem to="/pengaduan" label="Pengaduan" />
+                </PermissionGate>
               </div>
             </PermissionGate>
 

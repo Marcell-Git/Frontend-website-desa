@@ -114,3 +114,31 @@ export const pengumumanApi = {
   remove: (id) =>
     client.delete(`/pengumuman/${id}`).then((r) => r.data.data),
 }
+
+export const anakKosApi = {
+  list: (params) =>
+    client.get('/anak-kos', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/anak-kos/${id}`).then((r) => r.data.data),
+  create: (body) => client.post('/anak-kos', body).then((r) => r.data.data),
+  update: (id, body) =>
+    client.put(`/anak-kos/${id}`, body).then((r) => r.data.data),
+  remove: (id) => client.delete(`/anak-kos/${id}`).then((r) => r.data.data),
+}
+
+export const pengaduanApi = {
+  submit: (formData) =>
+    client.post('/public/pengaduan', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 30000,
+    }).then((r) => r.data.data),
+  list: (params) =>
+    client.get('/pengaduan', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/pengaduan/${id}`).then((r) => r.data.data),
+  updateStatus: (id, body) =>
+    client.patch(`/pengaduan/${id}/status`, body).then((r) => r.data.data),
+  addCatatan: (id, body) =>
+    client.post(`/pengaduan/${id}/catatan`, body).then((r) => r.data.data),
+  remove: (id) => client.delete(`/pengaduan/${id}`).then((r) => r.data.data),
+  downloadBukti: (id) =>
+    client.get(`/pengaduan/${id}/bukti`, { responseType: 'blob' }),
+}
