@@ -9,11 +9,11 @@ const emptyForm = {
   nomor_hp: '',
   alamat: '',
   rt: '26',
-  rw: '07',
+  rw: '',
   desa: 'Tegalyoso',
-  kecamatan: '',
-  kabupaten: '',
-  provinsi: 'Jawa Timur',
+  kecamatan: 'Klaten Selatan',
+  kabupaten: 'Klaten',
+  provinsi: 'Jawa Tengah',
 }
 
 const emptyKepala = {
