@@ -111,18 +111,15 @@ export default function KKForm() {
         navigate(`/kartu-keluarga/${res.id}`)
       }
     } catch (err) {
-      setError(errorMessage(err))
-      setErrors(fieldErrors(err))
+      const fe = fieldErrors(err)
+      setErrors(fe)
+      setError(Object.keys(fe).length > 0 ? '' : errorMessage(err))
     } finally {
       setSubmitting(false)
     }
   }
 
   if (loading) return <Spinner />
-
-  const namaError = errors.kepala_keluarga
-    ? Array.isArray(errors.kepala_keluarga) ? errors.kepala_keluarga[0] : null
-    : null
 
   return (
     <div className="max-w-3xl">
@@ -207,11 +204,6 @@ export default function KKForm() {
                 Tambah kepala keluarga
               </label>
             </div>
-            {namaError && (
-              <div className="mb-4">
-                <Alert>{namaError}</Alert>
-              </div>
-            )}
             {withKepala && (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="NIK" required error={errors.nik}>

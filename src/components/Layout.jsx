@@ -118,23 +118,28 @@ export default function Layout() {
               </div>
             </PermissionGate>
 
-            <PermissionGate permission="audit-log:view">
+            {(can('audit-log:view') || can('user:view') || can('role:view') || can('website-settings:view') || can('backup:view')) && (
               <div className="pt-3">
                 <div className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-emerald-400">
                   Sistem
                 </div>
-                <NavItem to="/audit-log" label="Audit Log" />
+                <PermissionGate permission="audit-log:view">
+                  <NavItem to="/audit-log" label="Audit Log" />
+                </PermissionGate>
                 <PermissionGate permission="user:view">
                   <NavItem to="/user-management" label="Manajemen User" />
                 </PermissionGate>
                 <PermissionGate permission="role:view">
                   <NavItem to="/role-management" label="Manajemen Role" />
                 </PermissionGate>
+                <PermissionGate permission="backup:view">
+                  <NavItem to="/backup-database" label="Backup Database" />
+                </PermissionGate>
                 <PermissionGate permission="website-settings:view">
                   <NavItem to="/pengaturan" label="Pengaturan" />
                 </PermissionGate>
               </div>
-            </PermissionGate>
+            )}
 
             <div className="pt-3">
               <div className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-emerald-400">

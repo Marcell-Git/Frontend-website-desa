@@ -102,8 +102,9 @@ export default function AnggotaForm() {
         navigate(`/kartu-keluarga/${form.kartu_keluarga_id}`)
       }
     } catch (err) {
-      setError(errorMessage(err))
-      setErrors(fieldErrors(err))
+      const fe = fieldErrors(err)
+      setErrors(fe)
+      setError(Object.keys(fe).length > 0 ? '' : errorMessage(err))
     } finally {
       setSubmitting(false)
     }

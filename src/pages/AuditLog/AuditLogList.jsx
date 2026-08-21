@@ -14,14 +14,16 @@ import {
 import { errorMessage } from '../../api/client.js'
 
 const modulOptions = [
-  '', 'Authentication', 'Jenis Iuran', 'Kategori Pengeluaran', 'Master Data',
-  'Pengumuman', 'Rekap Iuran', 'Rekap Kas', 'Rekap Pengeluaran',
+  '', 'Authentication', 'Backup Database', 'Jenis Iuran', 'Kategori Pengeluaran', 'Master Data',
+  'Pengumuman', 'Pengaduan', 'Rekap Iuran', 'Rekap Kas', 'Rekap Pengeluaran',
+  'Role Management', 'User Management', 'Website Settings',
 ]
 
 const aktivitasOptions = [
   '', 'Gagal Login', 'Login', 'Logout', 'Tambah Anak Kos', 'Tambah Iuran',
   'Tambah Jenis Iuran', 'Tambah KK', 'Tambah Kas', 'Tambah Kategori',
   'Tambah Pengeluaran', 'Tambah Pengumuman', 'Ubah KK', 'Ubah Pengumuman',
+  'Buat Backup', 'Unduh Backup', 'Restore Database', 'Hapus Backup',
 ]
 
 export default function AuditLogList() {

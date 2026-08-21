@@ -135,7 +135,6 @@ export default function KKDetail() {
                 <thead>
                   <tr className="border-b border-slate-200 text-xs uppercase text-slate-500">
                     <th className="px-3 py-2">Nama</th>
-                    <th className="px-3 py-2">NIK</th>
                     <th className="px-3 py-2">Jenis Kelamin</th>
                     <th className="px-3 py-2">Hubungan</th>
                     <th className="px-3 py-2 text-right">Aksi</th>
@@ -148,7 +147,6 @@ export default function KKDetail() {
                         <div className="font-medium text-slate-900">{a.nama_lengkap}</div>
                         <div className="text-xs text-slate-400">{a.nik}</div>
                       </td>
-                      <td className="px-3 py-2.5 text-slate-600">{a.nik}</td>
                       <td className="px-3 py-2.5 text-slate-600">{a.jenis_kelamin}</td>
                       <td className="px-3 py-2.5">
                         {a.hubungan_keluarga === 'Kepala Keluarga' ? (
@@ -159,22 +157,36 @@ export default function KKDetail() {
                       </td>
                       <td className="px-3 py-2.5">
                         <div className="flex justify-end gap-2">
-                          {a.hubungan_keluarga !== 'Kepala Keluarga' && can('anggota:update') && (
+                          {a.hubungan_keluarga === 'Kepala Keluarga' ? (
+                            <span
+                              className="cursor-not-allowed rounded-lg px-2 py-1 text-xs font-medium text-slate-300"
+                              title="Anggota ini sudah merupakan kepala keluarga"
+                            >
+                              Jadikan Kepala
+                            </span>
+                          ) : can('anggota:update') ? (
                             <button
                               onClick={() => setToSetKepala(a)}
                               className="rounded-lg px-2 py-1 text-xs font-medium text-amber-700 hover:bg-amber-50"
                             >
                               Jadikan Kepala
                             </button>
-                          )}
-                          {a.hubungan_keluarga !== 'Kepala Keluarga' && (
+                          ) : null}
+                          {a.hubungan_keluarga === 'Kepala Keluarga' ? (
+                            <span
+                              className="cursor-not-allowed rounded-lg px-2 py-1 text-xs font-medium text-slate-300"
+                              title="Kepala keluarga tidak dapat dipindahkan. Tentukan pengganti kepala keluarga terlebih dahulu."
+                            >
+                              Pindah
+                            </span>
+                          ) : can('anggota:update') ? (
                             <Link
                               to={`/anggota/${a.id}/pindah`}
                               className="rounded-lg px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
                             >
                               Pindah
                             </Link>
-                          )}
+                          ) : null}
                           {can('anggota:update') && (
                             <Link
                               to={`/anggota/${a.id}/edit`}
@@ -183,14 +195,21 @@ export default function KKDetail() {
                               Ubah
                             </Link>
                           )}
-                          {can('anggota:delete') && a.hubungan_keluarga !== 'Kepala Keluarga' && (
+                          {a.hubungan_keluarga === 'Kepala Keluarga' && anggota.length > 1 ? (
+                            <span
+                              className="cursor-not-allowed rounded-lg px-2 py-1 text-xs font-medium text-slate-300"
+                              title="Kepala keluarga tidak dapat dihapus. Tentukan pengganti kepala keluarga terlebih dahulu."
+                            >
+                              Hapus
+                            </span>
+                          ) : can('anggota:delete') ? (
                             <button
                               onClick={() => setToDelete(a)}
                               className="rounded-lg px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
                             >
                               Hapus
                             </button>
-                          )}
+                          ) : null}
                         </div>
                       </td>
                     </tr>
@@ -205,7 +224,11 @@ export default function KKDetail() {
       <ConfirmModal
         open={!!toDelete}
         title="Hapus Anggota"
-        message={`Yakin ingin menghapus ${toDelete ? toDelete.nama_lengkap : ''}?`}
+        message={
+          toDelete?.hubungan_keluarga === 'Kepala Keluarga'
+            ? `${toDelete?.nama_lengkap} adalah satu-satunya anggota KK ini. Menghapusnya akan mengosongkan KK sehingga KK ini juga dapat dihapus. Lanjutkan?`
+            : `Yakin ingin menghapus ${toDelete ? toDelete.nama_lengkap : ''}?`
+        }
         onConfirm={handleDeleteAnggota}
         onCancel={() => setToDelete(null)}
         loading={deleting}

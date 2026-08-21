@@ -176,22 +176,36 @@ export default function AnggotaList() {
                               Ubah
                             </Link>
                           )}
-                          {a.hubungan_keluarga !== 'Kepala Keluarga' && (
+                          {a.hubungan_keluarga === 'Kepala Keluarga' ? (
+                            <span
+                              className="cursor-not-allowed rounded-lg px-2 py-1 text-xs font-medium text-slate-300"
+                              title="Kepala keluarga tidak dapat dipindahkan. Tentukan pengganti kepala keluarga terlebih dahulu."
+                            >
+                              Pindah
+                            </span>
+                          ) : can('anggota:update') ? (
                             <Link
                               to={`/anggota/${a.id}/pindah`}
                               className="rounded-lg px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
                             >
                               Pindah
                             </Link>
-                          )}
-                          {can('anggota:delete') && a.hubungan_keluarga !== 'Kepala Keluarga' && (
+                          ) : null}
+                          {a.hubungan_keluarga === 'Kepala Keluarga' && (a.jumlah_anggota_kk ?? 1) > 1 ? (
+                            <span
+                              className="cursor-not-allowed rounded-lg px-2 py-1 text-xs font-medium text-slate-300"
+                              title="Kepala keluarga tidak dapat dihapus. Tentukan pengganti kepala keluarga terlebih dahulu."
+                            >
+                              Hapus
+                            </span>
+                          ) : can('anggota:delete') ? (
                             <button
                               onClick={() => setToDelete(a)}
                               className="rounded-lg px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
                             >
                               Hapus
                             </button>
-                          )}
+                          ) : null}
                         </div>
                       </td>
                     </tr>
@@ -211,7 +225,11 @@ export default function AnggotaList() {
       <ConfirmModal
         open={!!toDelete}
         title="Hapus Anggota"
-        message={`Yakin ingin menghapus ${toDelete ? toDelete.nama_lengkap : ''}?`}
+        message={
+          toDelete?.hubungan_keluarga === 'Kepala Keluarga'
+            ? `${toDelete?.nama_lengkap} adalah satu-satunya anggota KK ini. Menghapusnya akan mengosongkan KK sehingga KK ini juga dapat dihapus. Lanjutkan?`
+            : `Yakin ingin menghapus ${toDelete ? toDelete.nama_lengkap : ''}?`
+        }
         onConfirm={handleDelete}
         onCancel={() => setToDelete(null)}
         loading={deleting}

@@ -248,3 +248,14 @@ export const exportApi = {
   pengeluaranExcel: (params) =>
     downloadBlob(buildExportUrl('/export/pengeluaran/excel', params), `laporan-pengeluaran-${Date.now()}.xlsx`),
 }
+
+export const backupApi = {
+  list: (params) =>
+    client.get('/backup', { params }).then((r) => r.data.data).then(normalizePaginated),
+  create: () =>
+    client.post('/backup', {}, { timeout: 600000 }).then((r) => r.data.data),
+  download: (id, filename) => downloadBlob(`/backup/${id}/download`, filename),
+  restore: (id) =>
+    client.post(`/backup/${id}/restore`, {}, { timeout: 600000 }).then((r) => r.data),
+  remove: (id) => client.delete(`/backup/${id}`).then((r) => r.data),
+}

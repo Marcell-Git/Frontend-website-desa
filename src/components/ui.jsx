@@ -104,7 +104,11 @@ export function Field({ label, error, required, children, hint }) {
       </label>
       {children}
       {hint && !error && <p className="mt-1 text-xs text-slate-400">{hint}</p>}
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && (
+        <p className="mt-1 text-xs text-red-600">
+          {Array.isArray(error) ? error.join(', ') : error}
+        </p>
+      )}
     </div>
   )
 }
