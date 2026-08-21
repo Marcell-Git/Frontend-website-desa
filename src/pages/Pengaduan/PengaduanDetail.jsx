@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { pengaduanApi } from '../../api/index.js'
-import { Alert, Badge, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import { Alert, Badge, Button, Card, ConfirmModal, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
 
@@ -38,6 +38,7 @@ export default function PengaduanDetail() {
   const [catatan, setCatatan] = useState('')
   const [addingCatatan, setAddingCatatan] = useState(false)
   const [statusCatatan, setStatusCatatan] = useState('')
+  const [pendingStatus, setPendingStatus] = useState(null)
 
   const load = useCallback(() => {
     setLoading(true)
@@ -53,17 +54,18 @@ export default function PengaduanDetail() {
     load()
   }, [load])
 
-  const handleUpdateStatus = async (newStatus) => {
-    if (!confirm(`Yakin ingin mengubah status ke "${statusLabels[newStatus]}"?`)) return
+  const handleUpdateStatus = async () => {
+    if (!pendingStatus) return
     setUpdating(true)
     setSuccess('')
     setError('')
     try {
       await pengaduanApi.updateStatus(id, {
-        status: newStatus,
-        catatan: statusCatatan || `Status diubah ke ${statusLabels[newStatus]}`,
+        status: pendingStatus,
+        catatan: statusCatatan || `Status diubah ke ${statusLabels[pendingStatus]}`,
       })
       setStatusCatatan('')
+      setPendingStatus(null)
       setSuccess('Status berhasil diperbarui')
       load()
     } catch (err) {
@@ -104,7 +106,7 @@ export default function PengaduanDetail() {
       link.remove()
       window.URL.revokeObjectURL(url)
     } catch (err) {
-      alert('Gagal mengunduh bukti')
+      setError('Gagal mengunduh bukti')
     }
   }
 
@@ -215,21 +217,16 @@ export default function PengaduanDetail() {
             <PermissionGate permission="pengaduan:update">
               <Card className="p-6">
                 <h3 className="mb-4 text-sm font-semibold text-slate-700">Ubah Status</h3>
-                <Field label="Catatan (opsional)">
-                  <textarea
-                    className={inputClass + ' resize-none'}
-                    rows={3}
-                    placeholder="Catatan perubahan status..."
-                    value={statusCatatan}
-                    onChange={(e) => setStatusCatatan(e.target.value)}
-                  />
-                </Field>
+                <p className="text-sm text-slate-500">
+                  Ubah status pengaduan ini menjadi{' '}
+                  <span className="font-medium text-slate-800">{nextStatusLabel[data.status]}</span>.
+                </p>
                 <Button
                   className="mt-3 w-full"
-                  onClick={() => handleUpdateStatus(nextStatus[data.status])}
+                  onClick={() => setPendingStatus(nextStatus[data.status])}
                   disabled={updating}
                 >
-                  {updating ? 'Memproses...' : `Ubah ke ${nextStatusLabel[data.status]}`}
+                  Ubah ke {nextStatusLabel[data.status]}
                 </Button>
               </Card>
             </PermissionGate>
@@ -257,6 +254,34 @@ export default function PengaduanDetail() {
           </PermissionGate>
         </div>
       </div>
+
+      <ConfirmModal
+        open={!!pendingStatus}
+        title="Ubah Status Pengaduan"
+        message={`Status akan diubah dari "${statusLabels[data?.status] || '-'}" menjadi "${
+          nextStatusLabel[pendingStatus] || '-'
+        }". Lanjutkan?`}
+        confirmText="Ubah Status"
+        cancelText="Batal"
+        danger={false}
+        loading={updating}
+        onConfirm={handleUpdateStatus}
+        onCancel={() => {
+          if (!updating) setPendingStatus(null)
+        }}
+      >
+        <div className="mt-4">
+          <Field label="Catatan (opsional)">
+            <textarea
+              className={inputClass + ' resize-none'}
+              rows={3}
+              placeholder="Catatan perubahan status..."
+              value={statusCatatan}
+              onChange={(e) => setStatusCatatan(e.target.value)}
+            />
+          </Field>
+        </div>
+      </ConfirmModal>
     </div>
   )
 }

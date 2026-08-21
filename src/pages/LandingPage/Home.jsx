@@ -59,9 +59,6 @@ export default function Home() {
     <div>
       <section className="bg-gradient-to-br from-emerald-900 via-emerald-800 to-emerald-600 py-16 text-center text-white sm:py-24">
         <div className="mx-auto max-w-3xl px-4">
-          <span className="inline-block rounded-full bg-white/15 px-4 py-1 text-xs font-medium tracking-wide text-emerald-100 ring-1 ring-white/25">
-            {settings?.nama_rt || 'RT 26'} • RW 07 • Kelurahan Tegalyoso
-          </span>
           <h1 className="mt-5 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
             {settings?.nama_website || 'Sistem Informasi RT'}
           </h1>
