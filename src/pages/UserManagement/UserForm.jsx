@@ -3,11 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { userApi, rolesApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
+import { useAuth } from '../../auth/AuthContext.jsx'
 
 export default function UserForm() {
   const { id } = useParams()
   const isEdit = !!id
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const isSuperAdmin = user?.role === 'Super Admin'
 
   const [form, setForm] = useState({
     nama: '',
@@ -26,8 +29,16 @@ export default function UserForm() {
   const [errors, setErrors] = useState({})
 
   useEffect(() => {
-    rolesApi.list({ limit: 100 }).then((res) => setRoles(res.data)).catch(() => {})
+    rolesApi.list({ limit: 100 }).then((res) => {
+      setRoles(res.data)
+    }).catch(() => {})
   }, [])
+
+  const visibleRoles = isSuperAdmin
+    ? roles
+    : roles.filter((r) => r.nama !== 'Super Admin')
+
+  const editingSuperAdmin = isEdit && roles.some((r) => r.id === form.role_id && r.nama === 'Super Admin')
 
   useEffect(() => {
     if (!isEdit) return
@@ -145,12 +156,19 @@ export default function UserForm() {
                 className={inputClass}
                 value={form.role_id}
                 onChange={set('role_id')}
+                disabled={editingSuperAdmin && !isSuperAdmin}
               >
                 <option value="">Pilih Role</option>
-                {roles.map((r) => (
+                {visibleRoles.map((r) => (
                   <option key={r.id} value={r.id}>{r.nama}</option>
                 ))}
+                {editingSuperAdmin && !isSuperAdmin && (
+                  <option value={form.role_id}>Super Admin</option>
+                )}
               </select>
+              {editingSuperAdmin && !isSuperAdmin && (
+                <p className="mt-1 text-xs text-slate-500">Role Super Admin tidak dapat diubah</p>
+              )}
             </Field>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field

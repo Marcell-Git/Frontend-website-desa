@@ -45,7 +45,7 @@ export default function Login() {
           </div>
           <h1 className="text-2xl font-semibold text-white">SIM RT Tegalyoso 26</h1>
           <p className="mt-1 text-sm text-emerald-300">
-            Sistem Informasi Manajemen RT 26 / RW 07 Desa Tegalyoso
+            Sistem Informasi Manajemen RT 26 Desa Tegalyoso
           </p>
         </div>
 
