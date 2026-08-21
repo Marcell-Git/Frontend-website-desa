@@ -78,18 +78,18 @@ export default function AuditLogList() {
 
       <Card>
         <div className="border-b border-slate-200 p-4">
-          <div className="flex flex-wrap gap-2">
-            <form onSubmit={submitSearch} className="flex max-w-sm gap-2">
-              <input
-                className={inputClass}
-                placeholder="Cari user, modul, aktivitas..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <Button variant="secondary" type="submit">Cari</Button>
-            </form>
+          <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
+            <input
+              className={`${inputClass} max-w-xs`}
+              placeholder="Cari user, modul, aktivitas..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Button variant="secondary" type="submit">Cari</Button>
+          </form>
+          <div className="mt-2 flex flex-wrap gap-2">
             <select
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterModul}
               onChange={(e) => { setFilterModul(e.target.value); setPage(1) }}
             >
@@ -99,7 +99,7 @@ export default function AuditLogList() {
               ))}
             </select>
             <select
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterAktivitas}
               onChange={(e) => { setFilterAktivitas(e.target.value); setPage(1) }}
             >
@@ -110,14 +110,14 @@ export default function AuditLogList() {
             </select>
             <input
               type="date"
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterTanggalMulai}
               onChange={(e) => { setFilterTanggalMulai(e.target.value); setPage(1) }}
               placeholder="Dari tanggal"
             />
             <input
               type="date"
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterTanggalAkhir}
               onChange={(e) => { setFilterTanggalAkhir(e.target.value); setPage(1) }}
               placeholder="Sampai tanggal"

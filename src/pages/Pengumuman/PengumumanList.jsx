@@ -83,20 +83,18 @@ export default function PengumumanList() {
 
       <Card>
         <div className="border-b border-slate-200 p-4">
-          <div className="flex flex-wrap gap-2">
-            <form onSubmit={submitSearch} className="flex max-w-sm gap-2">
-              <input
-                className={inputClass}
-                placeholder="Cari judul, isi..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <Button variant="secondary" type="submit">
-                Cari
-              </Button>
-            </form>
+          <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
+            <input
+              className={`${inputClass} max-w-xs`}
+              placeholder="Cari judul, isi..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Button variant="secondary" type="submit">
+              Cari
+            </Button>
             <select
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterStatus}
               onChange={(e) => { setFilterStatus(e.target.value); setPage(1) }}
             >
@@ -105,7 +103,7 @@ export default function PengumumanList() {
               <option value="published">Published</option>
             </select>
             <select
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterBulan}
               onChange={(e) => { setFilterBulan(e.target.value); setPage(1) }}
             >
@@ -115,7 +113,7 @@ export default function PengumumanList() {
               ))}
             </select>
             <select
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterTahun}
               onChange={(e) => { setFilterTahun(e.target.value); setPage(1) }}
             >
@@ -124,7 +122,7 @@ export default function PengumumanList() {
                 <option key={y} value={y}>{y}</option>
               ))}
             </select>
-          </div>
+          </form>
         </div>
 
         {error && <div className="p-4 text-sm text-red-600">{error}</div>}

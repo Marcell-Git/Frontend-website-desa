@@ -57,13 +57,14 @@ export default function Home() {
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-emerald-900 via-emerald-800 to-emerald-600 py-16 text-center text-white sm:py-24">
-        <div className="mx-auto max-w-3xl px-4">
+      <section className="relative bg-[url('/gambar-desa.jpg')] bg-cover bg-bottom py-16 text-center text-white sm:py-24">
+        <div className="absolute inset-0 bg-black/55" aria-hidden="true" />
+        <div className="relative mx-auto max-w-3xl px-4">
           <h1 className="mt-5 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
             {settings?.nama_website || 'Sistem Informasi RT'}
           </h1>
-          {lokasi && <p className="mt-3 text-sm text-emerald-100 sm:text-base">{lokasi}</p>}
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-emerald-50/90 sm:text-base">
+          {lokasi && <p className="mt-3 text-sm text-white/80 sm:text-base">{lokasi}</p>}
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/85 sm:text-base">
             Media informasi resmi warga: pengumuman, transparansi laporan keuangan, dan sarana
             penyampaian pengaduan masyarakat.
           </p>
@@ -113,7 +114,7 @@ export default function Home() {
       )}
 
       {showPengumuman && (
-        <section className={`mx-auto max-w-6xl px-4 py-12 ${!showLaporan ? 'pt-12' : ''}`}>
+        <section className={`mx-auto max-w-6xl px-4 py-5 ${!showLaporan ? 'pt-12' : ''}`}>
           <div className="flex flex-wrap items-end justify-between gap-2">
             <h2 className="text-xl font-bold text-slate-900">Pengumuman Terbaru</h2>
             <Link to="/pengumuman" className="text-sm font-medium text-emerald-700 hover:underline">
@@ -151,7 +152,7 @@ export default function Home() {
       )}
 
       {showPengaduan && (
-        <section className="mx-auto max-w-6xl px-4 pb-16">
+        <section className="mx-auto max-w-6xl px-4 pb-10">
           <div className="flex flex-col items-start justify-between gap-4 rounded-xl border border-emerald-200 bg-emerald-50 p-6 sm:flex-row sm:items-center sm:p-8">
             <div>
               <h2 className="text-lg font-bold text-emerald-900">Ada keluhan atau laporan?</h2>

@@ -94,20 +94,18 @@ export default function PengeluaranList() {
 
       <Card>
         <div className="border-b border-slate-200 p-4">
-          <div className="flex flex-wrap gap-2">
-            <form onSubmit={submitSearch} className="flex max-w-sm gap-2">
-              <input
-                className={inputClass}
-                placeholder="Cari kategori, keterangan..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <Button variant="secondary" type="submit">
-                Cari
-              </Button>
-            </form>
+          <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
+            <input
+              className={`${inputClass} max-w-xs`}
+              placeholder="Cari kategori, keterangan..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Button variant="secondary" type="submit">
+              Cari
+            </Button>
             <select
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterKategori}
               onChange={(e) => { setFilterKategori(e.target.value); setPage(1) }}
             >
@@ -117,7 +115,7 @@ export default function PengeluaranList() {
               ))}
             </select>
             <select
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterBulan}
               onChange={(e) => { setFilterBulan(e.target.value); setPage(1) }}
             >
@@ -127,7 +125,7 @@ export default function PengeluaranList() {
               ))}
             </select>
             <select
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterTahun}
               onChange={(e) => { setFilterTahun(e.target.value); setPage(1) }}
             >
@@ -136,7 +134,7 @@ export default function PengeluaranList() {
                 <option key={y} value={y}>{y}</option>
               ))}
             </select>
-          </div>
+          </form>
         </div>
 
         {error && <div className="p-4 text-sm text-red-600">{error}</div>}

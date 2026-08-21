@@ -92,6 +92,9 @@ export default function AnakKosList() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            <Button variant="secondary" type="submit">
+              Cari
+            </Button>
             <select
               className={`${inputClass} max-w-xs`}
               value={jkFilter}
@@ -116,9 +119,6 @@ export default function AnakKosList() {
               <option value="true">Aktif</option>
               <option value="false">Nonaktif</option>
             </select>
-            <Button variant="secondary" type="submit">
-              Cari
-            </Button>
           </form>
         </div>
 

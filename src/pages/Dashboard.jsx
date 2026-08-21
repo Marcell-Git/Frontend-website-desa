@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { FaIdCard, FaBed, FaWallet, FaCoins, FaReceipt } from 'react-icons/fa6'
 import { dashboardApi } from '../api/index.js'
 import { Card, Spinner, PageHeader } from '../components/ui.jsx'
 import { errorMessage } from '../api/client.js'
@@ -12,6 +14,63 @@ function StatCard({ label, value, accent }) {
       </div>
       <div className="mt-1 text-sm text-slate-500">{label}</div>
     </Card>
+  )
+}
+
+const quickNavItems = [
+  {
+    to: '/kartu-keluarga',
+    title: 'Pendataan Kartu Keluarga',
+    description: 'Kelola data KK dan anggota keluarga',
+    accent: 'bg-emerald-500',
+    icon: <FaIdCard className="h-5 w-5" />,
+  },
+  {
+    to: '/anak-kos',
+    title: 'Anak Kos',
+    description: 'Data anak kos di lingkungan RT',
+    accent: 'bg-blue-500',
+    icon: <FaBed className="h-5 w-5" />,
+  },
+  {
+    to: '/kas',
+    title: 'Rekap Kas',
+    description: 'Mutasi kas masuk dan keluar',
+    accent: 'bg-amber-500',
+    icon: <FaWallet className="h-5 w-5" />,
+  },
+  {
+    to: '/iuran',
+    title: 'Rekap Iuran',
+    description: 'Catatan pembayaran iuran warga',
+    accent: 'bg-teal-500',
+    icon: <FaCoins className="h-5 w-5" />,
+  },
+  {
+    to: '/pengeluaran',
+    title: 'Rekap Pengeluaran',
+    description: 'Catatan pengeluaran kas RT',
+    accent: 'bg-rose-500',
+    icon: <FaReceipt className="h-5 w-5" />,
+  },
+]
+
+function QuickNavItem({ to, title, description, accent, icon }) {
+  return (
+    <Link
+      to={to}
+      className="group flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md"
+    >
+      <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${accent} text-white`}>
+        {icon}
+      </span>
+      <span className="min-w-0">
+        <span className="block truncate text-sm font-semibold text-slate-800 group-hover:text-emerald-700">
+          {title}
+        </span>
+        <span className="mt-0.5 block text-xs text-slate-500">{description}</span>
+      </span>
+    </Link>
   )
 }
 
@@ -49,6 +108,15 @@ export default function Dashboard() {
           value={`Rp ${Number(data.pengeluaran_bulan_ini || 0).toLocaleString('id-ID')}`}
           accent="bg-rose-500"
         />
+      </div>
+
+      <div className="mt-6">
+        <h3 className="text-sm font-semibold text-slate-700">Navigasi Cepat</h3>
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
+          {quickNavItems.map((item) => (
+            <QuickNavItem key={item.to} {...item} />
+          ))}
+        </div>
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">

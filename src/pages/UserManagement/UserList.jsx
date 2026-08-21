@@ -127,20 +127,18 @@ export default function UserList() {
 
       <Card>
         <div className="border-b border-slate-200 p-4">
-          <div className="flex flex-wrap gap-2">
-            <form onSubmit={submitSearch} className="flex max-w-sm gap-2">
-              <input
-                className={inputClass}
-                placeholder="Cari nama, email, jabatan..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <Button variant="secondary" type="submit">
-                Cari
-              </Button>
-            </form>
+          <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
+            <input
+              className={`${inputClass} max-w-xs`}
+              placeholder="Cari nama, email, jabatan..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Button variant="secondary" type="submit">
+              Cari
+            </Button>
             <select
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterRole}
               onChange={(e) => { setFilterRole(e.target.value); setPage(1) }}
             >
@@ -150,7 +148,7 @@ export default function UserList() {
               ))}
             </select>
             <select
-              className={inputClass}
+              className={`${inputClass} max-w-xs`}
               value={filterStatus}
               onChange={(e) => { setFilterStatus(e.target.value); setPage(1) }}
             >
@@ -158,7 +156,7 @@ export default function UserList() {
               <option value="true">Aktif</option>
               <option value="false">Nonaktif</option>
             </select>
-          </div>
+          </form>
         </div>
 
         {error && <div className="p-4 text-sm text-red-600">{error}</div>}
