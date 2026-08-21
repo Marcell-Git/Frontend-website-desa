@@ -1,7 +1,14 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import Layout from './components/Layout.jsx'
+import PublicLayout from './components/PublicLayout.jsx'
 import Login from './pages/Login.jsx'
+import Home from './pages/LandingPage/Home.jsx'
+import PengumumanPublik from './pages/LandingPage/PengumumanPublik.jsx'
+import DetailPengumumanPublik from './pages/LandingPage/DetailPengumumanPublik.jsx'
+import LaporanPublik from './pages/LandingPage/LaporanPublik.jsx'
+import FormPengaduanPublik from './pages/LandingPage/FormPengaduanPublik.jsx'
+import Kontak from './pages/LandingPage/Kontak.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Profile from './pages/Profile.jsx'
 import KKList from './pages/KK/KKList.jsx'
@@ -39,7 +46,17 @@ import SettingsPage from './pages/Settings/SettingsPage.jsx'
 export default function App() {
   return (
     <Routes>
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/pengumuman" element={<PengumumanPublik />} />
+        <Route path="/pengumuman/:id" element={<DetailPengumumanPublik />} />
+        <Route path="/laporan" element={<LaporanPublik />} />
+        <Route path="/pengaduan" element={<FormPengaduanPublik />} />
+        <Route path="/kontak" element={<Kontak />} />
+      </Route>
+
       <Route path="/login" element={<Login />} />
+
       <Route
         path="/"
         element={
@@ -48,7 +65,6 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profil" element={<Profile />} />
         <Route path="/kartu-keluarga" element={<KKList />} />
@@ -77,12 +93,12 @@ export default function App() {
         <Route path="/pengeluaran" element={<PengeluaranList />} />
         <Route path="/pengeluaran/baru" element={<PengeluaranForm />} />
         <Route path="/pengeluaran/:id/edit" element={<PengeluaranForm />} />
-        <Route path="/pengumuman" element={<PengumumanList />} />
-        <Route path="/pengumuman/baru" element={<PengumumanForm />} />
-        <Route path="/pengumuman/:id/edit" element={<PengumumanForm />} />
-        <Route path="/pengaduan" element={<PengaduanList />} />
-        <Route path="/pengaduan/:id" element={<PengaduanDetail />} />
-        <Route path="/laporan" element={<LaporanPage />} />
+        <Route path="/kelola-pengumuman" element={<PengumumanList />} />
+        <Route path="/kelola-pengumuman/baru" element={<PengumumanForm />} />
+        <Route path="/kelola-pengumuman/:id/edit" element={<PengumumanForm />} />
+        <Route path="/kelola-pengaduan" element={<PengaduanList />} />
+        <Route path="/kelola-pengaduan/:id" element={<PengaduanDetail />} />
+        <Route path="/kelola-laporan" element={<LaporanPage />} />
         <Route path="/audit-log" element={<AuditLogList />} />
         <Route path="/audit-log/:id" element={<AuditLogDetail />} />
         <Route path="/user-management" element={<UserList />} />

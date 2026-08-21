@@ -166,7 +166,7 @@ export default function PengaduanList() {
                       <td className="px-4 py-3">
                         <div className="flex justify-end gap-2">
                           <Link
-                            to={`/pengaduan/${item.id}`}
+                            to={`/kelola-pengaduan/${item.id}`}
                             className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
                           >
                             Detail

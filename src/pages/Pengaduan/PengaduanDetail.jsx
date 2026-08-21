@@ -115,7 +115,7 @@ export default function PengaduanDetail() {
         <PageHeader title="Detail Pengaduan" />
         <Alert type="error">{error}</Alert>
         <div className="mt-4">
-          <Link to="/pengaduan" className="text-sm text-emerald-600 hover:underline">
+          <Link to="/kelola-pengaduan" className="text-sm text-emerald-600 hover:underline">
             Kembali ke daftar pengaduan
           </Link>
         </div>
@@ -128,7 +128,7 @@ export default function PengaduanDetail() {
   return (
     <div>
       <PageHeader title="Detail Pengaduan" description={`Pengaduan dari ${data?.nama_pelapor || ''}`}>
-        <Link to="/pengaduan">
+        <Link to="/kelola-pengaduan">
           <Button variant="secondary">Kembali</Button>
         </Link>
       </PageHeader>

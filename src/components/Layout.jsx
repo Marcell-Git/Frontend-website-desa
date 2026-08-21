@@ -101,7 +101,7 @@ export default function Layout() {
                   <NavItem to="/kategori-pengeluaran" label="Kategori Pengeluaran" />
                 </PermissionGate>
                 <PermissionGate permission="laporan:view">
-                  <NavItem to="/laporan" label="Laporan" />
+                  <NavItem to="/kelola-laporan" label="Laporan" />
                 </PermissionGate>
               </div>
             )}
@@ -111,9 +111,9 @@ export default function Layout() {
                 <div className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-emerald-400">
                   Informasi
                 </div>
-                <NavItem to="/pengumuman" label="Pengumuman" />
+                <NavItem to="/kelola-pengumuman" label="Pengumuman" />
                 <PermissionGate permission="pengaduan:view">
-                  <NavItem to="/pengaduan" label="Pengaduan" />
+                  <NavItem to="/kelola-pengaduan" label="Pengaduan" />
                 </PermissionGate>
               </div>
             </PermissionGate>

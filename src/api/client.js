@@ -13,13 +13,21 @@ client.interceptors.request.use((config) => {
   return config
 })
 
+const PUBLIC_PATHS = ['/', '/pengumuman', '/laporan', '/pengaduan', '/kontak']
+
+function isPublicPath(pathname) {
+  return PUBLIC_PATHS.some((p) =>
+    p === '/' ? pathname === '/' : pathname.startsWith(p),
+  )
+}
+
 client.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
       localStorage.removeItem('token')
       localStorage.removeItem('refresh_token')
-      if (!window.location.pathname.startsWith('/login')) {
+      if (!isPublicPath(window.location.pathname)) {
         window.location.href = '/login'
       }
     }

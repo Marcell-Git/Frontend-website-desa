@@ -75,7 +75,7 @@ export default function PengumumanList() {
     <div>
       <PageHeader title="Pengumuman" description="Kelola pengumuman untuk warga">
         <PermissionGate permission="pengumuman:create">
-          <Link to="/pengumuman/baru">
+          <Link to="/kelola-pengumuman/baru">
             <Button>Tambah Pengumuman</Button>
           </Link>
         </PermissionGate>
@@ -162,7 +162,7 @@ export default function PengumumanList() {
                         <div className="flex justify-end gap-2">
                           {can('pengumuman:update') && (
                             <Link
-                              to={`/pengumuman/${item.id}/edit`}
+                              to={`/kelola-pengumuman/${item.id}/edit`}
                               className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
                             >
                               Ubah

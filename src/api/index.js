@@ -21,6 +21,17 @@ export const dashboardApi = {
   summary: () => client.get('/dashboard').then((r) => r.data.data),
 }
 
+export const publicApi = {
+  pengumuman: () =>
+    client.get('/public/pengumuman').then((r) => r.data.data ?? []),
+  pengumumanDetail: (id) =>
+    client.get(`/public/pengumuman/${id}`).then((r) => r.data.data),
+  laporan: (tahun) =>
+    client
+      .get('/public/laporan', { params: tahun ? { tahun } : {} })
+      .then((r) => r.data.data),
+}
+
 export const kkApi = {
   list: (params) =>
     client.get('/kartu-keluarga', { params }).then((r) => r.data.data).then(normalizePaginated),

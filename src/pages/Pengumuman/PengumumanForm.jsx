@@ -57,7 +57,7 @@ export default function PengumumanForm() {
       } else {
         await pengumumanApi.create(body)
       }
-      navigate('/pengumuman')
+      navigate('/kelola-pengumuman')
     } catch (err) {
       setError(errorMessage(err))
       setErrors(fieldErrors(err))
