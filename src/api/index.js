@@ -36,6 +36,11 @@ export const kkApi = {
   list: (params) =>
     client.get('/kartu-keluarga', { params }).then((r) => r.data.data).then(normalizePaginated),
   get: (id) => client.get(`/kartu-keluarga/${id}`).then((r) => r.data.data),
+  ocr: (formData) =>
+    client.post('/kartu-keluarga/ocr', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 60000,
+    }).then((r) => r.data.data),
   create: (body) =>
     client.post('/kartu-keluarga', body).then((r) => r.data.data),
   update: (id, body) =>
