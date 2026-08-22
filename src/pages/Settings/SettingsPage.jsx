@@ -11,7 +11,6 @@ export default function SettingsPage() {
   const [success, setSuccess] = useState('')
   const [uploading, setUploading] = useState('')
   const logoRef = useRef()
-  const faviconRef = useRef()
 
   useEffect(() => {
     settingsApi
@@ -68,23 +67,6 @@ export default function SettingsPage() {
     } finally {
       setUploading('')
       if (logoRef.current) logoRef.current.value = ''
-    }
-  }
-
-  const handleUploadFavicon = async (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading('favicon')
-    try {
-      const fd = new FormData()
-      fd.append('favicon', file)
-      const result = await settingsApi.uploadFavicon(fd)
-      setForm((f) => ({ ...f, favicon_path: result.path }))
-    } catch (err) {
-      setError(errorMessage(err))
-    } finally {
-      setUploading('')
-      if (faviconRef.current) faviconRef.current.value = ''
     }
   }
 
@@ -172,25 +154,6 @@ export default function SettingsPage() {
               />
               <p className="mt-1 text-xs text-slate-400">PNG, JPG, SVG. Maks 5MB.</p>
               {uploading === 'logo' && <p className="mt-1 text-xs text-blue-600">Mengupload...</p>}
-            </div>
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Favicon</label>
-              {form.favicon_path && (
-                <img
-                  src={`/${form.favicon_path}`}
-                  alt="Favicon"
-                  className="mb-2 h-8 w-8 rounded border border-slate-200 object-contain"
-                />
-              )}
-              <input
-                ref={faviconRef}
-                type="file"
-                accept=".png,.ico"
-                onChange={handleUploadFavicon}
-                className="text-sm text-slate-600"
-              />
-              <p className="mt-1 text-xs text-slate-400">PNG, ICO. Maks 1MB.</p>
-              {uploading === 'favicon' && <p className="mt-1 text-xs text-blue-600">Mengupload...</p>}
             </div>
           </div>
         </Card>

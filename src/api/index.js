@@ -223,11 +223,6 @@ export const settingsApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
       timeout: 30000,
     }).then((r) => r.data.data),
-  uploadFavicon: (formData) =>
-    client.post('/website-settings/favicon', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-      timeout: 30000,
-    }).then((r) => r.data.data),
 }
 
 export const userApi = {
