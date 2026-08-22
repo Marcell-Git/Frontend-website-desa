@@ -8,7 +8,7 @@ import {
   EmptyState,
   PageHeader,
   Pagination,
-  Spinner,
+  TableSkeleton,
   inputClass,
 } from '../../components/ui.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -129,7 +129,7 @@ export default function AuditLogList() {
 
         {error && <div className="p-4 text-sm text-red-600">{error}</div>}
         {loading ? (
-          <Spinner />
+          <TableSkeleton rows={15} cols={7} />
         ) : data.data.length === 0 ? (
           <EmptyState message="Belum ada audit log." />
         ) : (

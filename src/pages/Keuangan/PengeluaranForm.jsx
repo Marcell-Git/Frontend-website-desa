@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { pengeluaranApi, kategoriPengeluaranApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
@@ -60,8 +61,10 @@ export default function PengeluaranForm() {
       }
       if (isEdit) {
         await pengeluaranApi.update(id, body)
+        toast.success('Pengeluaran berhasil diperbarui')
       } else {
         await pengeluaranApi.create(body)
+        toast.success('Pengeluaran berhasil ditambahkan')
       }
       navigate('/pengeluaran')
     } catch (err) {

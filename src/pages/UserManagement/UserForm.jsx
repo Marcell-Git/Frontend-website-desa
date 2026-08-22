@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { userApi, rolesApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
@@ -82,8 +83,10 @@ export default function UserForm() {
       }
       if (isEdit) {
         await userApi.update(id, body)
+        toast.success('Pengguna berhasil diperbarui')
       } else {
         await userApi.create(body)
+        toast.success('Pengguna berhasil ditambahkan')
       }
       navigate('/user-management')
     } catch (err) {

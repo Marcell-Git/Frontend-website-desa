@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { reportApi, exportApi, jenisIuranApi, kategoriPengeluaranApi } from '../../api/index.js'
 import {
   Button,
   Card,
   EmptyState,
   PageHeader,
-  Spinner,
+  TableSkeleton,
   inputClass,
 } from '../../components/ui.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -105,7 +106,7 @@ export default function LaporanPage() {
       }
       await fnMap[type](params)
     } catch (err) {
-      alert(errorMessage(err))
+      toast.error(errorMessage(err))
     } finally {
       setExporting('')
     }
@@ -445,7 +446,11 @@ export default function LaporanPage() {
 
         {error && <div className="p-4 text-sm text-red-600">{error}</div>}
         {loading ? (
-          <Spinner />
+          activeTab === 'keuangan' ? (
+            <TableSkeleton rows={4} cols={3} />
+          ) : (
+            <TableSkeleton cols={5} />
+          )
         ) : activeTab === 'keuangan' ? (
           renderKeuangan()
         ) : data.length === 0 ? (

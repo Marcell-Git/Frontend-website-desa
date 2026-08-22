@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { useAuth } from '../auth/AuthContext.jsx'
 import { authApi } from '../api/index.js'
 import { Alert, Button, Card, Field, inputClass, PageHeader } from '../components/ui.jsx'
@@ -28,6 +29,7 @@ export default function Profile() {
     setLoading(true)
     try {
       await authApi.changePassword(oldPassword, newPassword)
+      toast.success('Password berhasil diperbarui')
       setSuccess('Password berhasil diperbarui')
       setOldPassword('')
       setNewPassword('')

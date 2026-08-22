@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { kkApi } from '../../api/index.js'
 import {
   Badge,
@@ -9,7 +10,7 @@ import {
   EmptyState,
   PageHeader,
   Pagination,
-  Spinner,
+  TableSkeleton,
   inputClass,
 } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
@@ -46,10 +47,11 @@ export default function KKList() {
     setDeleting(true)
     try {
       await kkApi.remove(toDelete.id)
+      toast.success('Kartu keluarga berhasil dihapus')
       setToDelete(null)
       load()
     } catch (err) {
-      alert(errorMessage(err))
+      toast.error(errorMessage(err))
     } finally {
       setDeleting(false)
     }
@@ -87,7 +89,7 @@ export default function KKList() {
 
         {error && <div className="p-4 text-sm text-red-600">{error}</div>}
         {loading ? (
-          <Spinner />
+          <TableSkeleton cols={6} />
         ) : data.data.length === 0 ? (
           <EmptyState message="Belum ada data KK." />
         ) : (

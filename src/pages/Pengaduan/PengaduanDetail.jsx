@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
+import { toast } from 'sonner'
 import { pengaduanApi } from '../../api/index.js'
 import { Alert, Badge, Button, Card, ConfirmModal, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
@@ -64,6 +65,7 @@ export default function PengaduanDetail() {
         status: pendingStatus,
         catatan: statusCatatan || `Status diubah ke ${statusLabels[pendingStatus]}`,
       })
+      toast.success('Status pengaduan diperbarui')
       setStatusCatatan('')
       setPendingStatus(null)
       setSuccess('Status berhasil diperbarui')
@@ -83,6 +85,7 @@ export default function PengaduanDetail() {
     setError('')
     try {
       await pengaduanApi.addCatatan(id, { catatan: catatan.trim() })
+      toast.success('Catatan berhasil ditambahkan')
       setCatatan('')
       setSuccess('Catatan berhasil ditambahkan')
       load()

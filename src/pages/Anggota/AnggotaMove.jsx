@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { anggotaApi, kkApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
@@ -36,6 +37,7 @@ export default function AnggotaMove() {
     setSubmitting(true)
     try {
       await anggotaApi.move(id, target)
+      toast.success('Anggota berhasil dipindah')
       navigate(`/kartu-keluarga/${target}`)
     } catch (err) {
       setError(errorMessage(err))

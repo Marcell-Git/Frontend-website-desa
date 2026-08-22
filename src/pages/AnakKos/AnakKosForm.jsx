@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { anakKosApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import ScanCard from '../../components/ScanCard.jsx'
@@ -95,6 +96,7 @@ export default function AnakKosForm() {
           alamat_asal: form.alamat_asal,
           status: form.status,
         })
+        toast.success('Data anak kos berhasil diperbarui')
         navigate('/anak-kos')
       } else {
         await anakKosApi.create({
@@ -108,6 +110,7 @@ export default function AnakKosForm() {
           alamat_asal: form.alamat_asal,
           status: form.status,
         })
+        toast.success('Data anak kos berhasil ditambahkan')
         navigate('/anak-kos')
       }
     } catch (err) {

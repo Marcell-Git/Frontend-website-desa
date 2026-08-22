@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { kategoriPengeluaranApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
@@ -42,8 +43,10 @@ export default function KategoriPengeluaranForm() {
       }
       if (isEdit) {
         await kategoriPengeluaranApi.update(id, body)
+        toast.success('Kategori pengeluaran berhasil diperbarui')
       } else {
         await kategoriPengeluaranApi.create(body)
+        toast.success('Kategori pengeluaran berhasil ditambahkan')
       }
       navigate('/kategori-pengeluaran')
     } catch (err) {

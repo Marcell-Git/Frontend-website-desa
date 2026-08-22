@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'sonner'
 import { rolesApi } from '../../api/index.js'
-import { Badge, Button, Card, ConfirmModal, EmptyState, PageHeader, Pagination, Spinner, inputClass } from '../../components/ui.jsx'
+import { Badge, Button, Card, ConfirmModal, EmptyState, PageHeader, Pagination, TableSkeleton, inputClass } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
 import { useAuth } from '../../auth/AuthContext.jsx'
@@ -35,6 +36,7 @@ export default function RoleList() {
     setDeleting(true)
     try {
       await rolesApi.remove(deleteTarget.id)
+      toast.success('Role berhasil dihapus')
       setDeleteTarget(null)
       load()
     } catch (err) {
@@ -76,7 +78,7 @@ export default function RoleList() {
 
         {error && <div className="p-4 text-sm text-red-600">{error}</div>}
         {loading ? (
-          <Spinner />
+          <TableSkeleton cols={6} />
         ) : data.data.length === 0 ? (
           <EmptyState message="Belum ada role." />
         ) : (

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { anggotaApi, kkApi } from '../../api/index.js'
 import {
   Badge,
@@ -54,10 +55,11 @@ export default function KKDetail() {
     setDeleting(true)
     try {
       await anggotaApi.remove(toDelete.id)
+      toast.success('Anggota berhasil dihapus dari KK')
       setToDelete(null)
       load()
     } catch (err) {
-      alert(errorMessage(err))
+      toast.error(errorMessage(err))
     } finally {
       setDeleting(false)
     }
@@ -67,10 +69,11 @@ export default function KKDetail() {
     setSettingKepala(true)
     try {
       await anggotaApi.setKepala(toSetKepala.id)
+      toast.success('Kepala keluarga berhasil ditetapkan')
       setToSetKepala(null)
       load()
     } catch (err) {
-      alert(errorMessage(err))
+      toast.error(errorMessage(err))
     } finally {
       setSettingKepala(false)
     }

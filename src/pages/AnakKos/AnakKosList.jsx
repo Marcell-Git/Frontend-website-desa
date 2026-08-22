@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'sonner'
 import { anakKosApi } from '../../api/index.js'
 import {
   Badge,
@@ -9,7 +10,7 @@ import {
   EmptyState,
   PageHeader,
   Pagination,
-  Spinner,
+  TableSkeleton,
   inputClass,
 } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
@@ -53,10 +54,11 @@ export default function AnakKosList() {
     setDeleting(true)
     try {
       await anakKosApi.remove(toDelete.id)
+      toast.success('Data anak kos berhasil dihapus')
       setToDelete(null)
       load()
     } catch (err) {
-      alert(errorMessage(err))
+      toast.error(errorMessage(err))
     } finally {
       setDeleting(false)
     }
@@ -124,7 +126,7 @@ export default function AnakKosList() {
 
         {error && <div className="p-4 text-sm text-red-600">{error}</div>}
         {loading ? (
-          <Spinner />
+          <TableSkeleton cols={9} />
         ) : data.data.length === 0 ? (
           <EmptyState message="Belum ada data anak kos." />
         ) : (

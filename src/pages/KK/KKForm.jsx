@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FaXmark } from 'react-icons/fa6'
+import { toast } from 'sonner'
 import { kkApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import ScanCard from '../../components/ScanCard.jsx'
@@ -180,6 +181,7 @@ export default function KKForm() {
           provinsi: form.provinsi,
         }
         await kkApi.update(id, body)
+        toast.success('Kartu keluarga berhasil diperbarui')
         navigate(`/kartu-keluarga/${id}`)
       } else {
         const body = {
@@ -219,6 +221,7 @@ export default function KKForm() {
           }))
         }
         const res = await kkApi.create(body)
+        toast.success('Kartu keluarga berhasil ditambahkan')
         navigate(`/kartu-keluarga/${res.id}`)
       }
     } catch (err) {

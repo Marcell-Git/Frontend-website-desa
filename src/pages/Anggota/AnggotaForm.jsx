@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { anggotaApi, kkApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
@@ -83,6 +84,7 @@ export default function AnggotaForm() {
           hubungan_keluarga: form.hubungan_keluarga,
           status: form.status,
         })
+        toast.success('Anggota berhasil diperbarui')
         navigate(`/kartu-keluarga/${form.kartu_keluarga_id}`)
       } else {
         const body = {
@@ -99,6 +101,7 @@ export default function AnggotaForm() {
           status: form.status,
         }
         await anggotaApi.create(body)
+        toast.success('Anggota berhasil ditambahkan')
         navigate(`/kartu-keluarga/${form.kartu_keluarga_id}`)
       }
     } catch (err) {

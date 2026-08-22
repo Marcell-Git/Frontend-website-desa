@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { pengumumanApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
@@ -54,8 +55,10 @@ export default function PengumumanForm() {
       }
       if (isEdit) {
         await pengumumanApi.update(id, body)
+        toast.success('Pengumuman berhasil diperbarui')
       } else {
         await pengumumanApi.create(body)
+        toast.success('Pengumuman berhasil ditambahkan')
       }
       navigate('/kelola-pengumuman')
     } catch (err) {

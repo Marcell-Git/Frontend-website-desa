@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { kasApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
@@ -52,8 +53,10 @@ export default function KasForm() {
       }
       if (isEdit) {
         await kasApi.update(id, body)
+        toast.success('Transaksi kas berhasil diperbarui')
       } else {
         await kasApi.create(body)
+        toast.success('Transaksi kas berhasil ditambahkan')
       }
       navigate('/kas')
     } catch (err) {

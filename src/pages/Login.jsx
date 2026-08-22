@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useLocation, useNavigate, Navigate } from 'react-router-dom'
+import { FaEye, FaEyeSlash } from 'react-icons/fa6'
 import { useAuth } from '../auth/AuthContext.jsx'
 import { Alert, Button, Field, inputClass } from '../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../api/client.js'
@@ -11,6 +12,7 @@ export default function Login() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [errors, setErrors] = useState({})
@@ -71,14 +73,26 @@ export default function Login() {
               />
             </Field>
             <Field label="Password" required error={errors.password}>
-              <input
-                type="password"
-                className={inputClass}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                autoComplete="current-password"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  className={inputClass}
+                  style={{ paddingRight: '2.75rem' }}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
+                  aria-pressed={showPassword}
+                  className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-slate-400 transition-colors hover:text-slate-600"
+                >
+                  {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                </button>
+              </div>
             </Field>
             <Button type="submit" className="w-full justify-center" disabled={loading}>
               {loading ? 'Memproses...' : 'Masuk'}

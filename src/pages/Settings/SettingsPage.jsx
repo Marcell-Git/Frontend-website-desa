@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 import { settingsApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -45,6 +46,7 @@ export default function SettingsPage() {
         show_pengaduan: form.show_pengaduan,
       }
       await settingsApi.update(body)
+      toast.success('Pengaturan berhasil disimpan')
       setSuccess('Pengaturan berhasil disimpan')
     } catch (err) {
       setError(errorMessage(err))

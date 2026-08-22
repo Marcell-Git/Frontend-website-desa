@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { backupApi } from '../../api/index.js'
 import { errorMessage } from '../../api/client.js'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
@@ -10,7 +11,7 @@ import {
   EmptyState,
   PageHeader,
   Pagination,
-  Spinner,
+  TableSkeleton,
   inputClass,
 } from '../../components/ui.jsx'
 
@@ -61,6 +62,7 @@ export default function BackupList() {
     backupApi
       .create()
       .then((res) => {
+        toast.success('Backup berhasil dibuat')
         setMessage(`Backup "${res.nama_file}" berhasil dibuat.`)
         load()
       })
@@ -76,6 +78,7 @@ export default function BackupList() {
     backupApi
       .restore(restoreTarget.id)
       .then((res) => {
+        toast.success('Database berhasil dipulihkan')
         setMessage(res.message || 'Database berhasil dipulihkan.')
         setRestoreTarget(null)
         load()
@@ -92,6 +95,7 @@ export default function BackupList() {
     backupApi
       .remove(deleteTarget.id)
       .then(() => {
+        toast.success('Backup berhasil dihapus')
         setMessage(`Backup "${deleteTarget.nama_file}" berhasil dihapus.`)
         setDeleteTarget(null)
         load()
@@ -143,7 +147,7 @@ export default function BackupList() {
         </div>
 
         {loading ? (
-          <Spinner />
+          <TableSkeleton rows={15} cols={5} />
         ) : data.data.length === 0 ? (
           <EmptyState message="Belum ada file backup. Klik tombol Buat Backup untuk membuat cadangan database." />
         ) : (

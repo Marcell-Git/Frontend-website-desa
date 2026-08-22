@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { rolesApi, permissionsApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
@@ -64,8 +65,10 @@ export default function RoleForm() {
       if (isEdit) {
         await rolesApi.update(id, form)
         await rolesApi.updatePermissions(id, { permission_ids: Array.from(selectedPerms) })
+        toast.success('Role berhasil diperbarui')
       } else {
         await rolesApi.create(form)
+        toast.success('Role berhasil ditambahkan')
       }
       navigate('/role-management')
     } catch (err) {

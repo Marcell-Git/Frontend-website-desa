@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { iuranApi, jenisIuranApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
@@ -60,8 +61,10 @@ export default function IuranForm() {
       }
       if (isEdit) {
         await iuranApi.update(id, body)
+        toast.success('Iuran berhasil diperbarui')
       } else {
         await iuranApi.create(body)
+        toast.success('Iuran berhasil ditambahkan')
       }
       navigate('/iuran')
     } catch (err) {
