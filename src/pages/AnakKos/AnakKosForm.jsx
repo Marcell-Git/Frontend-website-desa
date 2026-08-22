@@ -40,7 +40,7 @@ export default function AnakKosForm() {
           nik: a.nik,
           nama_lengkap: a.nama_lengkap,
           jenis_kelamin: a.jenis_kelamin,
-          tanggal_lahir: a.tanggal_lahir,
+          tanggal_lahir: (a.tanggal_lahir || '').slice(0, 10),
           agama: a.agama,
           pekerjaan: a.pekerjaan || '',
           nomor_hp: a.nomor_hp || '',
