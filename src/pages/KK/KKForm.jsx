@@ -12,7 +12,7 @@ const emptyForm = {
   nomor_kk: '',
   nomor_hp: '',
   alamat: '',
-  rt: '26',
+  rt: '026',
   rw: '',
   desa: 'Tegalyoso',
   kecamatan: 'Klaten Selatan',
@@ -31,6 +31,31 @@ const emptyKepala = {
   nomor_hp: '',
 }
 
+const emptyAnggota = {
+  nik: '',
+  nama_lengkap: '',
+  tempat_lahir: '',
+  tanggal_lahir: '',
+  jenis_kelamin: 'L',
+  agama: '',
+  pekerjaan: '',
+  nomor_hp: '',
+  hubungan_keluarga: '',
+}
+
+const hubunganOptions = [
+  'Suami',
+  'Istri',
+  'Anak',
+  'Menantu',
+  'Cucu',
+  'Orang Tua',
+  'Mertua',
+  'Famili Lain',
+  'Pembantu',
+  'Lainnya',
+]
+
 export default function KKForm() {
   const { id } = useParams()
   const isEdit = !!id
@@ -39,6 +64,7 @@ export default function KKForm() {
   const [form, setForm] = useState(emptyForm)
   const [kepala, setKepala] = useState(emptyKepala)
   const [withKepala, setWithKepala] = useState(true)
+  const [anggota, setAnggota] = useState([])
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -84,21 +110,45 @@ export default function KKForm() {
       kabupaten: d.kabupaten || f.kabupaten,
       provinsi: d.provinsi || f.provinsi,
     }))
-    const k = d.kepala_keluarga
-    if (k && (k.nik || k.nama_lengkap)) {
+    const members = Array.isArray(d.anggota) ? d.anggota : []
+    const kepalaRow = members.find((m) => m.hubungan_keluarga === 'Kepala Keluarga')
+    if (kepalaRow && (kepalaRow.nik || kepalaRow.nama_lengkap)) {
       setWithKepala(true)
       setKepala((prev) => ({
         ...prev,
-        nik: k.nik || prev.nik,
-        nama_lengkap: k.nama_lengkap || prev.nama_lengkap,
-        tempat_lahir: k.tempat_lahir || prev.tempat_lahir,
-        tanggal_lahir: k.tanggal_lahir || prev.tanggal_lahir,
-        jenis_kelamin: k.jenis_kelamin || prev.jenis_kelamin,
-        agama: k.agama || prev.agama,
-        pekerjaan: k.pekerjaan || prev.pekerjaan,
+        nik: kepalaRow.nik || prev.nik,
+        nama_lengkap: kepalaRow.nama_lengkap || prev.nama_lengkap,
+        tempat_lahir: kepalaRow.tempat_lahir || prev.tempat_lahir,
+        tanggal_lahir: kepalaRow.tanggal_lahir || prev.tanggal_lahir,
+        jenis_kelamin: kepalaRow.jenis_kelamin || prev.jenis_kelamin,
+        agama: kepalaRow.agama || prev.agama,
+        pekerjaan: kepalaRow.pekerjaan || prev.pekerjaan,
       }))
     }
+    const rest = members.filter((m) => m !== kepalaRow && (m.nik || m.nama_lengkap))
+    if (rest.length > 0) {
+      setAnggota(
+        rest.map((m) => ({
+          ...emptyAnggota,
+          nik: m.nik || '',
+          nama_lengkap: m.nama_lengkap || '',
+          tempat_lahir: m.tempat_lahir || '',
+          tanggal_lahir: m.tanggal_lahir || '',
+          jenis_kelamin: m.jenis_kelamin === 'P' ? 'P' : 'L',
+          agama: m.agama || '',
+          pekerjaan: m.pekerjaan || '',
+          hubungan_keluarga: m.hubungan_keluarga || 'Lainnya',
+        })),
+      )
+    }
   }
+
+  const updateAnggota = (i, key, value) =>
+    setAnggota((list) => list.map((a, idx) => (idx === i ? { ...a, [key]: value } : a)))
+
+  const removeAnggota = (i) => setAnggota((list) => list.filter((_, idx) => idx !== i))
+
+  const addAnggota = () => setAnggota((list) => [...list, { ...emptyAnggota }])
 
   const clearScan = () => {
     if (scanPreview) URL.revokeObjectURL(scanPreview)
@@ -178,6 +228,19 @@ export default function KKForm() {
             pekerjaan: kepala.pekerjaan || null,
             nomor_hp: kepala.nomor_hp || null,
           }
+        }
+        if (anggota.length > 0) {
+          body.anggota = anggota.map((a) => ({
+            nik: a.nik,
+            nama_lengkap: a.nama_lengkap,
+            tempat_lahir: a.tempat_lahir,
+            tanggal_lahir: a.tanggal_lahir,
+            jenis_kelamin: a.jenis_kelamin,
+            agama: a.agama,
+            pekerjaan: a.pekerjaan || null,
+            nomor_hp: a.nomor_hp || null,
+            hubungan_keluarga: a.hubungan_keluarga,
+          }))
         }
         const res = await kkApi.create(body)
         navigate(`/kartu-keluarga/${res.id}`)
@@ -406,6 +469,122 @@ export default function KKForm() {
                     placeholder="Opsional"
                   />
                 </Field>
+              </div>
+            )}
+          </Card>
+        )}
+
+        {!isEdit && (
+          <Card className="mt-4 p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-slate-700">Anggota Keluarga Lainnya</h3>
+              <Button variant="secondary" size="sm" type="button" onClick={addAnggota}>
+                + Tambah Anggota
+              </Button>
+            </div>
+            {anggota.length === 0 ? (
+              <p className="text-sm text-slate-400">
+                Belum ada anggota. Scan KK atau tambahkan secara manual — anggota lain bisa juga ditambahkan nanti dari menu Anggota.
+              </p>
+            ) : (
+              <div className="space-y-4">
+                {anggota.map((a, i) => (
+                  <div key={i} className="rounded-lg border border-slate-200 p-4">
+                    <div className="mb-3 flex items-center justify-between">
+                      <span className="text-xs font-medium text-slate-500">
+                        Anggota {i + 1}
+                        {a.nama_lengkap && ` — ${a.nama_lengkap}`}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeAnggota(i)}
+                        className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-red-600"
+                      >
+                        <FaXmark className="h-3.5 w-3.5" /> Hapus
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      <Field label="Hubungan Keluarga" required error={errors[`anggota_${i}_hubungan_keluarga`]}>
+                        <select
+                          className={inputClass}
+                          value={a.hubungan_keluarga}
+                          onChange={(e) => updateAnggota(i, 'hubungan_keluarga', e.target.value)}
+                        >
+                          <option value="">Pilih</option>
+                          {hubunganOptions.map((h) => (
+                            <option key={h} value={h}>
+                              {h}
+                            </option>
+                          ))}
+                        </select>
+                      </Field>
+                      <Field label="NIK" required error={errors[`anggota_${i}_nik`]}>
+                        <input
+                          className={inputClass}
+                          value={a.nik}
+                          onChange={(e) => updateAnggota(i, 'nik', e.target.value)}
+                          maxLength={16}
+                          inputMode="numeric"
+                        />
+                      </Field>
+                      <Field label="Nama Lengkap" required error={errors[`anggota_${i}_nama_lengkap`]}>
+                        <input
+                          className={inputClass}
+                          value={a.nama_lengkap}
+                          onChange={(e) => updateAnggota(i, 'nama_lengkap', e.target.value)}
+                        />
+                      </Field>
+                      <Field label="Tempat Lahir" required error={errors[`anggota_${i}_tempat_lahir`]}>
+                        <input
+                          className={inputClass}
+                          value={a.tempat_lahir}
+                          onChange={(e) => updateAnggota(i, 'tempat_lahir', e.target.value)}
+                        />
+                      </Field>
+                      <Field label="Tanggal Lahir" required error={errors[`anggota_${i}_tanggal_lahir`]}>
+                        <input
+                          type="date"
+                          className={inputClass}
+                          value={a.tanggal_lahir}
+                          onChange={(e) => updateAnggota(i, 'tanggal_lahir', e.target.value)}
+                        />
+                      </Field>
+                      <Field label="Jenis Kelamin" required error={errors[`anggota_${i}_jenis_kelamin`]}>
+                        <select
+                          className={inputClass}
+                          value={a.jenis_kelamin}
+                          onChange={(e) => updateAnggota(i, 'jenis_kelamin', e.target.value)}
+                        >
+                          <option value="L">Laki-laki</option>
+                          <option value="P">Perempuan</option>
+                        </select>
+                      </Field>
+                      <Field label="Agama" required error={errors[`anggota_${i}_agama`]}>
+                        <select
+                          className={inputClass}
+                          value={a.agama}
+                          onChange={(e) => updateAnggota(i, 'agama', e.target.value)}
+                        >
+                          <option value="">Pilih</option>
+                          <option>Islam</option>
+                          <option>Kristen</option>
+                          <option>Katolik</option>
+                          <option>Hindu</option>
+                          <option>Buddha</option>
+                          <option>Konghucu</option>
+                        </select>
+                      </Field>
+                      <Field label="Pekerjaan" error={errors[`anggota_${i}_pekerjaan`]}>
+                        <input
+                          className={inputClass}
+                          value={a.pekerjaan}
+                          onChange={(e) => updateAnggota(i, 'pekerjaan', e.target.value)}
+                          placeholder="Opsional"
+                        />
+                      </Field>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </Card>
