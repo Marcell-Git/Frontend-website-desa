@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { FaCamera, FaXmark } from 'react-icons/fa6'
+import { FaXmark } from 'react-icons/fa6'
 import { kkApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import ScanCard from '../../components/ScanCard.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
-
-const MAX_SCAN_SIZE = 10 * 1024 * 1024
-const ALLOWED_SCAN_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
 
 const emptyForm = {
   nomor_kk: '',
@@ -71,8 +69,6 @@ export default function KKForm() {
   const [errors, setErrors] = useState({})
   const [scanning, setScanning] = useState(false)
   const [scanError, setScanError] = useState('')
-  const [scanPreview, setScanPreview] = useState(null)
-  const scanInputRef = useRef(null)
 
   useEffect(() => {
     if (!isEdit) return
@@ -150,29 +146,9 @@ export default function KKForm() {
 
   const addAnggota = () => setAnggota((list) => [...list, { ...emptyAnggota }])
 
-  const clearScan = () => {
-    if (scanPreview) URL.revokeObjectURL(scanPreview)
-    setScanPreview(null)
-    setScanError('')
-    if (scanInputRef.current) scanInputRef.current.value = ''
-  }
-
-  const handleScanChange = async (e) => {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
-    if (!ALLOWED_SCAN_TYPES.includes(file.type)) {
-      setScanError('Format foto harus JPG, PNG, WEBP, atau HEIC')
-      return
-    }
-    if (file.size > MAX_SCAN_SIZE) {
-      setScanError('Ukuran foto maksimal 10 MB')
-      return
-    }
+  const handleScanFile = async (file) => {
     setError('')
     setScanError('')
-    if (scanPreview) URL.revokeObjectURL(scanPreview)
-    setScanPreview(URL.createObjectURL(file))
     setScanning(true)
     try {
       const fd = new FormData()
@@ -274,63 +250,14 @@ export default function KKForm() {
       )}
 
       {!isEdit && (
-        <Card className="mb-4 p-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="min-w-0">
-              <h3 className="text-sm font-semibold text-slate-700">Scan Kartu Keluarga</h3>
-              <p className="mt-1 text-xs text-slate-500">
-                Ambil foto KK, datanya akan terisi otomatis. Periksa kembali hasilnya sebelum menyimpan.
-              </p>
-            </div>
-            <label
-              className={`inline-flex cursor-pointer items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 ${
-                scanning ? 'pointer-events-none opacity-60' : ''
-              }`}
-            >
-              <input
-                ref={scanInputRef}
-                type="file"
-                accept="image/*"
-                capture="environment"
-                className="hidden"
-                onChange={handleScanChange}
-                disabled={scanning}
-              />
-              <FaCamera className="h-4 w-4" />
-              {scanning ? 'Memindai...' : scanPreview ? 'Ambil Ulang Foto' : 'Ambil Foto KK'}
-            </label>
-          </div>
-
-          {scanning && (
-            <div className="mt-4 flex items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-              <span className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
-              Membaca data dari foto KK, mohon tunggu...
-            </div>
-          )}
-
-          {scanError && (
-            <div className="mt-4">
-              <Alert>{scanError}</Alert>
-            </div>
-          )}
-
-          {scanPreview && !scanning && (
-            <div className="mt-4 flex items-start gap-4">
-              <img
-                src={scanPreview}
-                alt="Foto Kartu Keluarga"
-                className="max-h-48 w-auto rounded-lg border border-slate-200"
-              />
-              <button
-                type="button"
-                onClick={clearScan}
-                className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-red-600"
-              >
-                <FaXmark className="h-3.5 w-3.5" /> Hapus foto
-              </button>
-            </div>
-          )}
-        </Card>
+        <ScanCard
+          title="Scan Kartu Keluarga"
+          description="Ambil foto KK, datanya akan terisi otomatis. Periksa kembali hasilnya sebelum menyimpan."
+          label="Ambil Foto KK"
+          scanning={scanning}
+          error={scanError}
+          onFile={handleScanFile}
+        />
       )}
 
       <form onSubmit={handleSubmit}>

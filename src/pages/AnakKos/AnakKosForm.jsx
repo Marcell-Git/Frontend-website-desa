@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { anakKosApi } from '../../api/index.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import ScanCard from '../../components/ScanCard.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
 
 const emptyForm = {
@@ -26,6 +27,8 @@ export default function AnakKosForm() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [errors, setErrors] = useState({})
+  const [scanning, setScanning] = useState(false)
+  const [scanError, setScanError] = useState('')
 
   useEffect(() => {
     if (!isEdit) return
@@ -50,6 +53,31 @@ export default function AnakKosForm() {
 
   const set = (key) => (e) =>
     setForm((f) => ({ ...f, [key]: key === 'status' ? e.target.checked : e.target.value }))
+
+  const handleScanFile = async (file) => {
+    setError('')
+    setScanError('')
+    setScanning(true)
+    try {
+      const fd = new FormData()
+      fd.append('foto', file)
+      const d = await anakKosApi.ocr(fd)
+      setForm((f) => ({
+        ...f,
+        nik: d.nik || f.nik,
+        nama_lengkap: d.nama_lengkap || f.nama_lengkap,
+        jenis_kelamin: d.jenis_kelamin === 'P' ? 'P' : d.jenis_kelamin === 'L' ? 'L' : f.jenis_kelamin,
+        tanggal_lahir: d.tanggal_lahir || f.tanggal_lahir,
+        agama: d.agama || f.agama,
+        pekerjaan: d.pekerjaan || f.pekerjaan,
+        alamat_asal: d.alamat_asal || f.alamat_asal,
+      }))
+    } catch (err) {
+      setScanError(errorMessage(err))
+    } finally {
+      setScanning(false)
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -107,6 +135,17 @@ export default function AnakKosForm() {
         <div className="mb-4">
           <Alert>{error}</Alert>
         </div>
+      )}
+
+      {!isEdit && (
+        <ScanCard
+          title="Scan KTP Anak Kos"
+          description="Ambil foto KTP, datanya akan terisi otomatis. Periksa kembali hasilnya sebelum menyimpan."
+          label="Ambil Foto KTP"
+          scanning={scanning}
+          error={scanError}
+          onFile={handleScanFile}
+        />
       )}
 
       <form onSubmit={handleSubmit}>

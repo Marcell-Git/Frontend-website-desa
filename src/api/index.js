@@ -135,6 +135,11 @@ export const anakKosApi = {
   list: (params) =>
     client.get('/anak-kos', { params }).then((r) => r.data.data).then(normalizePaginated),
   get: (id) => client.get(`/anak-kos/${id}`).then((r) => r.data.data),
+  ocr: (formData) =>
+    client.post('/anak-kos/ocr', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 60000,
+    }).then((r) => r.data.data),
   create: (body) => client.post('/anak-kos', body).then((r) => r.data.data),
   update: (id, body) =>
     client.put(`/anak-kos/${id}`, body).then((r) => r.data.data),
