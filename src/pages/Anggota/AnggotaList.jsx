@@ -151,7 +151,7 @@ export default function AnggotaList() {
                         >
                           {a.nama_lengkap}
                         </button>
-                        <div className="text-xs text-slate-400">KK: {a.kartu_keluarga_id.slice(0, 8)}...</div>
+                        <div className="text-xs text-slate-400">KK: {a.nomor_kk || a.kartu_keluarga_id}</div>
                       </td>
                       <td className="px-4 py-3 text-slate-600">{a.nik}</td>
                       <td className="px-4 py-3 text-slate-600">{formatTanggal(a.tanggal_lahir)}</td>
