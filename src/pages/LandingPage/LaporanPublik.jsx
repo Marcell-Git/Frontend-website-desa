@@ -2,22 +2,32 @@ import { useEffect, useState } from 'react'
 import { publicApi } from '../../api/index.js'
 import { errorMessage } from '../../api/client.js'
 import { usePublicSettings } from '../../components/PublicLayout.jsx'
+import StatCard from './StatCard.jsx'
 import { rupiah, NAMA_BULAN } from './format.js'
 
-function StatCard({ label, value, highlight }) {
-  return (
-    <div
-      className={`rounded-xl border p-4 shadow-sm ${
-        highlight ? 'border-emerald-200 bg-emerald-50' : 'border-slate-200 bg-white'
-      }`}
-    >
-      <div className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</div>
-      <div className={`mt-1 text-base font-bold sm:text-lg ${highlight ? 'text-emerald-700' : 'text-slate-900'}`}>
-        {value}
-      </div>
-    </div>
-  )
-}
+const IconWallet = () => (
+  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
+  </svg>
+)
+
+const IconWarga = () => (
+  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+  </svg>
+)
+
+const IconPengeluaran = () => (
+  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+  </svg>
+)
+
+const IconSaldo = () => (
+  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z" />
+  </svg>
+)
 
 const TAHUN_AWAL = 2020
 
@@ -69,11 +79,13 @@ export default function LaporanPublik() {
   for (let y = currentYear; y >= TAHUN_AWAL; y--) years.push(y)
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+    <div className="mx-auto max-w-6xl px-4 py-12">
+      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Laporan Keuangan</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="text-balance font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Laporan Keuangan
+          </h1>
+          <p className="mt-2 text-sm text-slate-500">
             Ringkasan kas, iuran, dan pengeluaran RT untuk transparansi warga.
           </p>
         </div>
@@ -110,10 +122,10 @@ export default function LaporanPublik() {
       {data?.ringkasan && (
         <>
           <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-            <StatCard label={`Total Kas ${tahun}`} value={rupiah(data.ringkasan.total_kas)} />
-            <StatCard label={`Total Iuran ${tahun}`} value={rupiah(data.ringkasan.total_iuran)} />
-            <StatCard label={`Total Pengeluaran ${tahun}`} value={rupiah(data.ringkasan.total_pengeluaran)} />
-            <StatCard label="Saldo Akhir" value={rupiah(data.ringkasan.saldo_akhir)} highlight />
+            <StatCard label={`Total Kas ${tahun}`} value={rupiah(data.ringkasan.total_kas)} icon={<IconWallet />} />
+            <StatCard label={`Total Iuran ${tahun}`} value={rupiah(data.ringkasan.total_iuran)} icon={<IconWarga />} />
+            <StatCard label={`Total Pengeluaran ${tahun}`} value={rupiah(data.ringkasan.total_pengeluaran)} icon={<IconPengeluaran />} />
+            <StatCard label="Saldo Akhir" value={rupiah(data.ringkasan.saldo_akhir)} highlight icon={<IconSaldo />} />
           </div>
 
           <div className="mt-8 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">

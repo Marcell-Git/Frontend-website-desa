@@ -19,9 +19,11 @@ export default function Kontak() {
   const { settings } = usePublicSettings()
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="text-2xl font-bold text-slate-900">Kontak</h1>
-      <p className="mt-1 text-sm text-slate-500">
+    <div className="mx-auto max-w-3xl px-4 py-12">
+      <h1 className="text-balance font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        Kontak
+      </h1>
+      <p className="mt-2 text-sm text-slate-500">
         Hubungi pengurus RT untuk informasi lebih lanjut.
       </p>
 
@@ -63,7 +65,7 @@ export default function Kontak() {
 
       {settings && (
         <div className="mt-8 rounded-xl border border-emerald-200 bg-emerald-50 p-6 text-sm leading-relaxed text-emerald-900">
-          <span className="font-semibold">{settings.nama_website}</span> —{' '}
+          <span className="font-display font-bold">{settings.nama_website}</span> —{' '}
           {[settings.nama_rt, settings.desa, settings.kecamatan, settings.kabupaten, settings.provinsi]
             .filter(Boolean)
             .join(', ')}

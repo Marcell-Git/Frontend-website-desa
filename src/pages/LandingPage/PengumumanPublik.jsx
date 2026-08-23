@@ -28,10 +28,12 @@ export default function PengumumanPublik() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10">
-      <h1 className="text-2xl font-bold text-slate-900">Pengumuman</h1>
-      <p className="mt-1 text-sm text-slate-500">
-        Informasi resmi dari pengurus RT, diurutkan dari yang terbaru.
+    <div className="mx-auto max-w-4xl px-4 py-12">
+      <h1 className="text-balance font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        Pengumuman
+      </h1>
+      <p className="mt-2 text-sm text-slate-500">
+        Informasi resmi dari pengurus RT.
       </p>
 
       {error && (
@@ -60,12 +62,12 @@ export default function PengumumanPublik() {
             <Link
               key={item.id}
               to={`/pengumuman/${item.id}`}
-              className="group block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md sm:p-6"
+              className="group block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-900/5 sm:p-6"
             >
-              <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
+              <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
                 {tanggalIndo(item.tanggal_publikasi)}
               </span>
-              <h2 className="mt-3 font-semibold text-slate-900 group-hover:text-emerald-700">
+              <h2 className="mt-3 font-display text-lg font-bold leading-snug text-slate-900 transition-colors group-hover:text-emerald-700 sm:text-xl">
                 {item.judul}
               </h2>
               <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-500">{item.isi}</p>

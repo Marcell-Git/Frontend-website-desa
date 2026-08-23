@@ -111,7 +111,9 @@ export default function FormPengaduanPublik() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 className="mt-5 text-xl font-bold text-emerald-900">Pengaduan Berhasil Dikirim</h1>
+          <h1 className="mt-5 font-display text-xl font-bold text-emerald-900 sm:text-2xl">
+            Pengaduan Berhasil Dikirim
+          </h1>
           <p className="mt-2 text-sm leading-relaxed text-emerald-800">
             Terima kasih telah menyampaikan laporan Anda. Pengaduan akan segera ditindaklanjuti oleh
             pengurus RT dengan status awal <span className="font-semibold">Menunggu</span>.
@@ -138,10 +140,12 @@ export default function FormPengaduanPublik() {
     'w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100'
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="text-2xl font-bold text-slate-900">Form Pengaduan Masyarakat</h1>
-      <p className="mt-1 text-sm text-slate-500">
-        Sampaikan keluhan atau laporan Anda kepada pengurus RT. Tidak perlu login.
+    <div className="mx-auto max-w-2xl px-4 py-12">
+      <h1 className="text-balance font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        Form Pengaduan Masyarakat
+      </h1>
+      <p className="mt-2 text-sm text-slate-500">
+        Sampaikan keluhan atau laporan Anda kepada pengurus RT.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-5 rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" noValidate>

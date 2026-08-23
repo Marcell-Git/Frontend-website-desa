@@ -58,20 +58,28 @@ export default function DetailPengumumanPublik() {
   }
 
   return (
-    <article className="mx-auto max-w-2xl px-4 py-10">
-      <Link to="/pengumuman" className="text-sm font-medium text-emerald-700 hover:underline">
-        ← Kembali ke daftar pengumuman
+    <article className="mx-auto max-w-2xl px-4 py-12">
+      <Link
+        to="/pengumuman"
+        className="group inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 transition-colors hover:text-emerald-800"
+      >
+        <span aria-hidden="true" className="transition-transform duration-300 group-hover:-translate-x-0.5">
+          ←
+        </span>
+        Kembali ke daftar pengumuman
       </Link>
 
       <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
+        <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
           {tanggalIndo(item.tanggal_publikasi)}
         </span>
-        <h1 className="mt-3 text-2xl font-bold leading-snug text-slate-900">{item.judul}</h1>
+        <h1 className="text-balance mt-4 font-display text-2xl font-bold leading-snug tracking-tight text-slate-900 sm:text-3xl">
+          {item.judul}
+        </h1>
         {item.nama_user && (
-          <p className="mt-2 text-xs text-slate-400">Dipublikasikan oleh {item.nama_user}</p>
+          <p className="mt-3 text-xs text-slate-400">Dipublikasikan oleh {item.nama_user}</p>
         )}
-        <div className="my-5 border-t border-slate-100" />
+        <div className="my-6 border-t border-slate-100" />
         <p className="whitespace-pre-line text-sm leading-relaxed text-slate-700">{item.isi}</p>
       </div>
     </article>
