@@ -133,7 +133,7 @@ export default function UserList() {
           <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
             <input
               className={`${inputClass} max-w-xs`}
-              placeholder="Cari nama, email, jabatan..."
+              placeholder="Cari nama, username, jabatan..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -173,8 +173,7 @@ export default function UserList() {
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-slate-200 text-xs uppercase text-slate-500">
-                    <th className="px-4 py-3">Nama</th>
-                    <th className="px-4 py-3">Email</th>
+                    <th className="px-4 py-3">Username</th>
                     <th className="px-4 py-3">Jabatan</th>
                     <th className="px-4 py-3">Role</th>
                     <th className="px-4 py-3">Status</th>
@@ -185,8 +184,7 @@ export default function UserList() {
                 <tbody>
                   {data.data.map((item) => (
                     <tr key={item.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                      <td className="px-4 py-3 font-medium text-slate-900">{item.nama}</td>
-                      <td className="px-4 py-3 text-slate-600">{item.email}</td>
+                      <td className="px-4 py-3 font-medium text-slate-900">{item.username}</td>
                       <td className="px-4 py-3 text-slate-600">{item.jabatan || '-'}</td>
                       <td className="px-4 py-3">
                         <Badge variant="blue">{item.role_nama}</Badge>
@@ -260,7 +258,7 @@ export default function UserList() {
           <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
             <h3 className="text-lg font-semibold text-slate-900">Reset Password</h3>
             <p className="mt-2 text-sm text-slate-600">
-              Reset password untuk <strong>{resetUser.nama}</strong>
+              Reset password untuk <strong>{resetUser.username}</strong>
             </p>
             {resetError && (
               <div className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{resetError}</div>
@@ -302,7 +300,7 @@ export default function UserList() {
       <ConfirmModal
         open={!!deleteUser}
         title="Hapus Pengguna"
-        message={`Yakin ingin menghapus pengguna "${deleteUser?.nama}"?`}
+        message={`Yakin ingin menghapus pengguna "${deleteUser?.username}"?`}
         onConfirm={handleDelete}
         onCancel={() => setDeleteUser(null)}
         loading={deleting}

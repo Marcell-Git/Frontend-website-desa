@@ -10,7 +10,7 @@ export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -27,7 +27,7 @@ export default function Login() {
     setErrors({})
     setLoading(true)
     try {
-      await login(email, password)
+      await login(username, password)
       const from = location.state && location.state.from
       navigate(from ? from.pathname : '/dashboard', { replace: true })
     } catch (err) {
@@ -62,14 +62,14 @@ export default function Login() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Field label="Email" required error={errors.email}>
+            <Field label="Username" required error={errors.username}>
               <input
-                type="email"
+                type="text"
                 className={inputClass}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="nama@email.com"
-                autoComplete="email"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="masukkan username"
+                autoComplete="username"
               />
             </Field>
             <Field label="Password" required error={errors.password}>

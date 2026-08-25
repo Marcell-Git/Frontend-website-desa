@@ -14,8 +14,7 @@ export default function UserForm() {
   const isSuperAdmin = user?.role === 'Super Admin'
 
   const [form, setForm] = useState({
-    nama: '',
-    email: '',
+    username: '',
     nomor_hp: '',
     jabatan: '',
     role_id: '',
@@ -47,8 +46,7 @@ export default function UserForm() {
       .get(id)
       .then((item) => {
         setForm({
-          nama: item.nama || '',
-          email: item.email || '',
+          username: item.username || '',
           nomor_hp: item.nomor_hp || '',
           jabatan: item.jabatan || '',
           role_id: item.role_id || '',
@@ -70,8 +68,7 @@ export default function UserForm() {
     setSubmitting(true)
     try {
       const body = {
-        nama: form.nama,
-        email: form.email,
+        username: form.username,
         nomor_hp: form.nomor_hp || null,
         jabatan: form.jabatan || null,
         role_id: form.role_id,
@@ -119,21 +116,13 @@ export default function UserForm() {
       <form onSubmit={handleSubmit}>
         <Card className="p-6">
           <div className="grid grid-cols-1 gap-4">
-            <Field label="Nama Lengkap" required error={errors.nama}>
+            <Field label="Username" required error={errors.username}>
               <input
+                type="text"
                 className={inputClass}
-                value={form.nama}
-                onChange={set('nama')}
-                placeholder="Nama lengkap"
-              />
-            </Field>
-            <Field label="Email" required error={errors.email}>
-              <input
-                type="email"
-                className={inputClass}
-                value={form.email}
-                onChange={set('email')}
-                placeholder="email@contoh.com"
+                value={form.username}
+                onChange={set('username')}
+                placeholder="contoh: budi.santoso"
               />
             </Field>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

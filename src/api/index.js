@@ -5,8 +5,8 @@ function normalizePaginated(d) {
 }
 
 export const authApi = {
-  login: (email, password) =>
-    client.post('/auth/login', { email, password }).then((r) => r.data.data),
+  login: (username, password) =>
+    client.post('/auth/login', { username, password }).then((r) => r.data.data),
   profile: () => client.get('/auth/profile').then((r) => r.data.data),
   logout: (refreshToken) =>
     client.post('/auth/logout', { refresh_token: refreshToken }),

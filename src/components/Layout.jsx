@@ -33,7 +33,7 @@ export default function Layout() {
     navigate('/login')
   }
 
-  const initials = (user && user.nama ? user.nama.trim() : '?')
+  const initials = (user && user.username ? user.username.trim() : '?')
     .split(/\s+/)
     .slice(0, 2)
     .map((w) => w[0])
@@ -156,7 +156,7 @@ export default function Layout() {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm font-medium text-white">
-                  {user ? user.nama : ''}
+                  {user ? user.username : ''}
                 </div>
                 <div className="truncate text-xs text-emerald-300">{user ? user.role : ''}</div>
               </div>

@@ -51,12 +51,8 @@ export default function Profile() {
           <h3 className="mb-4 text-sm font-semibold text-slate-700">Informasi Akun</h3>
           <dl className="space-y-3 text-sm">
             <div className="flex justify-between gap-4">
-              <dt className="text-slate-500">Nama</dt>
-              <dd className="font-medium text-slate-900">{user.nama}</dd>
-            </div>
-            <div className="flex justify-between gap-4">
-              <dt className="text-slate-500">Email</dt>
-              <dd className="font-medium text-slate-900">{user.email}</dd>
+              <dt className="text-slate-500">Username</dt>
+              <dd className="font-medium text-slate-900">{user.username}</dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-slate-500">Peran</dt>
