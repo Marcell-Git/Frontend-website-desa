@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { settingsApi } from '../api/index.js'
+import Logo from './Logo.jsx'
 
 const PublicSettingsContext = createContext(null)
 
@@ -20,23 +21,6 @@ const NAV_ITEMS = [
   { to: '/pengaduan', label: 'Pengaduan', show: (s) => s.show_pengaduan },
   { to: '/kontak', label: 'Kontak', show: () => true },
 ]
-
-function Logo({ settings }) {
-  if (settings?.logo_path) {
-    return (
-      <img
-        src={`/${settings.logo_path}`}
-        alt="Logo"
-        className="h-10 w-10 rounded-xl object-contain"
-      />
-    )
-  }
-  return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 font-display text-base font-bold text-white">
-      RT
-    </div>
-  )
-}
 
 export default function PublicLayout() {
   const [settings, setSettings] = useState(null)

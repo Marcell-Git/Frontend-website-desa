@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa6'
 import { useAuth } from '../auth/AuthContext.jsx'
 import { Alert, Button, Field, inputClass } from '../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../api/client.js'
+import Logo from '../components/Logo.jsx'
 
 export default function Login() {
   const { user, login } = useAuth()
@@ -42,9 +43,7 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center bg-emerald-950 p-4">
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-600 text-2xl font-bold text-white">
-            RT
-          </div>
+          <Logo className="mx-auto mb-3 h-14 w-14 rounded-2xl" />
           <h1 className="text-2xl font-semibold text-white">SIM RT Tegalyoso 26</h1>
           <p className="mt-1 text-sm text-emerald-300">
             Sistem Informasi Manajemen RT 26 Desa Tegalyoso

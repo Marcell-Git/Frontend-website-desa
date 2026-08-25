@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext.jsx'
 import { PermissionGate } from './ProtectedRoute.jsx'
+import Logo from './Logo.jsx'
 
 const icon = 'inline-block h-4 w-4'
 
@@ -49,9 +50,7 @@ export default function Layout() {
       >
         <div className="flex h-full flex-col">
           <div className="flex items-center gap-3 border-b border-emerald-800 px-5 py-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 text-lg font-bold text-white">
-              RT
-            </div>
+            <Logo />
             <div>
               <div className="font-semibold text-white">SIM RT Tegalyoso</div>
               <div className="text-xs text-emerald-300">RT 26</div>
