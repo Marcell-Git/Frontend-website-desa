@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import { FaIdCard, FaBed, FaWallet, FaCoins, FaReceipt } from 'react-icons/fa6'
 import { dashboardApi } from '../api/index.js'
 import { Card, Spinner, PageHeader } from '../components/ui.jsx'
+import { GrafikKeuangan } from '../components/GrafikKeuangan.jsx'
 import { errorMessage } from '../api/client.js'
 
 function StatCard({ label, value, accent }) {
   return (
     <Card className="p-5">
       <div className={`mb-2 h-1.5 w-10 rounded-full ${accent}`} />
-      <div className="text-3xl font-bold text-slate-900">
+      <div className="text-2xl font-bold text-slate-900">
         {typeof value === 'number' ? value.toLocaleString('id-ID') : value}
       </div>
       <div className="mt-1 text-sm text-slate-500">{label}</div>
@@ -95,13 +96,18 @@ export default function Dashboard() {
         description="Ringkasan data warga dan aktivitas terbaru RT 26"
       />
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <StatCard label="Total Kartu Keluarga" value={data.total_kk} accent="bg-emerald-500" />
         <StatCard label="Total Penduduk" value={data.total_penduduk} accent="bg-blue-500" />
         <StatCard
           label="Saldo Kas"
           value={`Rp ${Number(data.saldo_kas || 0).toLocaleString('id-ID')}`}
           accent="bg-amber-500"
+        />
+        <StatCard
+          label="Saldo Iuran"
+          value={`Rp ${Number(data.total_iuran || 0).toLocaleString('id-ID')}`}
+          accent="bg-teal-500"
         />
         <StatCard
           label="Pengeluaran Bulan Ini"
@@ -120,23 +126,7 @@ export default function Dashboard() {
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Card className="p-5">
-          <h3 className="text-sm font-semibold text-slate-700">Modul Lain</h3>
-          <div className="mt-4 space-y-3 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-slate-600">Pengaduan Baru</span>
-              <span className="font-semibold text-slate-900">{data.pengaduan_baru || 0}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-600">Pengaduan Diproses</span>
-              <span className="font-semibold text-slate-900">{data.pengaduan_diproses || 0}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-slate-600">Pengumuman Aktif</span>
-              <span className="font-semibold text-slate-900">{data.pengumuman_aktif || 0}</span>
-            </div>
-          </div>
-        </Card>
+        <GrafikKeuangan />
 
         <Card className="p-5 lg:col-span-2">
           <h3 className="text-sm font-semibold text-slate-700">Aktivitas Terbaru</h3>

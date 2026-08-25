@@ -19,6 +19,10 @@ export const authApi = {
 
 export const dashboardApi = {
   summary: () => client.get('/dashboard').then((r) => r.data.data),
+  grafik: (bulan) =>
+    client
+      .get('/dashboard/grafik', { params: bulan ? { bulan } : {} })
+      .then((r) => r.data.data),
 }
 
 export const publicApi = {
