@@ -237,19 +237,19 @@ export default function LaporanPage() {
     return (
       <div className="space-y-6">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 ml-5 mr-5 mt-5">
-          <div className="rounded-xl border border-slate-200 bg-white p-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-3">
             <div className="text-xs font-medium text-slate-500">Total Kas</div>
             <div className="mt-2 text-lg font-semibold text-slate-900">{formatRupiah(summary.total_kas)}</div>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-3">
             <div className="text-xs font-medium text-slate-500">Total Iuran</div>
             <div className="mt-2 text-lg font-semibold text-slate-900">{formatRupiah(summary.total_iuran)}</div>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-6">
-            <div className="text-xs font-medium text-slate-500">Total Pengeluaran</div>
+          <div className="rounded-xl border border-red-200 bg-red-50 p-3">
+            <div className="text-xs font-medium text-red-500">Total Pengeluaran</div>
             <div className="mt-2 text-lg font-semibold text-red-600">{formatRupiah(summary.total_pengeluaran)}</div>
           </div>
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-6">
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
             <div className="text-xs font-medium text-emerald-700">Saldo Akhir</div>
             <div className="mt-2 text-lg font-semibold text-emerald-800">{formatRupiah(summary.saldo_akhir)}</div>
           </div>
