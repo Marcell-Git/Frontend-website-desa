@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { settingsApi } from '../../api/index.js'
+import { assetUrl } from '../../api/config.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage } from '../../api/client.js'
 
@@ -142,7 +143,7 @@ export default function SettingsPage() {
               <label className="mb-2 block text-sm font-medium text-slate-700">Logo</label>
               {form.logo_path && (
                 <img
-                  src={`/${form.logo_path}`}
+                  src={assetUrl(form.logo_path)}
                   alt="Logo"
                   className="mb-2 h-16 w-auto rounded border border-slate-200 object-contain"
                 />

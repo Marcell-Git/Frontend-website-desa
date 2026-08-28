@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { API_BASE } from './config.js'
 
 const client = axios.create({
-  baseURL: '/api/v1',
+  baseURL: `${API_BASE}/api/v1`,
   timeout: 20000,
 })
 
@@ -34,7 +35,7 @@ function refreshTokens() {
     return Promise.reject(new Error('Tidak ada refresh token'))
   }
   return axios
-    .post('/api/v1/auth/refresh', { refresh_token: refreshToken })
+    .post(`${API_BASE}/api/v1/auth/refresh`, { refresh_token: refreshToken })
     .then((res) => {
       const data = res.data?.data
       if (!data?.token || !data?.refresh_token) {

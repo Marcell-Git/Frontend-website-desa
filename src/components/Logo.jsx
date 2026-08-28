@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { settingsApi } from '../api/index.js'
+import { assetUrl } from '../api/config.js'
 
 let cachedSettings = null
 let settingsRequest = null
@@ -42,7 +43,7 @@ export default function Logo({
   if (logoPath) {
     return (
       <img
-        src={`/${logoPath}`}
+        src={assetUrl(logoPath)}
         alt="Logo"
         className={`${className} object-contain`}
       />
