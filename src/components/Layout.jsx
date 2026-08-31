@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext.jsx'
+import { settingsApi } from '../api/index.js'
 import { PermissionGate } from './ProtectedRoute.jsx'
 import Logo from './Logo.jsx'
 
@@ -28,6 +29,20 @@ export default function Layout() {
   const { user, logout, can } = useAuth()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
+  const [settings, setSettings] = useState(null)
+
+  useEffect(() => {
+    let active = true
+    settingsApi
+      .get()
+      .then((data) => {
+        if (active) setSettings(data)
+      })
+      .catch(() => {})
+    return () => {
+      active = false
+    }
+  }, [])
 
   const handleLogout = async () => {
     await logout()
@@ -52,8 +67,12 @@ export default function Layout() {
           <div className="flex items-center gap-3 border-b border-emerald-800 px-5 py-4">
             <Logo />
             <div>
-              <div className="font-semibold text-white">SIM RT Tegalyoso</div>
-              <div className="text-xs text-emerald-300">RT 26</div>
+              <div className="font-semibold text-white">
+                {settings?.nama_website || 'SIM RT'}
+              </div>
+              {settings?.nama_rt && (
+                <div className="text-xs text-emerald-300">{settings.nama_rt}</div>
+              )}
             </div>
           </div>
 
@@ -193,7 +212,7 @@ export default function Layout() {
               </svg>
             </button>
             <span className="text-sm font-medium text-slate-700">
-              Sistem Informasi Manajemen RT 26
+              {settings?.nama_website || 'Sistem Informasi Manajemen RT'}
             </span>
           </div>
           <span className="hidden text-xs text-slate-400 sm:block">
