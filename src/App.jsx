@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import Layout from './components/Layout.jsx'
 import PublicLayout from './components/PublicLayout.jsx'
+import DocumentTitle from './components/DocumentTitle.jsx'
 import Login from './pages/Login.jsx'
 import Home from './pages/LandingPage/Home.jsx'
 import PengumumanPublik from './pages/LandingPage/PengumumanPublik.jsx'
@@ -46,7 +47,9 @@ import SettingsPage from './pages/Settings/SettingsPage.jsx'
 
 export default function App() {
   return (
-    <Routes>
+    <>
+      <DocumentTitle />
+      <Routes>
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/pengumuman" element={<PengumumanPublik />} />
@@ -113,6 +116,7 @@ export default function App() {
         <Route path="/pengaturan" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+      </Routes>
+    </>
   )
 }

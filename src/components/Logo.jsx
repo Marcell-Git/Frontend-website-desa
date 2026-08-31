@@ -1,36 +1,17 @@
 import { useEffect, useState } from 'react'
-import { settingsApi } from '../api/index.js'
 import { assetUrl } from '../api/config.js'
-
-let cachedSettings = null
-let settingsRequest = null
-
-function fetchSettings() {
-  if (!settingsRequest) {
-    settingsRequest = settingsApi
-      .get()
-      .then((data) => {
-        cachedSettings = data
-        return data
-      })
-      .catch(() => {
-        settingsRequest = null
-        return null
-      })
-  }
-  return settingsRequest
-}
+import { getCachedSettings, getSettings } from '../api/settingsCache.js'
 
 export default function Logo({
   settings,
   className = 'h-10 w-10 rounded-xl',
 }) {
-  const [fetched, setFetched] = useState(cachedSettings)
+  const [fetched, setFetched] = useState(getCachedSettings())
 
   useEffect(() => {
-    if (settings || cachedSettings) return undefined
+    if (settings || getCachedSettings()) return undefined
     let active = true
-    fetchSettings().then((data) => {
+    getSettings().then((data) => {
       if (active && data) setFetched(data)
     })
     return () => {
