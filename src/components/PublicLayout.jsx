@@ -11,6 +11,7 @@ export function usePublicSettings() {
     showPengumuman: true,
     showLaporan: true,
     showPengaduan: true,
+    showVisiMisi: true,
   }
 }
 
@@ -19,6 +20,7 @@ const NAV_ITEMS = [
   { to: '/pengumuman', label: 'Pengumuman', show: (s) => s.show_pengumuman },
   { to: '/laporan', label: 'Laporan', show: (s) => s.show_laporan },
   { to: '/pengaduan', label: 'Pengaduan', show: (s) => s.show_pengaduan },
+  { to: '/visi-misi', label: 'Visi & Misi', show: (s) => s.show_visi_misi },
   { to: '/kontak', label: 'Kontak', show: () => true },
 ]
 

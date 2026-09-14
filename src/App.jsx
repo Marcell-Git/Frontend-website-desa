@@ -10,6 +10,7 @@ import DetailPengumumanPublik from './pages/LandingPage/DetailPengumumanPublik.j
 import LaporanPublik from './pages/LandingPage/LaporanPublik.jsx'
 import FormPengaduanPublik from './pages/LandingPage/FormPengaduanPublik.jsx'
 import Kontak from './pages/LandingPage/Kontak.jsx'
+import VisiMisi from './pages/LandingPage/VisiMisi.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Profile from './pages/Profile.jsx'
 import KKList from './pages/KK/KKList.jsx'
@@ -57,6 +58,7 @@ export default function App() {
         <Route path="/laporan" element={<LaporanPublik />} />
         <Route path="/pengaduan" element={<FormPengaduanPublik />} />
         <Route path="/kontak" element={<Kontak />} />
+        <Route path="/visi-misi" element={<VisiMisi />} />
       </Route>
 
       <Route path="/login" element={<Login />} />

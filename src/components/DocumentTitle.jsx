@@ -22,6 +22,7 @@ const PAGE_LABELS = [
   ['/pengaturan', 'Pengaturan'],
   ['/profil', 'Profil'],
   ['/login', 'Masuk'],
+  ['/visi-misi', 'Visi & Misi'],
 ]
 
 function pageLabel(pathname) {
