@@ -18,6 +18,7 @@ export function usePublicSettings() {
 const NAV_ITEMS = [
   { to: '/', label: 'Beranda', end: true, show: () => true },
   { to: '/pengumuman', label: 'Pengumuman', show: (s) => s.show_pengumuman },
+  { to: '/berita-kegiatan', label: 'Berita & Kegiatan', show: () => true },
   { to: '/laporan', label: 'Laporan', show: (s) => s.show_laporan },
   { to: '/pengaduan', label: 'Pengaduan', show: (s) => s.show_pengaduan },
   { to: '/visi-misi', label: 'Visi & Misi', show: (s) => s.show_visi_misi },

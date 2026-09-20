@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom'
 import { publicApi } from '../../api/index.js'
 import { usePublicSettings } from '../../components/PublicLayout.jsx'
 import StatCard from './StatCard.jsx'
-import { tanggalIndo, rupiah } from './format.js'
+import { tanggalIndo, rupiah, getContrastTextColor } from './format.js'
+
+const IconCalendar = () => (
+  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z" />
+  </svg>
+)
 
 const IconWallet = () => (
   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -55,6 +61,7 @@ export default function Home() {
 
   const [pengumuman, setPengumuman] = useState([])
   const [laporan, setLaporan] = useState(null)
+  const [beritaKegiatan, setBeritaKegiatan] = useState([])
 
   useEffect(() => {
     let active = true
@@ -74,6 +81,12 @@ export default function Home() {
         })
         .catch(() => {})
     }
+    publicApi
+      .beritaKegiatan()
+      .then((data) => {
+        if (active) setBeritaKegiatan((data ?? []).slice(0, 3))
+      })
+      .catch(() => {})
     return () => {
       active = false
     }
@@ -85,6 +98,7 @@ export default function Home() {
 
   const heroActions = [
     showPengumuman && { to: '/pengumuman', label: 'Pengumuman', Icon: IconMegaphone },
+    { to: '/berita-kegiatan', label: 'Berita & Kegiatan', Icon: IconCalendar },
     showLaporan && { to: '/laporan', label: 'Laporan Keuangan', Icon: IconLaporan },
     showPengaduan && { to: '/pengaduan', label: 'Kirim Pengaduan', Icon: IconPengaduan },
   ].filter(Boolean)
@@ -215,6 +229,77 @@ export default function Home() {
           )}
         </section>
       )}
+
+      <section className="mx-auto max-w-6xl px-4 pb-20">
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+          <div>
+            <h2 className="text-balance font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+              Berita &amp; Kegiatan Warga
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Agenda gotong royong, pertemuan warga, dan kabar lingkungan terbaru.
+            </p>
+          </div>
+          <Link
+            to="/berita-kegiatan"
+            className="group inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 transition-colors hover:text-emerald-800"
+          >
+            Semua berita &amp; kegiatan
+            <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-0.5">
+              →
+            </span>
+          </Link>
+        </div>
+
+        {beritaKegiatan.length === 0 ? (
+          <p className="mt-8 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center text-sm text-slate-400">
+            Belum ada agenda atau berita kegiatan saat ini.
+          </p>
+        ) : (
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {beritaKegiatan.map((item) => {
+              const labelColor = item.warna_label || '#047857'
+              const textColor = getContrastTextColor(labelColor)
+              return (
+                <Link
+                  key={item.id}
+                  to="/berita-kegiatan"
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg hover:shadow-emerald-900/5"
+                >
+                  <div
+                    className="absolute left-0 top-0 h-1.5 w-full transition-colors"
+                    style={{ backgroundColor: labelColor }}
+                  />
+                  <div className="flex items-center justify-between gap-2">
+                    <span
+                      className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold shadow-xs"
+                      style={{ backgroundColor: labelColor, color: textColor }}
+                    >
+                      {item.kategori}
+                    </span>
+                    <span className="text-xs font-medium text-slate-400">
+                      {tanggalIndo(item.tanggal)}
+                    </span>
+                  </div>
+                  <h3 className="mt-3 font-display text-base font-bold leading-snug text-slate-900 transition-colors group-hover:text-emerald-700 sm:text-lg">
+                    {item.judul}
+                  </h3>
+                  {item.keterangan && (
+                    <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-500">
+                      {item.keterangan}
+                    </p>
+                  )}
+                  <div className="mt-auto flex items-center justify-between pt-4 text-xs text-slate-500">
+                    <span className="truncate">📍 {item.lokasi}</span>
+                    <span className="shrink-0">⏰ {item.jam} WIB</span>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        )}
+      </section>
     </div>
   )
 }
+

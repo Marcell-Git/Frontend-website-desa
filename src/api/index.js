@@ -34,6 +34,8 @@ export const publicApi = {
     client
       .get('/public/laporan', { params: tahun ? { tahun } : {} })
       .then((r) => r.data.data),
+  beritaKegiatan: () =>
+    client.get('/public/berita-kegiatan').then((r) => r.data.data ?? []),
 }
 
 export const kkApi = {
