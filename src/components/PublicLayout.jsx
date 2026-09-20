@@ -103,6 +103,13 @@ export default function PublicLayout() {
               ))}
             </nav>
 
+            <Link
+              to="/login"
+              className="hidden items-center gap-1.5 rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-800 md:inline-flex"
+            >
+              Masuk
+            </Link>
+
             <button
               type="button"
               className="rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 md:hidden"
@@ -139,6 +146,13 @@ export default function PublicLayout() {
                   {item.label}
                 </NavLink>
               ))}
+              <Link
+                to="/login"
+                onClick={() => setOpen(false)}
+                className="mt-2 block rounded-lg bg-emerald-700 px-3 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
+              >
+                Masuk
+              </Link>
             </nav>
           )}
         </header>
