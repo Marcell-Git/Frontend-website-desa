@@ -46,6 +46,8 @@ import RoleList from './pages/RoleManagement/RoleList.jsx'
 import RoleForm from './pages/RoleManagement/RoleForm.jsx'
 import RoleDetail from './pages/RoleManagement/RoleDetail.jsx'
 import SettingsPage from './pages/Settings/SettingsPage.jsx'
+import BeritaKegiatanList from './pages/BeritaKegiatan/BeritaKegiatanList.jsx'
+import BeritaKegiatanForm from './pages/BeritaKegiatan/BeritaKegiatanForm.jsx'
 
 export default function App() {
   return (
@@ -104,6 +106,9 @@ export default function App() {
         <Route path="/kelola-pengumuman" element={<PengumumanList />} />
         <Route path="/kelola-pengumuman/baru" element={<PengumumanForm />} />
         <Route path="/kelola-pengumuman/:id/edit" element={<PengumumanForm />} />
+        <Route path="/kelola-berita-kegiatan" element={<BeritaKegiatanList />} />
+        <Route path="/kelola-berita-kegiatan/baru" element={<BeritaKegiatanForm />} />
+        <Route path="/kelola-berita-kegiatan/:id/edit" element={<BeritaKegiatanForm />} />
         <Route path="/kelola-pengaduan" element={<PengaduanList />} />
         <Route path="/kelola-pengaduan/:id" element={<PengaduanDetail />} />
         <Route path="/kelola-laporan" element={<LaporanPage />} />

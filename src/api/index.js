@@ -38,6 +38,15 @@ export const publicApi = {
     client.get('/public/berita-kegiatan').then((r) => r.data.data ?? []),
 }
 
+export const beritaKegiatanApi = {
+  list: (params) =>
+    client.get('/berita-kegiatan', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/berita-kegiatan/${id}`).then((r) => r.data.data),
+  create: (body) => client.post('/berita-kegiatan', body).then((r) => r.data.data),
+  update: (id, body) => client.put(`/berita-kegiatan/${id}`, body).then((r) => r.data.data),
+  remove: (id) => client.delete(`/berita-kegiatan/${id}`).then((r) => r.data.data),
+}
+
 export const kkApi = {
   list: (params) =>
     client.get('/kartu-keluarga', { params }).then((r) => r.data.data).then(normalizePaginated),

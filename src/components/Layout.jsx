@@ -124,17 +124,22 @@ export default function Layout() {
               </div>
             )}
 
-            <PermissionGate permission="pengumuman:view">
+            {(can('pengumuman:view') || can('berita-kegiatan:view') || can('pengaduan:view')) && (
               <div className="pt-3">
                 <div className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-emerald-400">
                   Informasi
                 </div>
-                <NavItem to="/kelola-pengumuman" label="Pengumuman" />
+                <PermissionGate permission="pengumuman:view">
+                  <NavItem to="/kelola-pengumuman" label="Pengumuman" />
+                </PermissionGate>
+                <PermissionGate permission="berita-kegiatan:view">
+                  <NavItem to="/kelola-berita-kegiatan" label="Berita & Kegiatan" />
+                </PermissionGate>
                 <PermissionGate permission="pengaduan:view">
                   <NavItem to="/kelola-pengaduan" label="Pengaduan" />
                 </PermissionGate>
               </div>
-            </PermissionGate>
+            )}
 
             {(can('audit-log:view') || can('user:view') || can('role:view') || can('website-settings:view') || can('backup:view')) && (
               <div className="pt-3">
