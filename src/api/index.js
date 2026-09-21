@@ -167,8 +167,8 @@ export const anakKosApi = {
       timeout: 60000,
     }).then((r) => r.data.data),
   create: (body) => client.post('/anak-kos', body).then((r) => r.data.data),
-  update: (id, body) =>
-    client.put(`/anak-kos/${id}`, body).then((r) => r.data.data),
+  submit: (body) => client.post('/public/anak-kos', body).then((r) => r.data.data),
+  update: (id, body) => client.put(`/anak-kos/${id}`, body).then((r) => r.data.data),
   remove: (id) => client.delete(`/anak-kos/${id}`).then((r) => r.data.data),
 }
 
