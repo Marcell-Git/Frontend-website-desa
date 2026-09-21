@@ -93,7 +93,7 @@ export default function Layout() {
                   <NavItem to="/anggota" label="Anggota Keluarga" />
                 </PermissionGate>
                 <PermissionGate permission="anak-kos:view">
-                  <NavItem to="/anak-kos" label="Anak Kos" />
+                  <NavItem to="/anak-kos" label="Anak Kos / Warga Kontrak" />
                 </PermissionGate>
               </div>
             )}

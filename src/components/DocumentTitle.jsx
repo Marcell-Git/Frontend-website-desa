@@ -6,7 +6,7 @@ const PAGE_LABELS = [
   ['/dashboard', 'Dashboard'],
   ['/kartu-keluarga', 'Kartu Keluarga'],
   ['/anggota', 'Anggota Keluarga'],
-  ['/anak-kos', 'Anak Kos'],
+  ['/anak-kos', 'Anak Kos / Warga Kontrak'],
   ['/kas', 'Kas'],
   ['/jenis-iuran', 'Jenis Iuran'],
   ['/iuran', 'Iuran'],

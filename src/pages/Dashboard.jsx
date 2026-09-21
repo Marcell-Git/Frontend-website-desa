@@ -28,8 +28,8 @@ const quickNavItems = [
   },
   {
     to: '/anak-kos',
-    title: 'Anak Kos',
-    description: 'Data anak kos di lingkungan RT',
+    title: 'Anak Kos / Warga Kontrak',
+    description: 'Data anak kos/warga kontrak di lingkungan RT',
     accent: 'bg-blue-500',
     icon: <FaBed className="h-5 w-5" />,
   },

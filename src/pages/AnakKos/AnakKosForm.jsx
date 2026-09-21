@@ -96,7 +96,7 @@ export default function AnakKosForm() {
           alamat_asal: form.alamat_asal,
           status: form.status,
         })
-        toast.success('Data anak kos berhasil diperbarui')
+        toast.success('Data anak kos/warga kontrak berhasil diperbarui')
         navigate('/anak-kos')
       } else {
         await anakKosApi.create({
@@ -110,7 +110,7 @@ export default function AnakKosForm() {
           alamat_asal: form.alamat_asal,
           status: form.status,
         })
-        toast.success('Data anak kos berhasil ditambahkan')
+        toast.success('Data anak kos/warga kontrak berhasil ditambahkan')
         navigate('/anak-kos')
       }
     } catch (err) {
@@ -126,8 +126,8 @@ export default function AnakKosForm() {
   return (
     <div className="max-w-3xl">
       <PageHeader
-        title={isEdit ? 'Ubah Data Anak Kos' : 'Tambah Anak Kos'}
-        description={isEdit ? 'Perbarui data anak kos' : 'Isi data anak kos baru'}
+        title={isEdit ? 'Ubah Data Anak Kos / Warga Kontrak' : 'Tambah Anak Kos / Warga Kontrak'}
+        description={isEdit ? 'Perbarui data anak kos/warga kontrak' : 'Isi data anak kos/warga kontrak baru'}
       >
         <Button variant="secondary" onClick={() => navigate(-1)}>
           Kembali
@@ -142,7 +142,7 @@ export default function AnakKosForm() {
 
       {!isEdit && (
         <ScanCard
-          title="Scan KTP Anak Kos"
+          title="Scan KTP Anak Kos / Warga Kontrak"
           description="Ambil foto KTP, datanya akan terisi otomatis. Periksa kembali hasilnya sebelum menyimpan."
           label="Ambil Foto KTP"
           scanning={scanning}
@@ -221,7 +221,7 @@ export default function AnakKosForm() {
                     onChange={set('status')}
                     className="h-4 w-4 accent-emerald-600"
                   />
-                  Aktif sebagai anak kos
+                  Aktif sebagai anak kos/warga kontrak
                 </label>
               </Field>
             )}
@@ -233,7 +233,7 @@ export default function AnakKosForm() {
             Batal
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Simpan Anak Kos'}
+            {submitting ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Simpan Anak Kos / Warga Kontrak'}
           </Button>
         </div>
       </form>

@@ -54,7 +54,7 @@ export default function AnakKosList() {
     setDeleting(true)
     try {
       await anakKosApi.remove(toDelete.id)
-      toast.success('Data anak kos berhasil dihapus')
+      toast.success('Data anak kos/warga kontrak berhasil dihapus')
       setToDelete(null)
       load()
     } catch (err) {
@@ -77,10 +77,10 @@ export default function AnakKosList() {
 
   return (
     <div>
-      <PageHeader title="Anak Kos" description="Daftar seluruh data anak kos di wilayah RT 26">
+      <PageHeader title="Anak Kos / Warga Kontrak" description="Daftar seluruh data anak kos/warga kontrak di wilayah RT 26">
         <PermissionGate permission="anak-kos:create">
           <Link to="/anak-kos/baru">
-            <Button>Tambah Anak Kos</Button>
+            <Button>Tambah Anak Kos / Warga Kontrak</Button>
           </Link>
         </PermissionGate>
       </PageHeader>
@@ -128,7 +128,7 @@ export default function AnakKosList() {
         {loading ? (
           <TableSkeleton cols={9} />
         ) : data.data.length === 0 ? (
-          <EmptyState message="Belum ada data anak kos." />
+          <EmptyState message="Belum ada data anak kos/warga kontrak." />
         ) : (
           <>
             <div className="overflow-x-auto">
@@ -195,7 +195,7 @@ export default function AnakKosList() {
 
       <ConfirmModal
         open={!!toDelete}
-        title="Hapus Anak Kos"
+        title="Hapus Anak Kos / Warga Kontrak"
         message={`Yakin ingin menghapus ${toDelete ? toDelete.nama_lengkap : ''}?`}
         onConfirm={handleDelete}
         onCancel={() => setToDelete(null)}
