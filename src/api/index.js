@@ -36,6 +36,8 @@ export const publicApi = {
       .then((r) => r.data.data),
   beritaKegiatan: () =>
     client.get('/public/berita-kegiatan').then((r) => r.data.data ?? []),
+  inventaris: () =>
+    client.get('/public/inventaris').then((r) => r.data.data ?? []),
 }
 
 export const beritaKegiatanApi = {
@@ -45,6 +47,15 @@ export const beritaKegiatanApi = {
   create: (body) => client.post('/berita-kegiatan', body).then((r) => r.data.data),
   update: (id, body) => client.put(`/berita-kegiatan/${id}`, body).then((r) => r.data.data),
   remove: (id) => client.delete(`/berita-kegiatan/${id}`).then((r) => r.data.data),
+}
+
+export const inventarisApi = {
+  list: (params) =>
+    client.get('/inventaris', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/inventaris/${id}`).then((r) => r.data.data),
+  create: (formData) => client.post('/inventaris', formData).then((r) => r.data.data),
+  update: (id, formData) => client.put(`/inventaris/${id}`, formData).then((r) => r.data.data),
+  remove: (id) => client.delete(`/inventaris/${id}`).then((r) => r.data.data),
 }
 
 export const kkApi = {

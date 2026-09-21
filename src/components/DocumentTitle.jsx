@@ -25,6 +25,8 @@ const PAGE_LABELS = [
   ['/visi-misi', 'Visi & Misi'],
   ['/berita-kegiatan', 'Berita & Kegiatan'],
   ['/kelola-berita-kegiatan', 'Kelola Berita & Kegiatan'],
+  ['/inventaris', 'Inventaris Barang RT'],
+  ['/kelola-inventaris', 'Kelola Inventaris'],
 ]
 
 function pageLabel(pathname) {

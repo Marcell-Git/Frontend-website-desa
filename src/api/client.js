@@ -14,7 +14,7 @@ client.interceptors.request.use((config) => {
   return config
 })
 
-const PUBLIC_PATHS = ['/', '/pengumuman', '/laporan', '/pengaduan', '/kontak']
+const PUBLIC_PATHS = ['/', '/pengumuman', '/laporan', '/pengaduan', '/kontak', '/inventaris']
 
 function isPublicPath(pathname) {
   return PUBLIC_PATHS.some((p) =>

@@ -12,6 +12,7 @@ import FormPengaduanPublik from './pages/LandingPage/FormPengaduanPublik.jsx'
 import Kontak from './pages/LandingPage/Kontak.jsx'
 import VisiMisi from './pages/LandingPage/VisiMisi.jsx'
 import BeritaKegiatanPublik from './pages/LandingPage/BeritaKegiatanPublik.jsx'
+import InventarisPublik from './pages/LandingPage/InventarisPublik.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Profile from './pages/Profile.jsx'
 import KKList from './pages/KK/KKList.jsx'
@@ -48,6 +49,9 @@ import RoleDetail from './pages/RoleManagement/RoleDetail.jsx'
 import SettingsPage from './pages/Settings/SettingsPage.jsx'
 import BeritaKegiatanList from './pages/BeritaKegiatan/BeritaKegiatanList.jsx'
 import BeritaKegiatanForm from './pages/BeritaKegiatan/BeritaKegiatanForm.jsx'
+import InventarisList from './pages/Inventaris/InventarisList.jsx'
+import InventarisForm from './pages/Inventaris/InventarisForm.jsx'
+import InventarisDetail from './pages/Inventaris/InventarisDetail.jsx'
 
 export default function App() {
   return (
@@ -63,6 +67,7 @@ export default function App() {
         <Route path="/kontak" element={<Kontak />} />
         <Route path="/visi-misi" element={<VisiMisi />} />
         <Route path="/berita-kegiatan" element={<BeritaKegiatanPublik />} />
+        <Route path="/inventaris" element={<InventarisPublik />} />
       </Route>
 
       <Route path="/login" element={<Login />} />
@@ -109,6 +114,10 @@ export default function App() {
         <Route path="/kelola-berita-kegiatan" element={<BeritaKegiatanList />} />
         <Route path="/kelola-berita-kegiatan/baru" element={<BeritaKegiatanForm />} />
         <Route path="/kelola-berita-kegiatan/:id/edit" element={<BeritaKegiatanForm />} />
+        <Route path="/kelola-inventaris" element={<InventarisList />} />
+        <Route path="/kelola-inventaris/baru" element={<InventarisForm />} />
+        <Route path="/kelola-inventaris/:id" element={<InventarisDetail />} />
+        <Route path="/kelola-inventaris/:id/edit" element={<InventarisForm />} />
         <Route path="/kelola-pengaduan" element={<PengaduanList />} />
         <Route path="/kelola-pengaduan/:id" element={<PengaduanDetail />} />
         <Route path="/kelola-laporan" element={<LaporanPage />} />
