@@ -164,7 +164,6 @@ export const anakKosApi = {
   ocr: (formData) =>
     client.post('/anak-kos/ocr', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
-      timeout: 60000,
     }).then((r) => r.data.data),
   create: (body) => client.post('/anak-kos', body).then((r) => r.data.data),
   submit: (body) => client.post('/public/anak-kos', body).then((r) => r.data.data),
