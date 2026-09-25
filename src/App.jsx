@@ -11,6 +11,7 @@ import LaporanPublik from './pages/LandingPage/LaporanPublik.jsx'
 import FormPengaduanPublik from './pages/LandingPage/FormPengaduanPublik.jsx'
 import Kontak from './pages/LandingPage/Kontak.jsx'
 import VisiMisi from './pages/LandingPage/VisiMisi.jsx'
+import PendataanAnakKosPublik from './pages/LandingPage/PendataanAnakKosPublik.jsx'
 import BeritaKegiatanPublik from './pages/LandingPage/BeritaKegiatanPublik.jsx'
 import InventarisPublik from './pages/LandingPage/InventarisPublik.jsx'
 import Dashboard from './pages/Dashboard.jsx'
@@ -68,6 +69,7 @@ export default function App() {
         <Route path="/visi-misi" element={<VisiMisi />} />
         <Route path="/berita-kegiatan" element={<BeritaKegiatanPublik />} />
         <Route path="/inventaris" element={<InventarisPublik />} />
+        <Route path="/pendataan-anak-kos" element={<PendataanAnakKosPublik />} />
       </Route>
 
       <Route path="/login" element={<Login />} />

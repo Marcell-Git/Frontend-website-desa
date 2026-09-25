@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { publicApi } from '../../api/index.js'
 import { usePublicSettings } from '../../components/PublicLayout.jsx'
 import StatCard from './StatCard.jsx'
-import PendataanAnakKosPublik from './PendataanAnakKosPublik.jsx'
 import { tanggalIndo, rupiah, getContrastTextColor } from './format.js'
 
 const IconCalendar = () => (
@@ -47,6 +46,50 @@ const IconLaporan = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
   </svg>
 )
+
+function PendataanCta() {
+  return (
+    <section className="mx-auto max-w-6xl px-4 pb-20">
+      <div className="relative overflow-hidden rounded-[2rem] border border-emerald-100 bg-emerald-50 shadow-[0_30px_60px_-40px_rgba(6,78,59,0.4)]">
+        <img
+          src="/gambar_warga.png"
+          alt="Ilustrasi warga RT 26 yang beragam"
+          loading="lazy"
+          width={4000}
+          height={2500}
+          draggable={false}
+          className="pointer-events-none h-44 w-full select-none object-contain object-center sm:absolute sm:bottom-0 sm:right-0 sm:z-0 sm:h-full sm:w-[58%] sm:object-contain sm:object-right-bottom"
+        />
+
+        <div className="relative z-10 max-w-xl bg-gradient-to-r from-emerald-50 via-emerald-50/95 to-transparent px-7 py-8 sm:px-12 sm:py-20">
+          <h2 className="text-balance font-display text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl xl:text-[2.75rem] xl:leading-[1.12]">
+            Tercatat sebagai warga,{' '}
+            <span className="text-emerald-700">walau cuma singgah.</span>
+          </h2>
+          <p className="mt-5 max-w-md text-sm leading-relaxed text-slate-600 sm:text-base">
+            Tinggal di kos, kontrakan, atau rumah keluarga di RT 26? Isi data diri sekali, dan kamu
+            langsung terdata pengurus tahu siapa penghuni lingkungan ini, dan kamu tetap bisa ikut
+            kegiatan serta menerima pengumuman warga.
+          </p>
+          <div className="mt-9">
+            <Link
+              to="/pendataan-anak-kos"
+              className="group inline-flex items-center gap-2.5 rounded-xl bg-emerald-700 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-emerald-700/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-xl hover:shadow-emerald-700/25 sm:text-base"
+            >
+              Isi Form Pendataan
+              <span
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
 
 export default function Home() {
   const { settings } = usePublicSettings()
@@ -293,7 +336,7 @@ export default function Home() {
         )}
       </section>
 
-      <PendataanAnakKosPublik />
+      <PendataanCta />
     </div>
   )
 }

@@ -26,6 +26,7 @@ const PAGE_LABELS = [
   ['/berita-kegiatan', 'Berita & Kegiatan'],
   ['/kelola-berita-kegiatan', 'Kelola Berita & Kegiatan'],
   ['/inventaris', 'Inventaris Barang RT'],
+  ['/pendataan-anak-kos', 'Pendataan Anak Kos / Warga Kontrak'],
   ['/kelola-inventaris', 'Kelola Inventaris'],
 ]
 

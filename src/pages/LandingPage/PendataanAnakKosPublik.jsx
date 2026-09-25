@@ -112,7 +112,7 @@ export default function PendataanAnakKosPublik() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-20" id="pendataan">
+    <section className="mx-auto max-w-6xl px-4 py-16" id="pendataan">
       <div className="grid gap-8 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <h2 className="text-balance font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
