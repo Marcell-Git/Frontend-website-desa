@@ -156,6 +156,13 @@ export default function PublicLayout() {
     group.items ? group.items : [group],
   )
 
+  const mapsQuery = [settings?.alamat, settings?.desa, settings?.kecamatan, settings?.kabupaten]
+    .filter(Boolean)
+    .join(', ')
+  const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(mapsQuery)}`
+  const mapsEmbed = `${mapsUrl}&output=embed`
+  const showMaps = Boolean(mapsQuery)
+
   return (
     <PublicSettingsContext.Provider value={{ settings }}>
       <div className="flex min-h-screen flex-col">
@@ -268,22 +275,38 @@ export default function PublicLayout() {
         </main>
 
         <footer className="bg-emerald-900 text-emerald-100">
-          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr] lg:gap-8">
+          <div className="h-1 bg-emerald-700" aria-hidden="true" />
+          <div className="mx-auto grid max-w-6xl gap-12 px-4 py-14 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1.1fr] lg:gap-10">
             <div>
               <div className="flex items-center gap-3">
                 <Logo settings={settings} />
-                <div className="font-display text-base font-bold text-white">
-                  {settings?.nama_website || 'Website RT'}
+                <div className="leading-tight">
+                  <div className="font-display text-base font-bold text-white">
+                    {settings?.nama_website || 'Website RT'}
+                  </div>
+                  <div className="text-xs font-medium text-emerald-300">
+                    {settings ? [settings.desa, settings.kecamatan].filter(Boolean).join(', ') : ''}
+                  </div>
                 </div>
               </div>
+              <p className="mt-5 max-w-sm text-sm leading-relaxed text-emerald-200/90">
+                Media informasi resmi warga: pengumuman, transparansi laporan keuangan, dan sarana
+                penyampaian pengaduan masyarakat.
+              </p>
               {settings?.alamat && (
-                <p className="mt-4 max-w-sm text-sm leading-relaxed text-emerald-200/90">{settings.alamat}</p>
+                <p className="mt-5 flex items-start gap-2.5 text-sm text-emerald-100/90">
+                  <svg className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span>{settings.alamat}</span>
+                </p>
               )}
             </div>
 
             <div>
               <div className="text-xs font-semibold uppercase tracking-wider text-emerald-300">Kontak</div>
-              <ul className="mt-4 space-y-2.5 text-sm">
+              <ul className="mt-5 space-y-2.5 text-sm">
                 {settings?.telepon && (
                   <li className="flex items-start gap-2.5">
                     <svg className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -305,20 +328,28 @@ export default function PublicLayout() {
             </div>
 
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wider text-emerald-300">Menu</div>
-              <ul className="mt-4 space-y-2.5 text-sm">
-                {visibleItems.map((item) => (
-                  <li key={item.to}>
-                    <Link to={item.to} className="text-emerald-100/90 underline-offset-4 transition-colors hover:text-white hover:underline">
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <div className="text-xs font-semibold uppercase tracking-wider text-emerald-300">Lokasi</div>
+              {showMaps ? (
+                <>
+                  <div className="mt-5 overflow-hidden rounded-xl border border-emerald-800">
+                    <iframe
+                      title={`Peta lokasi ${settings?.nama_website || 'RT'}`}
+                      src={mapsEmbed}
+                      className="aspect-square w-full bg-emerald-950"
+                      loading="lazy"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  </div>
+                </>
+              ) : (
+                <p className="mt-5 text-sm text-emerald-200/60">Peta lokasi belum tersedia.</p>
+              )}
             </div>
           </div>
+
           <div className="border-t border-emerald-800">
-            <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-emerald-300 sm:flex-row">
+            <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-emerald-300 sm:flex-row">
               <span>{settings?.copyright || `© ${new Date().getFullYear()} ${settings?.nama_website || 'RT'}`}</span>
             </div>
           </div>
