@@ -14,6 +14,7 @@ import VisiMisi from './pages/LandingPage/VisiMisi.jsx'
 import PendataanAnakKosPublik from './pages/LandingPage/PendataanAnakKosPublik.jsx'
 import BeritaKegiatanPublik from './pages/LandingPage/BeritaKegiatanPublik.jsx'
 import InventarisPublik from './pages/LandingPage/InventarisPublik.jsx'
+import PengurusPublik from './pages/LandingPage/PengurusPublik.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Profile from './pages/Profile.jsx'
 import KKList from './pages/KK/KKList.jsx'
@@ -70,6 +71,7 @@ export default function App() {
         <Route path="/berita-kegiatan" element={<BeritaKegiatanPublik />} />
         <Route path="/inventaris" element={<InventarisPublik />} />
         <Route path="/pendataan-anak-kos" element={<PendataanAnakKosPublik />} />
+        <Route path="/pengurus" element={<PengurusPublik />} />
       </Route>
 
       <Route path="/login" element={<Login />} />

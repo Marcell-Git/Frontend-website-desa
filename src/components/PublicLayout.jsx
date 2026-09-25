@@ -37,6 +37,7 @@ const NAV_GROUPS = [
     label: 'Tentang',
     items: [
       { to: '/visi-misi', label: 'Visi & Misi', show: (s) => s.show_visi_misi },
+      { to: '/pengurus', label: 'Pengurus RT', show: () => true },
       { to: '/kontak', label: 'Kontak', show: () => true },
     ],
   },

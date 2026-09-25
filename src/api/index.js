@@ -38,6 +38,8 @@ export const publicApi = {
     client.get('/public/berita-kegiatan').then((r) => r.data.data ?? []),
   inventaris: () =>
     client.get('/public/inventaris').then((r) => r.data.data ?? []),
+  pengurus: () =>
+    client.get('/public/pengurus').then((r) => r.data.data ?? []),
 }
 
 export const beritaKegiatanApi = {
