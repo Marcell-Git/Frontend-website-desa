@@ -64,16 +64,8 @@ export default function Layout() {
         }`}
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center gap-3 border-b border-emerald-800 px-5 py-4">
-            <Logo />
-            <div>
-              <div className="font-semibold text-white">
-                {settings?.nama_website || 'SIM RT'}
-              </div>
-              {settings?.nama_rt && (
-                <div className="text-xs text-emerald-300">{settings.nama_rt}</div>
-              )}
-            </div>
+          <div className="flex justify-center border-b border-emerald-800 px-5 py-4">
+            <Logo settings={settings} className="h-12 w-12 rounded-xl" />
           </div>
 
           <nav className="flex-1 space-y-1 overflow-y-auto p-3">
