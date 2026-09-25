@@ -54,6 +54,7 @@ import BeritaKegiatanForm from './pages/BeritaKegiatan/BeritaKegiatanForm.jsx'
 import InventarisList from './pages/Inventaris/InventarisList.jsx'
 import InventarisForm from './pages/Inventaris/InventarisForm.jsx'
 import InventarisDetail from './pages/Inventaris/InventarisDetail.jsx'
+import PengurusList from './pages/Pengurus/PengurusList.jsx'
 
 export default function App() {
   return (
@@ -70,8 +71,8 @@ export default function App() {
         <Route path="/visi-misi" element={<VisiMisi />} />
         <Route path="/berita-kegiatan" element={<BeritaKegiatanPublik />} />
         <Route path="/inventaris" element={<InventarisPublik />} />
-        <Route path="/pendataan-anak-kos" element={<PendataanAnakKosPublik />} />
         <Route path="/pengurus" element={<PengurusPublik />} />
+        <Route path="/pendataan-anak-kos" element={<PendataanAnakKosPublik />} />
       </Route>
 
       <Route path="/login" element={<Login />} />
@@ -122,6 +123,7 @@ export default function App() {
         <Route path="/kelola-inventaris/baru" element={<InventarisForm />} />
         <Route path="/kelola-inventaris/:id" element={<InventarisDetail />} />
         <Route path="/kelola-inventaris/:id/edit" element={<InventarisForm />} />
+        <Route path="/kelola-pengurus" element={<PengurusList />} />
         <Route path="/kelola-pengaduan" element={<PengaduanList />} />
         <Route path="/kelola-pengaduan/:id" element={<PengaduanDetail />} />
         <Route path="/kelola-laporan" element={<LaporanPage />} />

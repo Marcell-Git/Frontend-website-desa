@@ -116,7 +116,7 @@ export default function Layout() {
               </div>
             )}
 
-            {(can('pengumuman:view') || can('berita-kegiatan:view') || can('inventaris:view') || can('pengaduan:view')) && (
+            {(can('pengumuman:view') || can('berita-kegiatan:view') || can('inventaris:view') || can('pengurus:view') || can('pengaduan:view')) && (
               <div className="pt-3">
                 <div className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-emerald-400">
                   Informasi
@@ -129,6 +129,9 @@ export default function Layout() {
                 </PermissionGate>
                 <PermissionGate permission="inventaris:view">
                   <NavItem to="/kelola-inventaris" label="Inventaris" />
+                </PermissionGate>
+                <PermissionGate permission="pengurus:view">
+                  <NavItem to="/kelola-pengurus" label="Pengurus RT" />
                 </PermissionGate>
                 <PermissionGate permission="pengaduan:view">
                   <NavItem to="/kelola-pengaduan" label="Pengaduan" />

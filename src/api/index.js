@@ -147,6 +147,12 @@ export const pengeluaranApi = {
     client.delete(`/pengeluaran/${id}`).then((r) => r.data.data),
 }
 
+export const pengurusApi = {
+  all: () => client.get('/pengurus/all').then((r) => r.data.data),
+  saveAll: (formData) =>
+    client.put('/pengurus/all', formData, { timeout: 120000 }).then((r) => r.data.data),
+}
+
 export const pengumumanApi = {
   list: (params) =>
     client.get('/pengumuman', { params }).then((r) => r.data.data).then(normalizePaginated),
