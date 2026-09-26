@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { settingsApi } from '../api/index.js'
+import { SOCIAL_LINKS } from '../lib/socialLinks.js'
 import Logo from './Logo.jsx'
 
 const PublicSettingsContext = createContext(null)
@@ -158,12 +159,20 @@ export default function PublicLayout() {
     group.items ? group.items : [group],
   )
 
-  const mapsQuery = [settings?.alamat, settings?.desa, settings?.kecamatan, settings?.kabupaten]
-    .filter(Boolean)
-    .join(', ')
+  const hasCoordinates =
+    typeof settings?.maps_lat === 'number' && typeof settings?.maps_lng === 'number'
+  const mapsQuery = hasCoordinates
+    ? `${settings.maps_lat},${settings.maps_lng}`
+    : [settings?.alamat, settings?.desa, settings?.kecamatan, settings?.kabupaten]
+        .filter(Boolean)
+        .join(', ')
   const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(mapsQuery)}`
   const mapsEmbed = `${mapsUrl}&output=embed`
-  const showMaps = Boolean(mapsQuery)
+  const showMaps = hasCoordinates || Boolean(mapsQuery)
+
+  const socialLinks = SOCIAL_LINKS.filter(({ key }) =>
+    /^https?:\/\//i.test((settings?.[key] || '').trim()),
+  )
 
   return (
     <PublicSettingsContext.Provider value={{ settings }}>
@@ -295,20 +304,37 @@ export default function PublicLayout() {
                 Media informasi resmi warga: pengumuman, transparansi laporan keuangan, dan sarana
                 penyampaian pengaduan masyarakat.
               </p>
-              {settings?.alamat && (
-                <p className="mt-5 flex items-start gap-2.5 text-sm text-emerald-100/90">
-                  <svg className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  <span>{settings.alamat}</span>
-                </p>
+              {socialLinks.length > 0 && (
+                <nav aria-label="Media sosial" className="mt-6 flex flex-wrap items-center gap-2.5">
+                  {socialLinks.map(({ key, label, icon: Icon }) => (
+                    <a
+                      key={key}
+                      href={settings[key].trim()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={label}
+                      className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-800 text-emerald-200 transition-colors hover:border-emerald-500 hover:bg-emerald-800 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+                    >
+                      <Icon className="h-4 w-4" aria-hidden="true" />
+                      <span className="sr-only">{label}</span>
+                    </a>
+                  ))}
+                </nav>
               )}
             </div>
 
             <div>
               <div className="text-xs font-semibold uppercase tracking-wider text-emerald-300">Kontak</div>
               <ul className="mt-5 space-y-2.5 text-sm">
+                {settings?.alamat && (
+                  <li className="flex items-start gap-2.5">
+                    <svg className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span className="text-emerald-100/90">{settings.alamat}</span>
+                  </li>
+                )}
                 {settings?.telepon && (
                   <li className="flex items-start gap-2.5">
                     <svg className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -325,7 +351,9 @@ export default function PublicLayout() {
                     <span className="break-words text-emerald-100/90">{settings.email}</span>
                   </li>
                 )}
-                {!settings?.telepon && !settings?.email && <li className="text-emerald-200/60">-</li>}
+                {!settings?.alamat && !settings?.telepon && !settings?.email && (
+                  <li className="text-emerald-200/60">-</li>
+                )}
               </ul>
             </div>
 
