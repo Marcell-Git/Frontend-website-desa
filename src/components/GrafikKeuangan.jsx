@@ -1,19 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-  Legend,
-} from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { dashboardApi } from '../api/index.js'
 import { Card, EmptyState, Spinner } from './ui.jsx'
 import { errorMessage } from '../api/client.js'
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
+import '../lib/chartjs.js'
 
 const compactFormatter = new Intl.NumberFormat('id-ID', {
   notation: 'compact',

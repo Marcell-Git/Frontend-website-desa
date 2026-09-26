@@ -8,6 +8,7 @@ import Home from './pages/LandingPage/Home.jsx'
 import PengumumanPublik from './pages/LandingPage/PengumumanPublik.jsx'
 import DetailPengumumanPublik from './pages/LandingPage/DetailPengumumanPublik.jsx'
 import LaporanPublik from './pages/LandingPage/LaporanPublik.jsx'
+import StatistikPublik from './pages/LandingPage/StatistikPublik.jsx'
 import FormPengaduanPublik from './pages/LandingPage/FormPengaduanPublik.jsx'
 import Kontak from './pages/LandingPage/Kontak.jsx'
 import VisiMisi from './pages/LandingPage/VisiMisi.jsx'
@@ -69,6 +70,7 @@ export default function App() {
         <Route path="/pengumuman" element={<PengumumanPublik />} />
         <Route path="/pengumuman/:id" element={<DetailPengumumanPublik />} />
         <Route path="/laporan" element={<LaporanPublik />} />
+        <Route path="/statistik" element={<StatistikPublik />} />
         <Route path="/pengaduan" element={<FormPengaduanPublik />} />
         <Route path="/kontak" element={<Kontak />} />
         <Route path="/visi-misi" element={<VisiMisi />} />

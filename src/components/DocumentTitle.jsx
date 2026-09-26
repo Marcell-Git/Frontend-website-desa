@@ -30,6 +30,7 @@ const PAGE_LABELS = [
   ['/kelola-peraturan', 'Kelola Peraturan RT'],
   ['/pengurus', 'Pengurus RT'],
   ['/pendataan-anak-kos', 'Pendataan Anak Kos / Warga Kontrak'],
+  ['/statistik', 'Statistik Warga'],
   ['/kelola-inventaris', 'Kelola Inventaris'],
   ['/kelola-pengurus', 'Kelola Pengurus'],
 ]

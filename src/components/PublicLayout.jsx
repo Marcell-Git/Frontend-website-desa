@@ -14,6 +14,7 @@ export function usePublicSettings() {
     showPengaduan: true,
     showVisiMisi: true,
     showPeraturan: true,
+    showStatistik: true,
   }
 }
 
@@ -33,6 +34,7 @@ const NAV_GROUPS = [
     label: 'Transparansi',
     items: [
       { to: '/laporan', label: 'Laporan', show: (s) => s.show_laporan },
+      { to: '/statistik', label: 'Statistik Warga', show: (s) => s.show_statistik },
       { to: '/pengaduan', label: 'Pengaduan', show: (s) => s.show_pengaduan },
     ],
   },

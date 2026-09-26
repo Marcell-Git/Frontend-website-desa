@@ -42,6 +42,7 @@ export const publicApi = {
     client.get('/public/pengurus').then((r) => r.data.data ?? []),
   peraturan: () =>
     client.get('/public/peraturan').then((r) => r.data.data ?? []),
+  statistik: () => client.get('/public/statistik').then((r) => r.data.data),
 }
 
 export const beritaKegiatanApi = {

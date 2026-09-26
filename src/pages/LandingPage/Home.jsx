@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { publicApi } from '../../api/index.js'
 import { usePublicSettings } from '../../components/PublicLayout.jsx'
 import StatCard from './StatCard.jsx'
+import StatistikRingkas from './StatistikRingkas.jsx'
 import { tanggalIndo, rupiah, getContrastTextColor } from './format.js'
 
 const IconCalendar = () => (
@@ -192,6 +193,8 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      <StatistikRingkas />
 
       {showLaporan && laporan?.ringkasan && (
         <section className="mx-auto max-w-6xl px-4 pb-16 pt-14 sm:pt-16">
