@@ -99,7 +99,7 @@ export default function PeraturanForm() {
       <Card className="max-w-3xl p-6">
         {error && <Alert className="mb-4">{error}</Alert>}
         <form onSubmit={submit} className="space-y-4">
-          <Field label="Judul" required error={errors.judul} hint="Contoh: Peraturan Desa Nomor 01/2026 tentang Pengelolaan Sampah">
+          <Field label="Judul" required error={errors.judul} hint="Contoh: Peraturan RT Nomor 01/2026 tentang Pengelolaan Sampah">
             <input className={inputClass} value={form.judul} onChange={set('judul')} maxLength={200} placeholder="Judul peraturan" />
           </Field>
 

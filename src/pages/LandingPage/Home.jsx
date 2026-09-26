@@ -143,7 +143,7 @@ export default function Home() {
   const heroActions = [
     showPengumuman && { to: '/pengumuman', label: 'Pengumuman', Icon: IconMegaphone },
     { to: '/berita-kegiatan', label: 'Berita & Kegiatan', Icon: IconCalendar },
-    showPeraturan && { to: '/peraturan', label: 'Peraturan Desa', Icon: IconPeraturan },
+    showPeraturan && { to: '/peraturan', label: 'Peraturan RT', Icon: IconPeraturan },
     showLaporan && { to: '/laporan', label: 'Laporan Keuangan', Icon: IconLaporan },
   ].filter(Boolean)
 

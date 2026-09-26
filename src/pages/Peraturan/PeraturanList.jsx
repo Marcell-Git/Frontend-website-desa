@@ -49,7 +49,7 @@ export default function PeraturanList() {
 
   return (
     <div>
-      <PageHeader title="Peraturan Desa" description="Kelola dokumen peraturan yang dapat dibaca warga.">
+      <PageHeader title="Peraturan RT" description="Kelola dokumen peraturan yang dapat dibaca warga.">
         <PermissionGate permission="peraturan:create">
           <Link to="/kelola-peraturan/baru"><Button>Tambah</Button></Link>
         </PermissionGate>

@@ -300,7 +300,7 @@ export default function SettingsPage() {
             </label>
             <label className="flex items-center gap-3">
               <input type="checkbox" checked={form.show_peraturan} onChange={toggle('show_peraturan')} className="h-4 w-4 rounded text-emerald-600" />
-              <span className="text-sm text-slate-700">Tampilkan halaman Peraturan Desa</span>
+              <span className="text-sm text-slate-700">Tampilkan halaman Peraturan RT</span>
             </label>
           </div>
         </Card>

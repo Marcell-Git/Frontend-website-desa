@@ -131,7 +131,7 @@ export default function Layout() {
                   <NavItem to="/kelola-inventaris" label="Inventaris" />
                 </PermissionGate>
                 <PermissionGate permission="peraturan:view">
-                  <NavItem to="/kelola-peraturan" label="Peraturan Desa" />
+                  <NavItem to="/kelola-peraturan" label="Peraturan RT" />
                 </PermissionGate>
                 <PermissionGate permission="pengurus:view">
                   <NavItem to="/kelola-pengurus" label="Pengurus RT" />

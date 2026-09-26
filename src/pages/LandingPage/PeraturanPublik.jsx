@@ -39,7 +39,7 @@ export default function PeraturanPublik() {
             </span>
             <div>
               <h1 className="text-balance font-display text-2xl font-bold tracking-tight sm:text-3xl">
-                Peraturan Desa
+                Peraturan RT
               </h1>
               <p className="mt-1 text-sm text-emerald-100/85">
                 Dokumen peraturan yang berlaku di wilayah RT 26, dapat dibaca langsung di halaman ini.
