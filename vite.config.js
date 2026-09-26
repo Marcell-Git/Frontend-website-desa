@@ -36,6 +36,11 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // PENTING: tanpa denylist ini, setiap request bernavigasi (termasuk
+        // <iframe src="*.pdf"> dan <a target="_blank" href="*.pdf">) dilayani
+        // index.html oleh NavigationRoute di bawah, bukan file aslinya. Gejalanya
+        // PDF "berubah jadi halaman website". Regex diuji terhadap pathname+search.
+        navigateFallbackDenylist: [/^\/uploads\//, /^\/api\//],
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.startsWith('/uploads/'),
