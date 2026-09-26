@@ -90,8 +90,14 @@ client.interceptors.response.use(
 )
 
 export function errorMessage(err) {
-  if (err.response && err.response.data) {
-    return err.response.data.message || 'Terjadi kesalahan'
+  const data = err.response?.data
+  if (data) {
+    if (data.message && data.message !== 'Validation Error') {
+      return data.message
+    }
+    const firstField = Object.values(data.errors || {}).flat()[0]
+    if (firstField) return firstField
+    if (data.message) return data.message
   }
   return err.message || 'Terjadi kesalahan'
 }

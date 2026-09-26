@@ -162,22 +162,17 @@ export default function UserForm() {
                 <p className="mt-1 text-xs text-slate-500">Role Super Admin tidak dapat diubah</p>
               )}
             </Field>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Field
-                label="Password"
-                required={!isEdit}
-                error={errors.password}
-                hint={isEdit ? 'Kosongkan jika tidak ingin mengubah' : 'Minimal 8 karakter'}
-              >
-                <input
-                  type="password"
-                  className={inputClass}
-                  value={form.password}
-                  onChange={set('password')}
-                  placeholder={isEdit ? '••••••••' : 'Minimal 8 karakter'}
-                />
-              </Field>
-              {!isEdit && (
+            {!isEdit ? (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Field label="Password" required error={errors.password} hint="Minimal 8 karakter">
+                  <input
+                    type="password"
+                    className={inputClass}
+                    value={form.password}
+                    onChange={set('password')}
+                    placeholder="Minimal 8 karakter"
+                  />
+                </Field>
                 <Field label="Konfirmasi Password" required error={errors.confirm_password}>
                   <input
                     type="password"
@@ -187,8 +182,13 @@ export default function UserForm() {
                     placeholder="Ulangi password"
                   />
                 </Field>
-              )}
-            </div>
+              </div>
+            ) : (
+              <p className="rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-xs text-slate-500">
+                Password tidak diubah dari halaman ini. Gunakan tombol{' '}
+                <span className="font-semibold text-slate-600">Reset Password</span> di daftar pengguna.
+              </p>
+            )}
             {isEdit && (
               <Field label="Status">
                 <select

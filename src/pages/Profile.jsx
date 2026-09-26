@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useAuth } from '../auth/AuthContext.jsx'
 import { authApi } from '../api/index.js'
@@ -6,7 +7,8 @@ import { Alert, Button, Card, Field, inputClass, PageHeader } from '../component
 import { errorMessage, fieldErrors } from '../api/client.js'
 
 export default function Profile() {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -28,12 +30,18 @@ export default function Profile() {
 
     setLoading(true)
     try {
-      await authApi.changePassword(oldPassword, newPassword)
-      toast.success('Password berhasil diperbarui')
-      setSuccess('Password berhasil diperbarui')
+      const result = await authApi.changePassword(oldPassword, newPassword)
       setOldPassword('')
       setNewPassword('')
       setConfirmPassword('')
+      if (result?.reauth_required) {
+        toast.success(result.message || 'Password berhasil diperbarui')
+        await logout()
+        navigate('/login', { replace: true, state: { message: result.message } })
+        return
+      }
+      toast.success('Password berhasil diperbarui')
+      setSuccess('Password berhasil diperbarui')
     } catch (err) {
       setError(errorMessage(err))
       setErrors(fieldErrors(err))

@@ -90,6 +90,7 @@ export default function UserList() {
         new_password: resetPassword,
         confirm_password: resetConfirm,
       })
+      toast.success(`Password ${resetUser.username} berhasil direset`)
       setResetUser(null)
     } catch (err) {
       setResetError(errorMessage(err))
