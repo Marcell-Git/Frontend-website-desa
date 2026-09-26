@@ -13,6 +13,7 @@ export function usePublicSettings() {
     showLaporan: true,
     showPengaduan: true,
     showVisiMisi: true,
+    showPeraturan: true,
   }
 }
 
@@ -24,6 +25,7 @@ const NAV_GROUPS = [
       { to: '/pengumuman', label: 'Pengumuman', show: (s) => s.show_pengumuman },
       { to: '/berita-kegiatan', label: 'Berita & Kegiatan', show: () => true },
       { to: '/inventaris', label: 'Inventaris', show: () => true },
+      { to: '/peraturan', label: 'Peraturan Desa', show: (s) => s.show_peraturan },
       { to: '/pendataan-anak-kos', label: 'Pendataan Anak Kos/Warga Kontrak', show: () => true },
     ],
   },

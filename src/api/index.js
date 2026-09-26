@@ -40,6 +40,8 @@ export const publicApi = {
     client.get('/public/inventaris').then((r) => r.data.data ?? []),
   pengurus: () =>
     client.get('/public/pengurus').then((r) => r.data.data ?? []),
+  peraturan: () =>
+    client.get('/public/peraturan').then((r) => r.data.data ?? []),
 }
 
 export const beritaKegiatanApi = {
@@ -58,6 +60,15 @@ export const inventarisApi = {
   create: (formData) => client.post('/inventaris', formData).then((r) => r.data.data),
   update: (id, formData) => client.put(`/inventaris/${id}`, formData).then((r) => r.data.data),
   remove: (id) => client.delete(`/inventaris/${id}`).then((r) => r.data.data),
+}
+
+export const peraturanApi = {
+  list: (params) =>
+    client.get('/peraturan', { params }).then((r) => r.data.data).then(normalizePaginated),
+  get: (id) => client.get(`/peraturan/${id}`).then((r) => r.data.data),
+  create: (formData) => client.post('/peraturan', formData).then((r) => r.data.data),
+  update: (id, formData) => client.put(`/peraturan/${id}`, formData).then((r) => r.data.data),
+  remove: (id) => client.delete(`/peraturan/${id}`).then((r) => r.data.data),
 }
 
 export const kkApi = {

@@ -84,6 +84,7 @@ export default function SettingsPage() {
         show_laporan: form.show_laporan,
         show_pengaduan: form.show_pengaduan,
         show_visi_misi: form.show_visi_misi,
+        show_peraturan: form.show_peraturan,
       }
       await settingsApi.update(body)
       toast.success('Pengaturan berhasil disimpan')
@@ -296,6 +297,10 @@ export default function SettingsPage() {
             <label className="flex items-center gap-3">
               <input type="checkbox" checked={form.show_visi_misi} onChange={toggle('show_visi_misi')} className="h-4 w-4 rounded text-emerald-600" />
               <span className="text-sm text-slate-700">Tampilkan halaman Visi &amp; Misi</span>
+            </label>
+            <label className="flex items-center gap-3">
+              <input type="checkbox" checked={form.show_peraturan} onChange={toggle('show_peraturan')} className="h-4 w-4 rounded text-emerald-600" />
+              <span className="text-sm text-slate-700">Tampilkan halaman Peraturan Desa</span>
             </label>
           </div>
         </Card>
