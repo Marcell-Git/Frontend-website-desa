@@ -3,13 +3,36 @@ import { toast } from 'sonner'
 import { settingsApi } from '../../api/index.js'
 import { assetUrl } from '../../api/config.js'
 import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
-import { errorMessage } from '../../api/client.js'
+import { errorMessage, fieldErrors } from '../../api/client.js'
+import { SOCIAL_LINKS } from '../../lib/socialLinks.js'
+
+function toCoordinate(raw) {
+  // String kosong (bukan null) dipakai agar backend bisa membedakan
+  // "dikosongkan" dari "tidak dikirim" pada field ini.
+  if (raw === null || raw === undefined || String(raw).trim() === '') return ''
+  const num = Number(raw)
+  // Kirim apa adanya bila bukan angka, supaya backend menolak dan nilai lama tidak tersirkap.
+  return Number.isFinite(num) ? num : String(raw).trim()
+}
+
+function toDMS(value, axis) {
+  const num = Number(value)
+  if (!Number.isFinite(num) || num === 0) return ''
+  const hemisphere = axis === 'lat' ? (num < 0 ? 'S' : 'N') : num < 0 ? 'W' : 'E'
+  const abs = Math.abs(num)
+  const deg = Math.floor(abs)
+  const minFloat = (abs - deg) * 60
+  const min = Math.floor(minFloat)
+  const sec = (minFloat - min) * 60
+  return `${deg}°${min}'${sec.toFixed(1)}"${hemisphere}`
+}
 
 export default function SettingsPage() {
   const [form, setForm] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const [errors, setErrors] = useState({})
   const [success, setSuccess] = useState('')
   const [uploading, setUploading] = useState('')
   const logoRef = useRef()
@@ -25,9 +48,15 @@ export default function SettingsPage() {
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }))
   const toggle = (key) => () => setForm((f) => ({ ...f, [key]: !f[key] }))
 
+  const dmsPreview =
+    form && String(form.maps_lat ?? '').trim() !== '' && String(form.maps_lng ?? '').trim() !== ''
+      ? [toDMS(form.maps_lat, 'lat'), toDMS(form.maps_lng, 'lng')].filter(Boolean).join('  ')
+      : ''
+
   const handleSave = async (e) => {
     e.preventDefault()
     setError('')
+    setErrors({})
     setSuccess('')
     setSaving(true)
     try {
@@ -41,6 +70,13 @@ export default function SettingsPage() {
         telepon: form.telepon,
         email: form.email,
         alamat: form.alamat,
+        maps_lat: toCoordinate(form.maps_lat),
+        maps_lng: toCoordinate(form.maps_lng),
+        facebook: form.facebook,
+        instagram: form.instagram,
+        whatsapp: form.whatsapp,
+        youtube: form.youtube,
+        tiktok: form.tiktok,
         copyright: form.copyright,
         visi: form.visi,
         misi: (form.misi || []).map((item) => item.trim()).filter(Boolean),
@@ -54,6 +90,7 @@ export default function SettingsPage() {
       setSuccess('Pengaturan berhasil disimpan')
     } catch (err) {
       setError(errorMessage(err))
+      setErrors(fieldErrors(err))
     } finally {
       setSaving(false)
     }
@@ -146,6 +183,73 @@ export default function SettingsPage() {
             <Field label="Copyright">
               <input className={inputClass} value={form.copyright || ''} onChange={set('copyright')} />
             </Field>
+          </div>
+        </Card>
+
+        <Card className="mb-6 p-6">
+          <h3 className="mb-1 text-sm font-semibold text-slate-900">Titik Peta</h3>
+          <p className="mb-4 text-xs text-slate-400">
+            Dipakai untuk pin peta di footer halaman publik. Kosongkan keduanya untuk memakai pencarian
+            alamat di atas.
+          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Field
+              label="Latitude"
+              error={errors.maps_lat}
+              hint="Selatan bernilai negatif. Contoh: -7.7122778"
+            >
+              <input
+                type="number"
+                step="any"
+                inputMode="decimal"
+                className={inputClass}
+                value={form.maps_lat ?? ''}
+                onChange={set('maps_lat')}
+                placeholder="-7.7122778"
+              />
+            </Field>
+            <Field
+              label="Longitude"
+              error={errors.maps_lng}
+              hint="Timur bernilai positif. Contoh: 110.5879722"
+            >
+              <input
+                type="number"
+                step="any"
+                inputMode="decimal"
+                className={inputClass}
+                value={form.maps_lng ?? ''}
+                onChange={set('maps_lng')}
+                placeholder="110.5879722"
+              />
+            </Field>
+          </div>
+          {dmsPreview && (
+            <p className="mt-3 text-xs text-slate-500">
+              Titik saat ini: <span className="font-medium text-slate-700">{dmsPreview}</span>
+            </p>
+          )}
+        </Card>
+
+        <Card className="mb-6 p-6">
+          <h3 className="mb-1 text-sm font-semibold text-slate-900">Media Sosial</h3>
+          <p className="mb-4 text-xs text-slate-400">
+            Isi dengan URL lengkap. Link ini muncul sebagai ikon di footer halaman publik. Kosongkan bila
+            tidak dipakai.
+          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {SOCIAL_LINKS.map((item) => (
+              <Field key={item.key} label={item.label} error={errors[item.key]}>
+                <input
+                  type="url"
+                  inputMode="url"
+                  className={inputClass}
+                  value={form[item.key] || ''}
+                  onChange={set(item.key)}
+                  placeholder={item.placeholder}
+                />
+              </Field>
+            ))}
           </div>
         </Card>
 
