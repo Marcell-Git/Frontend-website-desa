@@ -49,7 +49,9 @@ export default function StatistikRingkas() {
   if (!data || data.total_warga === 0) return null
 
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-16 pt-14 sm:pt-16">
+    // Tanpa pb-*: section di bawahnya (Transparansi Keuangan) sudah membawa
+    // pt-nya sendiri. Kalau dua-duanya ditambah, jaraknya jadi ~2x section lain.
+    <section className="mx-auto max-w-6xl px-4 pt-14 sm:pt-16">
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
         <div>
           <h2 className="text-balance font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
