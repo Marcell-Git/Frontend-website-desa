@@ -215,8 +215,7 @@ export default function StatistikPublik() {
           Statistik Warga
         </h1>
         <p className="mt-2 text-sm text-slate-500">
-          Komposisi warga {settings.nama_rt || 'RT 26'} beserta anak kos dan warga kontrak yang
-          tercatat.
+          Komposisi warga RT 26 beserta anak kos dan warga kontrak yang tercatat.
         </p>
       </div>
 
