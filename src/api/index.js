@@ -285,6 +285,8 @@ export const userApi = {
 }
 
 export const exportApi = {
+  kkPdf: () => downloadBlob('/export/kk/pdf', `data-kartu-keluarga-${Date.now()}.pdf`),
+  anakKosPdf: () => downloadBlob('/export/anak-kos/pdf', `data-anak-kos-${Date.now()}.pdf`),
   kasPdf: (params) =>
     downloadBlob(buildExportUrl('/export/kas/pdf', params), `laporan-kas-${Date.now()}.pdf`),
   kasExcel: (params) =>

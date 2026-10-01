@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import { anakKosApi } from '../../api/index.js'
+import { anakKosApi, exportApi } from '../../api/index.js'
 import {
   Badge,
   Button,
@@ -29,6 +29,7 @@ export default function AnakKosList() {
   const [error, setError] = useState('')
   const [toDelete, setToDelete] = useState(null)
   const [deleting, setDeleting] = useState(false)
+  const [printing, setPrinting] = useState(false)
 
   const load = useCallback(() => {
     setLoading(true)
@@ -75,14 +76,33 @@ export default function AnakKosList() {
     return d.toLocaleDateString('id-ID')
   }
 
+  const handlePrint = async () => {
+    setPrinting(true)
+    try {
+      await exportApi.anakKosPdf()
+      toast.success('PDF data anak kos berhasil diunduh')
+    } catch (err) {
+      toast.error(errorMessage(err))
+    } finally {
+      setPrinting(false)
+    }
+  }
+
   return (
     <div>
       <PageHeader title="Anak Kos / Warga Kontrak" description="Daftar seluruh data anak kos/warga kontrak di wilayah RT 26">
-        <PermissionGate permission="anak-kos:create">
-          <Link to="/anak-kos/baru">
-            <Button>Tambah Anak Kos / Warga Kontrak</Button>
-          </Link>
-        </PermissionGate>
+        <div className="flex gap-2">
+          {can('anak-kos:export') && (
+            <Button variant="secondary" size="sm" disabled={printing} onClick={handlePrint}>
+              {printing ? 'Menyiapkan PDF...' : 'Cetak PDF'}
+            </Button>
+          )}
+          <PermissionGate permission="anak-kos:create">
+            <Link to="/anak-kos/baru">
+              <Button>Tambah Anak Kos / Warga Kontrak</Button>
+            </Link>
+          </PermissionGate>
+        </div>
       </PageHeader>
 
       <Card>

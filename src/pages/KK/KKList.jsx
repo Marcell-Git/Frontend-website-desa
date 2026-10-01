@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { kkApi } from '../../api/index.js'
+import { kkApi, exportApi } from '../../api/index.js'
 import {
   Badge,
   Button,
@@ -28,6 +28,7 @@ export default function KKList() {
   const [error, setError] = useState('')
   const [toDelete, setToDelete] = useState(null)
   const [deleting, setDeleting] = useState(false)
+  const [printing, setPrinting] = useState(false)
 
   const load = useCallback(() => {
     setLoading(true)
@@ -62,14 +63,33 @@ export default function KKList() {
     setPage(1)
   }
 
+  const handlePrint = async () => {
+    setPrinting(true)
+    try {
+      await exportApi.kkPdf()
+      toast.success('PDF data Kartu Keluarga berhasil diunduh')
+    } catch (err) {
+      toast.error(errorMessage(err))
+    } finally {
+      setPrinting(false)
+    }
+  }
+
   return (
     <div>
       <PageHeader title="Kartu Keluarga" description="Daftar Kartu Keluarga warga RT 26">
-        <PermissionGate permission="kartu-keluarga:create">
-          <Link to="/kartu-keluarga/baru">
-            <Button>Tambah KK</Button>
-          </Link>
-        </PermissionGate>
+        <div className="flex gap-2">
+          {can('kartu-keluarga:export') && (
+            <Button variant="secondary" size="sm" disabled={printing} onClick={handlePrint}>
+              {printing ? 'Menyiapkan PDF...' : 'Cetak PDF'}
+            </Button>
+          )}
+          <PermissionGate permission="kartu-keluarga:create">
+            <Link to="/kartu-keluarga/baru">
+              <Button>Tambah KK</Button>
+            </Link>
+          </PermissionGate>
+        </div>
       </PageHeader>
 
       <Card>
