@@ -9,9 +9,27 @@ import '../../lib/chartjs.js'
 
 const warnaGrafik = {
   utama: '#059669',
-  kedua: '#34d399',
-  aksen: '#f59e0b',
-  agregat: '#cbd5e1',
+  agregat: '#64748b',
+}
+
+const warnaKelamin = {
+  'Laki-laki': '#059669',
+  'Perempuan': '#d97706',
+}
+
+const warnaStatusKK = {
+  'Kepala Keluarga': '#047857',
+  'Anggota Keluarga': '#0284c7',
+  'Anak Kos / Warga Kontrak': '#d97706',
+}
+
+const warnaUmur = {
+  'Balita (0-4 tahun)': '#7c3aed',
+  'Anak (5-14 tahun)': '#0284c7',
+  'Remaja (15-24 tahun)': '#059669',
+  'Dewasa (25-54 tahun)': '#d97706',
+  'Lansia (55 tahun ke atas)': '#e11d48',
+  'Belum diisi': '#64748b',
 }
 
 const formatJumlah = (value) => Number(value || 0).toLocaleString('id-ID')
@@ -19,9 +37,15 @@ const formatJumlah = (value) => Number(value || 0).toLocaleString('id-ID')
 const formatPersen = (value) =>
   `${Number(value || 0).toLocaleString('id-ID', { maximumFractionDigits: 1 })}%`
 
-const isAgregat = (label) => label.startsWith('Lainnya') || label === 'Belum diisi'
+const isAgregat = (label) => label === 'Belum diisi'
 
-const warnaBatang = (label) => (isAgregat(label) ? warnaGrafik.agregat : warnaGrafik.utama)
+// Warna batang mengikuti peringkat, bukan nama pekerjaan, karena nama pekerjaan
+// bebas diisi dan tidak punya warna yang cocok. "Belum diisi" tetap abu-abu
+// supaya kelihatan sebagai bucket kosong, bukan hasil.
+const warnaPekerjaan = ['#0284c7', '#059669', '#d97706', '#e11d48', '#7c3aed']
+
+const warnaBatang = (label, i) =>
+  isAgregat(label) ? warnaGrafik.agregat : (warnaPekerjaan[i] ?? warnaGrafik.agregat)
 
 // Menulis total warga di tengah lingkaran, sehingga legenda cukup
 // menampilkan nama kategori tanpa angka.
@@ -104,15 +128,22 @@ const IconKos = () => (
 )
 
 function PanelLingkaran({ title, items, warna }) {
+  const warnaItem = (label) => warna[label] ?? warnaGrafik.agregat
   const data = useMemo(
     () => ({
       labels: items.map((item) => item.label),
       datasets: [
         {
           data: items.map((item) => item.jumlah),
-          backgroundColor: items.map((_, i) => warna[i] ?? warnaGrafik.agregat),
+          backgroundColor: items.map((item) => warnaItem(item.label)),
           borderColor: '#ffffff',
           borderWidth: 2,
+          // Celah antar-irisan ala padAngle ECharts. Bedanya: padAngle
+          // dihitung dalam radian (proporsional radius), sedangkan spacing
+          // di sini dalam piksel dan konstan di semua ukuran layar -- nilainya
+          // menambah lebar celah saat radius dihitung, bukan memotong irisan.
+          spacing: 4,
+          borderRadius: 4,
         },
       ],
     }),
@@ -126,12 +157,12 @@ function PanelLingkaran({ title, items, warna }) {
         <Doughnut data={data} options={opsiLingkaran(items)} plugins={[totalTengah]} />
       </div>
       <ul className="mt-4 space-y-2">
-        {items.map((item, i) => (
+        {items.map((item) => (
           <li key={item.label} className="flex items-center gap-2 text-sm">
             <span
               aria-hidden="true"
               className="h-2.5 w-2.5 shrink-0 rounded-full"
-              style={{ backgroundColor: warna[i] ?? warnaGrafik.agregat }}
+              style={{ backgroundColor: warnaItem(item.label) }}
             />
             <span className="min-w-0 flex-1 truncate text-slate-600">{item.label}</span>
             <span className="shrink-0 tabular-nums text-slate-400">
@@ -182,6 +213,7 @@ export default function StatistikPublik() {
   const gender = data?.gender ?? []
   const statusKK = data?.status_kk ?? []
   const pekerjaan = (data?.pekerjaan ?? []).filter((item) => item.jumlah > 0)
+  const umur = (data?.umur ?? []).filter((item) => item.jumlah > 0)
 
   const dataPekerjaan = useMemo(
     () => ({
@@ -189,7 +221,7 @@ export default function StatistikPublik() {
       datasets: [
         {
           data: pekerjaan.map((item) => item.jumlah),
-          backgroundColor: pekerjaan.map((item) => warnaBatang(item.label)),
+          backgroundColor: pekerjaan.map((item, i) => warnaBatang(item.label, i)),
           borderRadius: 4,
           barPercentage: 0.75,
         },
@@ -232,8 +264,8 @@ export default function StatistikPublik() {
               <div key={i} className="h-20 animate-pulse rounded-xl border border-slate-200 bg-slate-100" />
             ))}
           </div>
-          <div className="grid gap-4 lg:grid-cols-2">
-            {[0, 1].map((i) => (
+          <div className="grid gap-4 lg:grid-cols-3">
+            {[0, 1, 2].map((i) => (
               <div key={i} className="h-72 animate-pulse rounded-xl border border-slate-200 bg-slate-100" />
             ))}
           </div>
@@ -267,27 +299,26 @@ export default function StatistikPublik() {
             />
           </div>
 
-          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+          <div className="mt-4 grid gap-4 lg:grid-cols-3">
             {gender.length > 0 && (
-              <PanelLingkaran
-                title="Jenis Kelamin"
-                items={gender}
-                warna={[warnaGrafik.utama, warnaGrafik.aksen]}
-              />
+              <PanelLingkaran title="Jenis Kelamin" items={gender} warna={warnaKelamin} />
             )}
             {statusKK.length > 0 && (
               <PanelLingkaran
                 title="Kedudukan dalam Kartu Keluarga"
                 items={statusKK}
-                warna={[warnaGrafik.utama, warnaGrafik.kedua, warnaGrafik.aksen]}
+                warna={warnaStatusKK}
               />
+            )}
+            {umur.length > 0 && (
+              <PanelLingkaran title="Kelompok Umur" items={umur} warna={warnaUmur} />
             )}
           </div>
 
           {pekerjaan.length > 0 && (
             <div className="mt-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h2 className="text-sm font-semibold text-slate-700">Pekerjaan</h2>
-              <div className="mt-4 h-80">
+              <h2 className="text-sm font-semibold text-slate-700">Mayoritas Pekerjaan</h2>
+              <div className="mt-4 h-64">
                 <Bar data={dataPekerjaan} options={opsiBatang()} />
               </div>
             </div>
