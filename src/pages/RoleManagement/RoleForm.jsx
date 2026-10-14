@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { rolesApi, permissionsApi } from '../../api/index.js'
-import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import { Alert, Button, Card, Field, FormActions, FormSection, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
 
 export default function RoleForm() {
@@ -82,15 +82,10 @@ export default function RoleForm() {
   if (loading) return <Spinner />
 
   return (
-    <div className="max-w-3xl">
+    <div>
       <PageHeader
         title={isEdit ? 'Ubah Role' : 'Tambah Role'}
-        description={isEdit ? 'Perbarui role dan hak akses' : 'Buat role baru'}
-      >
-        <Button variant="secondary" onClick={() => navigate(-1)}>
-          Kembali
-        </Button>
-      </PageHeader>
+        description={isEdit ? 'Perbarui role dan hak akses' : 'Buat role baru'} back />
 
       {error && (
         <div className="mb-4">
@@ -98,8 +93,9 @@ export default function RoleForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <Card className="mb-6 p-6">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 items-start gap-4 xl:grid-cols-3">
+        <Card className="p-6 xl:sticky xl:top-[88px]">
+          <FormSection title="Data role">
           <div className="grid grid-cols-1 gap-4">
             <Field label="Nama Role" required error={errors.nama}>
               <input
@@ -131,17 +127,26 @@ export default function RoleForm() {
               </Field>
             )}
           </div>
+          </FormSection>
+          <FormActions>
+            <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
+              Batal
+            </Button>
+            <Button type="submit" disabled={submitting}>
+              {submitting ? 'Menyimpan...' : 'Simpan'}
+            </Button>
+          </FormActions>
         </Card>
 
-        <Card className="mb-6 p-6">
-          <h3 className="mb-4 text-sm font-semibold text-slate-900">Hak Akses (Permissions)</h3>
-          <div className="space-y-4">
+        <Card className="p-6 xl:col-span-2">
+          <FormSection title="Hak akses" description="Centang modul untuk memberi semua akses, atau pilih aksi satu per satu.">
+          <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
             {Object.entries(allPerms).map(([modul, perms]) => {
               const permIds = perms.map((p) => p.id)
               const allSelected = permIds.every((id) => selectedPerms.has(id))
               const someSelected = permIds.some((id) => selectedPerms.has(id))
               return (
-                <div key={modul} className="rounded-lg border border-slate-200 p-3">
+                <div key={modul} className="rounded-2xl bg-slate-50/70 p-4 ring-1 ring-slate-100">
                   <label className="flex items-center gap-2 mb-2">
                     <input
                       type="checkbox"
@@ -181,16 +186,9 @@ export default function RoleForm() {
               <p className="text-sm text-slate-400">Memuat permissions...</p>
             )}
           </div>
+          </FormSection>
         </Card>
 
-        <div className="flex justify-end gap-2">
-          <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
-            Batal
-          </Button>
-          <Button type="submit" disabled={submitting}>
-            {submitting ? 'Menyimpan...' : 'Simpan'}
-          </Button>
-        </div>
       </form>
     </div>
   )

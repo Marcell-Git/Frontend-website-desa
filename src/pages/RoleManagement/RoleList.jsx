@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { rolesApi } from '../../api/index.js'
-import { Badge, Button, Card, ConfirmModal, EmptyState, PageHeader, Pagination, TableSkeleton, inputClass } from '../../components/ui.jsx'
+import { ActionMenu, Badge, Button, Card, ConfirmModal, EmptyState, PageHeader, Pagination, TableSkeleton, rowLinkClass, toolbarClass, toolbarSearchClass } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
 import { useAuth } from '../../auth/AuthContext.jsx'
@@ -62,10 +62,10 @@ export default function RoleList() {
       </PageHeader>
 
       <Card>
-        <div className="border-b border-slate-200 p-4">
-          <form onSubmit={submitSearch} className="flex max-w-sm gap-2">
+        <div className="border-b border-slate-100 p-4">
+          <form onSubmit={submitSearch} className={toolbarClass}>
             <input
-              className={inputClass}
+              className={toolbarSearchClass}
               placeholder="Cari nama role..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -108,31 +108,14 @@ export default function RoleList() {
                         </Badge>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex justify-end gap-2">
-                          {can('role:view') && (
-                            <Link
-                              to={`/role-management/${item.id}`}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                            >
-                              Detail
-                            </Link>
-                          )}
-                          {can('role:update') && (
-                            <Link
-                              to={`/role-management/${item.id}/edit`}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                            >
-                              Ubah
-                            </Link>
-                          )}
-                          {can('role:delete') && (
-                            <button
-                              onClick={() => setDeleteTarget(item)}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                            >
-                              Hapus
-                            </button>
-                          )}
+                        <div className="flex items-center justify-end gap-2">
+                          {can('role:view') && (<Link to={`/role-management/${item.id}`} className={rowLinkClass}>Detail</Link>)}
+                          <ActionMenu
+                            items={[
+                              can('role:update') && { label: 'Ubah', to: `/role-management/${item.id}/edit` },
+                              can('role:delete') && { label: 'Hapus', onClick: () => setDeleteTarget(item), danger: true },
+                            ]}
+                          />
                         </div>
                       </td>
                     </tr>
