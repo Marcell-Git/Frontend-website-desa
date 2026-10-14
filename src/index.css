@@ -5,6 +5,10 @@
   --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
+:root {
+  --admin-bg: #eef0ee;
+}
+
 body {
   @apply bg-slate-100 text-slate-800 antialiased;
 }
@@ -12,6 +16,28 @@ body {
 ::selection {
   background-color: var(--color-emerald-200);
   color: var(--color-emerald-950);
+}
+
+/* Panah dropdown bawaan browser selalu menempel di tepi kanan dan tidak
+   bisa diatur posisinya, sehingga terlihat terlalu mepet pada kolom
+   berbentuk pil. Diganti chevron sendiri yang diberi jarak dari tepi.
+   Sengaja di luar @layer agar padding-right ini menang atas utilitas px-*. */
+select:not([multiple]):not([size]) {
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.1rem center;
+  background-size: 1rem;
+}
+
+/* Ikon kaca pembesar di kolom cari toolbar admin */
+.search-input {
+  padding-left: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='9' cy='9' r='6'/%3E%3Cpath d='m17 17-3.5-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 1rem center;
+  background-size: 1rem;
 }
 
 .hero-bg {
