@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { userApi, rolesApi } from '../../api/index.js'
 import {
+  ActionMenu,
   Badge,
   Button,
   Card,
@@ -12,6 +13,9 @@ import {
   Pagination,
   TableSkeleton,
   inputClass,
+  toolbarClass,
+  toolbarFieldClass,
+  toolbarSearchClass,
 } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -130,10 +134,10 @@ export default function UserList() {
       </PageHeader>
 
       <Card>
-        <div className="border-b border-slate-200 p-4">
-          <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
+        <div className="border-b border-slate-100 p-4">
+          <form onSubmit={submitSearch} className={toolbarClass}>
             <input
-              className={`${inputClass} max-w-xs`}
+              className={toolbarSearchClass}
               placeholder="Cari nama, username, jabatan..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -142,7 +146,7 @@ export default function UserList() {
               Cari
             </Button>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterRole}
               onChange={(e) => { setFilterRole(e.target.value); setPage(1) }}
             >
@@ -152,7 +156,7 @@ export default function UserList() {
               ))}
             </select>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterStatus}
               onChange={(e) => { setFilterStatus(e.target.value); setPage(1) }}
             >
@@ -201,43 +205,15 @@ export default function UserList() {
                           : '-'}
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex justify-end gap-2">
-                          {can('user:update') && (
-                            <Link
-                              to={`/user-management/${item.id}/edit`}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                            >
-                              Ubah
-                            </Link>
-                          )}
-                          {can('user:update') && (
-                            <button
-                              onClick={() => openResetPassword(item)}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-amber-600 hover:bg-amber-50"
-                            >
-                              Reset Password
-                            </button>
-                          )}
-                          {can('user:update') && (
-                            <button
-                              onClick={() => handleToggleStatus(item)}
-                              className={`rounded-lg px-2.5 py-1 text-xs font-medium ${
-                                item.status
-                                  ? 'text-red-600 hover:bg-red-50'
-                                  : 'text-emerald-600 hover:bg-emerald-50'
-                              }`}
-                            >
-                              {item.status ? 'Nonaktifkan' : 'Aktifkan'}
-                            </button>
-                          )}
-                          {can('user:delete') && (
-                            <button
-                              onClick={() => setDeleteUser(item)}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                            >
-                              Hapus
-                            </button>
-                          )}
+                        <div className="flex items-center justify-end gap-2">
+                          <ActionMenu
+                            items={[
+                              can('user:update') && { label: 'Ubah', to: `/user-management/${item.id}/edit` },
+                              can('user:update') && { label: 'Reset Password', onClick: () => openResetPassword(item) },
+                              can('user:update') && { label: item.status ? 'Nonaktifkan' : 'Aktifkan', onClick: () => handleToggleStatus(item), danger: item.status },
+                              can('user:delete') && { label: 'Hapus', onClick: () => setDeleteUser(item), danger: true },
+                            ]}
+                          />
                         </div>
                       </td>
                     </tr>

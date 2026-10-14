@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { userApi, rolesApi } from '../../api/index.js'
-import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import { Alert, Button, Card, Field, FormActions, FormSection, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
 import { useAuth } from '../../auth/AuthContext.jsx'
 
@@ -97,15 +97,10 @@ export default function UserForm() {
   if (loading) return <Spinner />
 
   return (
-    <div className="max-w-xl">
+    <div>
       <PageHeader
         title={isEdit ? 'Ubah Pengguna' : 'Tambah Pengguna'}
-        description={isEdit ? 'Perbarui data pengguna' : 'Buat akun pengguna baru'}
-      >
-        <Button variant="secondary" onClick={() => navigate(-1)}>
-          Kembali
-        </Button>
-      </PageHeader>
+        description={isEdit ? 'Perbarui data pengguna' : 'Buat akun pengguna baru'} back />
 
       {error && (
         <div className="mb-4">
@@ -115,103 +110,112 @@ export default function UserForm() {
 
       <form onSubmit={handleSubmit}>
         <Card className="p-6">
-          <div className="grid grid-cols-1 gap-4">
-            <Field label="Username" required error={errors.username}>
-              <input
-                type="text"
-                className={inputClass}
-                value={form.username}
-                onChange={set('username')}
-                placeholder="contoh: budi.santoso"
-              />
-            </Field>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Field label="Nomor HP" error={errors.nomor_hp}>
-                <input
-                  className={inputClass}
-                  value={form.nomor_hp}
-                  onChange={set('nomor_hp')}
-                  placeholder="08xxxxxxxxxx"
-                />
-              </Field>
-              <Field label="Jabatan" error={errors.jabatan}>
-                <input
-                  className={inputClass}
-                  value={form.jabatan}
-                  onChange={set('jabatan')}
-                  placeholder="Contoh: Ketua RT"
-                />
-              </Field>
-            </div>
-            <Field label="Role" required error={errors.role_id}>
-              <select
-                className={inputClass}
-                value={form.role_id}
-                onChange={set('role_id')}
-                disabled={editingSuperAdmin && !isSuperAdmin}
-              >
-                <option value="">Pilih Role</option>
-                {visibleRoles.map((r) => (
-                  <option key={r.id} value={r.id}>{r.nama}</option>
-                ))}
-                {editingSuperAdmin && !isSuperAdmin && (
-                  <option value={form.role_id}>Super Admin</option>
-                )}
-              </select>
-              {editingSuperAdmin && !isSuperAdmin && (
-                <p className="mt-1 text-xs text-slate-500">Role Super Admin tidak dapat diubah</p>
-              )}
-            </Field>
-            {!isEdit ? (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <Field label="Password" required error={errors.password} hint="Minimal 8 karakter">
+          <div className="space-y-8">
+            <FormSection title="Akun" description="Username dan role menentukan akses pengguna ke panel admin.">
+              <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 ${isEdit ? 'lg:grid-cols-3' : ''}`}>
+                <Field label="Username" required error={errors.username}>
                   <input
-                    type="password"
+                    type="text"
                     className={inputClass}
-                    value={form.password}
-                    onChange={set('password')}
-                    placeholder="Minimal 8 karakter"
+                    value={form.username}
+                    onChange={set('username')}
+                    placeholder="contoh: budi.santoso"
                   />
                 </Field>
-                <Field label="Konfirmasi Password" required error={errors.confirm_password}>
-                  <input
-                    type="password"
+                <Field label="Role" required error={errors.role_id}>
+                  <select
                     className={inputClass}
-                    value={form.confirm_password}
-                    onChange={set('confirm_password')}
-                    placeholder="Ulangi password"
+                    value={form.role_id}
+                    onChange={set('role_id')}
+                    disabled={editingSuperAdmin && !isSuperAdmin}
+                  >
+                    <option value="">Pilih Role</option>
+                    {visibleRoles.map((r) => (
+                      <option key={r.id} value={r.id}>{r.nama}</option>
+                    ))}
+                    {editingSuperAdmin && !isSuperAdmin && (
+                      <option value={form.role_id}>Super Admin</option>
+                    )}
+                  </select>
+                  {editingSuperAdmin && !isSuperAdmin && (
+                    <p className="mt-1 text-xs text-slate-500">Role Super Admin tidak dapat diubah</p>
+                  )}
+                </Field>
+                {isEdit && (
+                  <Field label="Status">
+                    <select
+                      className={inputClass}
+                      value={form.status ? 'true' : 'false'}
+                      onChange={(e) => setForm((f) => ({ ...f, status: e.target.value === 'true' }))}
+                    >
+                      <option value="true">Aktif</option>
+                      <option value="false">Nonaktif</option>
+                    </select>
+                  </Field>
+                )}
+              </div>
+            </FormSection>
+
+            <FormSection title="Kontak & jabatan">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Field label="Nomor HP" error={errors.nomor_hp}>
+                  <input
+                    className={inputClass}
+                    value={form.nomor_hp}
+                    onChange={set('nomor_hp')}
+                    placeholder="08xxxxxxxxxx"
+                  />
+                </Field>
+                <Field label="Jabatan" error={errors.jabatan}>
+                  <input
+                    className={inputClass}
+                    value={form.jabatan}
+                    onChange={set('jabatan')}
+                    placeholder="Contoh: Ketua RT"
                   />
                 </Field>
               </div>
-            ) : (
-              <p className="rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-xs text-slate-500">
-                Password tidak diubah dari halaman ini. Gunakan tombol{' '}
-                <span className="font-semibold text-slate-600">Reset Password</span> di daftar pengguna.
-              </p>
-            )}
-            {isEdit && (
-              <Field label="Status">
-                <select
-                  className={inputClass}
-                  value={form.status ? 'true' : 'false'}
-                  onChange={(e) => setForm((f) => ({ ...f, status: e.target.value === 'true' }))}
-                >
-                  <option value="true">Aktif</option>
-                  <option value="false">Nonaktif</option>
-                </select>
-              </Field>
-            )}
-          </div>
-        </Card>
+            </FormSection>
 
-        <div className="mt-6 flex justify-end gap-2">
-          <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
-            Batal
-          </Button>
-          <Button type="submit" disabled={submitting}>
-            {submitting ? 'Menyimpan...' : 'Simpan'}
-          </Button>
-        </div>
+            <FormSection title="Password">
+              {!isEdit ? (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <Field label="Password" required error={errors.password} hint="Minimal 8 karakter">
+                    <input
+                      type="password"
+                      className={inputClass}
+                      value={form.password}
+                      onChange={set('password')}
+                      placeholder="Minimal 8 karakter"
+                    />
+                  </Field>
+                  <Field label="Konfirmasi Password" required error={errors.confirm_password}>
+                    <input
+                      type="password"
+                      className={inputClass}
+                      value={form.confirm_password}
+                      onChange={set('confirm_password')}
+                      placeholder="Ulangi password"
+                    />
+                  </Field>
+                </div>
+              ) : (
+                <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-500">
+                  Password tidak diubah dari halaman ini. Gunakan tombol{' '}
+                  <span className="font-semibold text-slate-600">Reset Password</span> di daftar pengguna.
+                </p>
+              )}
+            </FormSection>
+          </div>
+          <FormActions>
+            <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
+              Batal
+            </Button>
+            <Button type="submit" disabled={submitting}>
+              {submitting ? 'Menyimpan...' : 'Simpan'}
+            </Button>
+          </FormActions>
+        </Card>
       </form>
     </div>
   )
