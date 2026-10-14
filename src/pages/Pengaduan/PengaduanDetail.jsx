@@ -257,7 +257,7 @@ export default function PengaduanDetail() {
         open={!!pendingStatus}
         title="Ubah Status Pengaduan"
         message={`Status akan diubah dari "${statusLabels[data?.status] || '-'}" menjadi "${
-          nextStatusLabel[pendingStatus] || '-'
+          statusLabels[pendingStatus] || '-'
         }". Lanjutkan?`}
         confirmText="Ubah Status"
         cancelText="Batal"

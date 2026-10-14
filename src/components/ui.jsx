@@ -205,6 +205,12 @@ export function ConfirmModal({
   const panelRef = useRef(null)
   const cancelButtonRef = useRef(null)
   const restoreFocusRef = useRef(null)
+  // Disimpan di ref agar effect fokus tidak berjalan ulang tiap render
+  // (onCancel inline berubah tiap ketikan dan fokus input di children hilang).
+  const onCancelRef = useRef(onCancel)
+  const loadingRef = useRef(loading)
+  onCancelRef.current = onCancel
+  loadingRef.current = loading
 
   useEffect(() => {
     if (!open) return undefined
@@ -212,9 +218,9 @@ export function ConfirmModal({
     const timer = setTimeout(() => cancelButtonRef.current?.focus(), 0)
 
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && !loading) {
+      if (e.key === 'Escape' && !loadingRef.current) {
         e.stopPropagation()
-        onCancel()
+        onCancelRef.current()
         return
       }
       if (e.key !== 'Tab' || !panelRef.current) return
@@ -239,7 +245,7 @@ export function ConfirmModal({
       clearTimeout(timer)
       restoreFocusRef.current?.focus?.()
     }
-  }, [open, loading, onCancel])
+  }, [open])
 
   if (!open) return null
 
