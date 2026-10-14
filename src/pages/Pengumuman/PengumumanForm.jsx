@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { pengumumanApi } from '../../api/index.js'
-import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import { Alert, Button, Card, Field, FormActions, FormSection, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
 
 export default function PengumumanForm() {
@@ -72,15 +72,10 @@ export default function PengumumanForm() {
   if (loading) return <Spinner />
 
   return (
-    <div className="max-w-xl">
+    <div>
       <PageHeader
         title={isEdit ? 'Ubah Pengumuman' : 'Tambah Pengumuman'}
-        description={isEdit ? 'Perbarui data pengumuman' : 'Buat pengumuman baru'}
-      >
-        <Button variant="secondary" onClick={() => navigate(-1)}>
-          Kembali
-        </Button>
-      </PageHeader>
+        description={isEdit ? 'Perbarui data pengumuman' : 'Buat pengumuman baru'} back />
 
       {error && (
         <div className="mb-4">
@@ -88,8 +83,8 @@ export default function PengumumanForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <Card className="p-6">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+        <Card className="p-6 xl:col-span-2">
           <div className="grid grid-cols-1 gap-4">
             <Field label="Judul" required error={errors.judul}>
               <input
@@ -102,13 +97,18 @@ export default function PengumumanForm() {
             <Field label="Isi Pengumuman" required error={errors.isi}>
               <textarea
                 className={inputClass}
-                rows={6}
+                rows={10}
                 value={form.isi}
                 onChange={set('isi')}
                 placeholder="Tulis isi pengumuman di sini..."
               />
             </Field>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          </div>
+        </Card>
+
+        <Card className="self-start p-6">
+          <FormSection title="Publikasi" description="Draft tidak tampil di halaman publik.">
+            <div className="grid grid-cols-1 gap-4">
               <Field label="Tanggal Publikasi" required error={errors.tanggal_publikasi}>
                 <input
                   type="date"
@@ -128,17 +128,16 @@ export default function PengumumanForm() {
                 </select>
               </Field>
             </div>
-          </div>
+          </FormSection>
+          <FormActions>
+            <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
+              Batal
+            </Button>
+            <Button type="submit" disabled={submitting}>
+              {submitting ? 'Menyimpan...' : 'Simpan'}
+            </Button>
+          </FormActions>
         </Card>
-
-        <div className="mt-6 flex justify-end gap-2">
-          <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
-            Batal
-          </Button>
-          <Button type="submit" disabled={submitting}>
-            {submitting ? 'Menyimpan...' : 'Simpan'}
-          </Button>
-        </div>
       </form>
     </div>
   )
