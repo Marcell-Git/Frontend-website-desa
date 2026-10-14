@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useLocation, useNavigate, Navigate } from 'react-router-dom'
-import { FaEye, FaEyeSlash } from 'react-icons/fa6'
+import { Link, useLocation, useNavigate, Navigate } from 'react-router-dom'
+import { FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa6'
 import { useAuth } from '../auth/AuthContext.jsx'
 import { Alert, Button, Field, inputClass } from '../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../api/client.js'
@@ -40,19 +40,46 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-emerald-950 p-4">
-      <div className="w-full max-w-md">
-        <div className="mb-6 text-center">
-          <Logo className="mx-auto mb-3 h-14 w-14 rounded-2xl" />
-          <h1 className="text-2xl font-semibold text-white">SIM RT Tegalyoso 26</h1>
-          <p className="mt-1 text-sm text-emerald-300">
-            Sistem Informasi Manajemen RT 26 Desa Tegalyoso
-          </p>
+    <div className="flex min-h-screen items-center justify-center bg-[var(--admin-bg)] p-4">
+      <div className="grid w-full max-w-4xl overflow-hidden rounded-[32px] bg-white shadow-xl shadow-slate-900/5 ring-1 ring-black/5 md:grid-cols-2">
+        <div
+          className="relative hidden flex-col justify-between bg-cover bg-center p-8 md:flex"
+          style={{ backgroundImage: 'url(/gambar-desa-960.webp)' }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-700/90 via-emerald-800/85 to-emerald-950/95" />
+          <div className="relative flex items-center gap-3">
+            <Logo className="h-11 w-11 rounded-full bg-white/10" />
+            <span className="font-display text-sm font-bold text-white">RT 26 Tegalyoso</span>
+          </div>
+          <div className="relative">
+            <h1 className="text-3xl font-medium leading-tight tracking-tight text-white">
+              Sistem Informasi
+              <br />
+              <span className="text-emerald-200">Manajemen RT 26</span>
+            </h1>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-emerald-100/80">
+              Kelola data warga, kas, iuran, dan pengaduan Desa Tegalyoso dalam satu tempat.
+            </p>
+          </div>
         </div>
 
-        <div className="rounded-2xl bg-white p-6 shadow-xl">
-          <h2 className="mb-1 text-lg font-semibold text-slate-900">Masuk</h2>
-          <p className="mb-5 text-sm text-slate-500">Gunakan akun Anda untuk melanjutkan</p>
+        <div className="p-6 sm:p-10">
+          <Link
+            to="/"
+            className="mb-8 inline-flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-slate-900"
+          >
+            <FaArrowLeft className="h-3 w-3" /> Ke beranda
+          </Link>
+
+          <div className="mb-6 flex items-center gap-3 md:hidden">
+            <Logo className="h-11 w-11 rounded-full" />
+            <span className="font-display text-sm font-bold text-emerald-800">SIM RT Tegalyoso 26</span>
+          </div>
+
+          <h2 className="text-3xl font-medium tracking-tight text-slate-900">
+            Selamat datang <span className="font-normal text-slate-400">kembali</span>
+          </h2>
+          <p className="mb-6 mt-1.5 text-sm text-slate-500">Masuk dengan akun pengurus untuk melanjutkan.</p>
 
           {error && (
             <div className="mb-4">
@@ -87,13 +114,13 @@ export default function Login() {
                   onClick={() => setShowPassword((v) => !v)}
                   aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
                   aria-pressed={showPassword}
-                  className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-slate-400 transition-colors hover:text-slate-600"
+                  className="absolute inset-y-0 right-1 flex w-10 items-center justify-center text-slate-400 transition-colors hover:text-slate-600"
                 >
                   {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
                 </button>
               </div>
             </Field>
-            <Button type="submit" className="w-full justify-center" disabled={loading}>
+            <Button type="submit" className="mt-2 w-full justify-center" disabled={loading}>
               {loading ? 'Memproses...' : 'Masuk'}
             </Button>
           </form>
