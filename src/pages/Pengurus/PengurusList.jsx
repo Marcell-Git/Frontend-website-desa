@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { FaTrashCan } from 'react-icons/fa6'
 import { pengurusApi } from '../../api/index.js'
 import { assetUrl } from '../../api/config.js'
 import { Alert, Button, Card, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
@@ -38,6 +39,10 @@ function rowFromItem(item) {
     hapusFoto: false,
   }
 }
+
+// Kolom baris pengurus: No | Jabatan | Nama (lebih lebar) | Foto | Aksi.
+// Foto dan Aksi diberi lebar tetap agar kolom sejajar antarbaris.
+const ROW_GRID = 'md:grid-cols-[2rem_minmax(0,1fr)_minmax(0,1.4fr)_9.5rem_8.25rem] md:gap-4'
 
 function getInitials(name) {
   if (!name) return '?'
@@ -78,7 +83,7 @@ function FotoPicker({ row, disabled, onChange, onClear }) {
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500">
         {getInitials(row.nama_lengkap)}
       </span>
-      <label className={`rounded-lg px-2.5 py-1 text-xs font-medium ${disabled ? 'cursor-not-allowed bg-slate-100 text-slate-400' : 'cursor-pointer bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+      <label className={`rounded-full px-3 py-1.5 text-xs font-medium ${disabled ? 'cursor-not-allowed bg-slate-100 text-slate-400' : 'cursor-pointer bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
         Unggah
         <input
           type="file"
@@ -216,7 +221,7 @@ export default function PengurusList() {
   }
 
   return (
-    <div className="max-w-4xl">
+    <div>
       <PageHeader
         title="Pengurus RT"
         description="Isi tabel jabatan sesuai struktur pengurus RT. Semua perubahan disimpan sekaligus."
@@ -235,7 +240,7 @@ export default function PengurusList() {
 
       <form onSubmit={submit}>
         <Card>
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 p-4">
             <p className="text-sm text-slate-500">
               {rows.length === 0
                 ? 'Belum ada jabatan. Tambahkan minimal satu.'
@@ -251,95 +256,97 @@ export default function PengurusList() {
               Belum ada jabatan. Klik “Tambah Jabatan” untuk memulai.
             </p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b border-slate-200 text-xs uppercase text-slate-500">
-                    <th className="px-4 py-3">No</th>
-                    <th className="px-4 py-3">Jabatan</th>
-                    <th className="px-4 py-3">Nama Lengkap</th>
-                    <th className="px-4 py-3">Foto</th>
-                    <th className="px-4 py-3 text-right">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.map((row, index) => {
-                    const jabatanError = rowError(index, 'jabatan')
-                    const namaError = rowError(index, 'nama_lengkap')
-                    const rowErrorMessage = rowError(index, 'id') || rowError(index, 'foto')
-                    return (
-                      <tr key={row.key} className="border-b border-slate-100 align-top last:border-0">
-                        <td className="px-4 py-3 text-slate-400">{index + 1}</td>
-                        <td className="px-4 py-3">
-                          <input
-                            className={`${inputClass} ${jabatanError ? 'border-red-400' : ''}`}
-                            value={row.jabatan}
-                            disabled={!canSave}
-                            onChange={(e) => patch(row.key, { jabatan: e.target.value })}
-                            placeholder="Ketua RT"
-                            aria-label={`Jabatan baris ${index + 1}`}
-                          />
-                          {jabatanError && <p className="mt-1 text-xs text-red-600">{jabatanError}</p>}
-                        </td>
-                        <td className="px-4 py-3">
-                          <input
-                            className={`${inputClass} ${namaError ? 'border-red-400' : ''}`}
-                            value={row.nama_lengkap}
-                            disabled={!canSave}
-                            onChange={(e) => patch(row.key, { nama_lengkap: e.target.value })}
-                            placeholder="Nama lengkap"
-                            aria-label={`Nama baris ${index + 1}`}
-                          />
-                          {namaError && <p className="mt-1 text-xs text-red-600">{namaError}</p>}
-                        </td>
-                        <td className="px-4 py-3">
-                          <FotoPicker
-                            row={row}
-                            disabled={!canSave}
-                            onChange={(file) => pickFoto(row, file)}
-                            onClear={() => clearFoto(row)}
-                          />
-                          {rowErrorMessage && <p className="mt-1 text-xs text-red-600">{rowErrorMessage}</p>}
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="flex items-center justify-end gap-1">
-                            <button
-                              type="button"
-                              onClick={() => move(index, -1)}
-                              disabled={!canSave || index === 0}
-                              aria-label={`Naikkan baris ${index + 1}`}
-                              className="rounded-lg px-2 py-1 text-xs text-slate-500 hover:bg-slate-100 disabled:opacity-30"
-                            >
-                              ↑
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => move(index, 1)}
-                              disabled={!canSave || index === rows.length - 1}
-                              aria-label={`Turunkan baris ${index + 1}`}
-                              className="rounded-lg px-2 py-1 text-xs text-slate-500 hover:bg-slate-100 disabled:opacity-30"
-                            >
-                              ↓
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => removeRow(row.key)}
-                              disabled={!canSave}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-30"
-                            >
-                              Hapus
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+            <div>
+              {/* Baris memakai grid, bukan tabel: kolom tabel menyusut mengikuti
+                  lebar bawaan input sehingga kotak Jabatan/Nama tidak penuh. */}
+              <div className={`hidden border-b border-slate-100 px-4 py-3 text-xs font-medium uppercase text-slate-500 md:grid ${ROW_GRID}`}>
+                <span>No</span>
+                <span>Jabatan</span>
+                <span>Nama Lengkap</span>
+                <span>Foto</span>
+                <span className="text-right">Aksi</span>
+              </div>
+              {rows.map((row, index) => {
+                const jabatanError = rowError(index, 'jabatan')
+                const namaError = rowError(index, 'nama_lengkap')
+                const rowErrorMessage = rowError(index, 'id') || rowError(index, 'foto')
+                return (
+                  <div
+                    key={row.key}
+                    className={`grid grid-cols-1 gap-3 border-b border-slate-100 px-4 py-3 last:border-0 md:items-start ${ROW_GRID}`}
+                  >
+                    <span className="text-xs font-medium text-slate-400 md:pt-3 md:text-sm">
+                      <span className="md:hidden">Baris </span>
+                      {index + 1}
+                    </span>
+                    <div className="min-w-0">
+                      <input
+                        className={`${inputClass} ${jabatanError ? 'border-red-400' : ''}`}
+                        value={row.jabatan}
+                        disabled={!canSave}
+                        onChange={(e) => patch(row.key, { jabatan: e.target.value })}
+                        placeholder="Ketua RT"
+                        aria-label={`Jabatan baris ${index + 1}`}
+                      />
+                      {jabatanError && <p className="mt-1 text-xs text-red-600">{jabatanError}</p>}
+                    </div>
+                    <div className="min-w-0">
+                      <input
+                        className={`${inputClass} ${namaError ? 'border-red-400' : ''}`}
+                        value={row.nama_lengkap}
+                        disabled={!canSave}
+                        onChange={(e) => patch(row.key, { nama_lengkap: e.target.value })}
+                        placeholder="Nama lengkap"
+                        aria-label={`Nama baris ${index + 1}`}
+                      />
+                      {namaError && <p className="mt-1 text-xs text-red-600">{namaError}</p>}
+                    </div>
+                    <div className="md:pt-0.5">
+                      <FotoPicker
+                        row={row}
+                        disabled={!canSave}
+                        onChange={(file) => pickFoto(row, file)}
+                        onClear={() => clearFoto(row)}
+                      />
+                      {rowErrorMessage && <p className="mt-1 text-xs text-red-600">{rowErrorMessage}</p>}
+                    </div>
+                    <div className="flex items-center justify-end gap-1 md:pt-1">
+                      <button
+                        type="button"
+                        onClick={() => move(index, -1)}
+                        disabled={!canSave || index === 0}
+                        aria-label={`Naikkan baris ${index + 1}`}
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-xs text-slate-500 ring-1 ring-slate-200 hover:bg-slate-50 disabled:opacity-30"
+                      >
+                        ↑
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => move(index, 1)}
+                        disabled={!canSave || index === rows.length - 1}
+                        aria-label={`Turunkan baris ${index + 1}`}
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-xs text-slate-500 ring-1 ring-slate-200 hover:bg-slate-50 disabled:opacity-30"
+                      >
+                        ↓
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removeRow(row.key)}
+                        disabled={!canSave}
+                        aria-label={`Hapus baris ${index + 1}`}
+                        title="Hapus baris"
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-rose-500 ring-1 ring-rose-200 hover:bg-rose-50 disabled:opacity-30"
+                      >
+                        <FaTrashCan className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           )}
 
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 p-4">
             <p className="text-xs text-slate-400">Baris yang dibiarkan kosong akan diabaikan saat disimpan.</p>
             <div className="flex gap-2">
               <Button type="button" variant="secondary" onClick={load} disabled={saving || !canSave}>
