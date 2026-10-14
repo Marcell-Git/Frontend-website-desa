@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { peraturanApi } from '../../api/index.js'
 import { assetUrl } from '../../api/config.js'
-import { Button, Card, ConfirmModal, EmptyState, PageHeader, Pagination, TableSkeleton, inputClass } from '../../components/ui.jsx'
+import { ActionMenu, Button, Card, ConfirmModal, EmptyState, PageHeader, Pagination, TableSkeleton, rowLinkClass, toolbarClass, toolbarSearchClass } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { useAuth } from '../../auth/AuthContext.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -55,8 +55,8 @@ export default function PeraturanList() {
         </PermissionGate>
       </PageHeader>
       <Card>
-        <form onSubmit={(e) => { e.preventDefault(); setPage(1) }} className="flex flex-wrap gap-2 border-b border-slate-200 p-4">
-          <input className={`${inputClass} max-w-xs`} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari judul peraturan..." />
+        <form onSubmit={(e) => { e.preventDefault(); setPage(1) }} className={`${toolbarClass} border-b border-slate-100 p-4`}>
+          <input className={toolbarSearchClass} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari judul peraturan..." />
           <Button type="submit" variant="secondary">Cari</Button>
         </form>
         {error && <p className="p-4 text-sm text-red-600">{error}</p>}
@@ -71,31 +71,14 @@ export default function PeraturanList() {
                   </td>
                   <td className="px-4 py-3 text-slate-600">{formatDate(item.created_at)}</td>
                   <td className="px-4 py-3">
-                    <div className="flex justify-end gap-2">
-                      <a
-                        href={assetUrl(item.file_pdf)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                      >
-                        Buka
-                      </a>
-                      {can('peraturan:update') && (
-                        <Link
-                          to={`/kelola-peraturan/${item.id}/edit`}
-                          className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                        >
-                          Ubah
-                        </Link>
-                      )}
-                      {can('peraturan:delete') && (
-                        <button
-                          onClick={() => setToDelete(item)}
-                          className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                        >
-                          Hapus
-                        </button>
-                      )}
+                    <div className="flex items-center justify-end gap-2">
+                      <a href={assetUrl(item.file_pdf)} target="_blank" rel="noopener noreferrer" className={rowLinkClass}>Buka</a>
+                      <ActionMenu
+                        items={[
+                          can('peraturan:update') && { label: 'Ubah', to: `/kelola-peraturan/${item.id}/edit` },
+                          can('peraturan:delete') && { label: 'Hapus', onClick: () => setToDelete(item), danger: true },
+                        ]}
+                      />
                     </div>
                   </td>
                 </tr>

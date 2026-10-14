@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { peraturanApi } from '../../api/index.js'
 import { assetUrl } from '../../api/config.js'
-import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import { Alert, Button, Card, Field, FormActions, InfoCard, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
 
 const MAX_SIZE = 10 * 1024 * 1024
@@ -95,53 +95,61 @@ export default function PeraturanForm() {
       <PageHeader
         title={isEdit ? 'Ubah Peraturan' : 'Tambah Peraturan'}
         description="Warga membaca dokumen ini langsung dari halaman publik."
+        back="/kelola-peraturan"
       />
-      <Card className="max-w-3xl p-6">
-        {error && <Alert className="mb-4">{error}</Alert>}
-        <form onSubmit={submit} className="space-y-4">
-          <Field label="Judul" required error={errors.judul} hint="Contoh: Peraturan RT Nomor 01/2026 tentang Pengelolaan Sampah">
-            <input className={inputClass} value={form.judul} onChange={set('judul')} maxLength={200} placeholder="Judul peraturan" />
-          </Field>
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+        <Card className="p-6 xl:col-span-2">
+          {error && <Alert className="mb-4">{error}</Alert>}
+          <form onSubmit={submit} className="space-y-4">
+            <Field label="Judul" required error={errors.judul} hint="Contoh: Peraturan RT Nomor 01/2026 tentang Pengelolaan Sampah">
+              <input className={inputClass} value={form.judul} onChange={set('judul')} maxLength={200} placeholder="Judul peraturan" />
+            </Field>
 
-          {isEdit && current?.file_pdf && !file && (
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">File saat ini</p>
-              <a
-                href={assetUrl(current.file_pdf)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-1 inline-block text-sm font-medium text-emerald-700 hover:underline"
-              >
-                Buka PDF
-              </a>
-              <p className="mt-1 text-xs text-slate-500">Biarkan kosong bila tidak ingin mengganti file.</p>
-            </div>
-          )}
+            {isEdit && current?.file_pdf && !file && (
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">File saat ini</p>
+                <a
+                  href={assetUrl(current.file_pdf)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-block text-sm font-medium text-emerald-700 hover:underline"
+                >
+                  Buka PDF
+                </a>
+                <p className="mt-1 text-xs text-slate-500">Biarkan kosong bila tidak ingin mengganti file.</p>
+              </div>
+            )}
 
-          <Field
-            label="File PDF"
-            required={!isEdit}
-            error={errors.file_pdf}
-            hint="Format PDF, maksimal 10 MB."
-          >
-            <input
-              type="file"
-              accept="application/pdf,.pdf"
-              onChange={pickFile}
-              className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-emerald-700"
-            />
-          </Field>
+            <Field
+              label="File PDF"
+              required={!isEdit}
+              error={errors.file_pdf}
+              hint="Format PDF, maksimal 10 MB."
+            >
+              <input
+                type="file"
+                accept="application/pdf,.pdf"
+                onChange={pickFile}
+                className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-full file:border-0 file:bg-emerald-700 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-emerald-800"
+              />
+            </Field>
 
-          {file && (
-            <p className="text-xs font-medium text-emerald-700">Dipilih: {file.name}</p>
-          )}
+            {file && (
+              <p className="text-xs font-medium text-emerald-700">Dipilih: {file.name}</p>
+            )}
 
-          <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="secondary" onClick={() => navigate('/kelola-peraturan')}>Batal</Button>
-            <Button type="submit" disabled={submitting}>{submitting ? 'Menyimpan...' : 'Simpan'}</Button>
-          </div>
-        </form>
-      </Card>
+            <FormActions>
+              <Button type="button" variant="secondary" onClick={() => navigate('/kelola-peraturan')}>Batal</Button>
+              <Button type="submit" disabled={submitting}>{submitting ? 'Menyimpan...' : 'Simpan'}</Button>
+            </FormActions>
+          </form>
+        </Card>
+
+        <InfoCard title="Dokumen peraturan">
+          <p>Unggah peraturan RT dalam bentuk PDF agar warga bisa membaca dan mengunduhnya dari halaman publik.</p>
+          <p>Gunakan judul yang jelas, termasuk nomor dan tahun peraturan.</p>
+        </InfoCard>
+      </div>
     </div>
   )
 }
