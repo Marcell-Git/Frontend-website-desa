@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { anakKosApi, exportApi } from '../../api/index.js'
 import {
+  ActionMenu,
   Badge,
   Button,
   Card,
@@ -11,7 +12,9 @@ import {
   PageHeader,
   Pagination,
   TableSkeleton,
-  inputClass,
+  toolbarClass,
+  toolbarFieldClass,
+  toolbarSearchClass,
 } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -106,10 +109,10 @@ export default function AnakKosList() {
       </PageHeader>
 
       <Card>
-        <div className="border-b border-slate-200 p-4">
-          <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
+        <div className="border-b border-slate-100 p-4">
+          <form onSubmit={submitSearch} className={toolbarClass}>
             <input
-              className={`${inputClass} max-w-xs`}
+              className={toolbarSearchClass}
               placeholder="Cari NIK, nama, pekerjaan..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -118,7 +121,7 @@ export default function AnakKosList() {
               Cari
             </Button>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={jkFilter}
               onChange={(e) => {
                 setJkFilter(e.target.value)
@@ -130,7 +133,7 @@ export default function AnakKosList() {
               <option value="P">Perempuan</option>
             </select>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={statusFilter}
               onChange={(e) => {
                 setStatusFilter(e.target.value)
@@ -180,23 +183,13 @@ export default function AnakKosList() {
                         {a.status ? <Badge color="green">Aktif</Badge> : <Badge color="red">Nonaktif</Badge>}
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex justify-end gap-2">
-                          {can('anak-kos:update') && (
-                            <Link
-                              to={`/anak-kos/${a.id}/edit`}
-                              className="rounded-lg px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                            >
-                              Ubah
-                            </Link>
-                          )}
-                          {can('anak-kos:delete') && (
-                            <button
-                              onClick={() => setToDelete(a)}
-                              className="rounded-lg px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                            >
-                              Hapus
-                            </button>
-                          )}
+                        <div className="flex items-center justify-end gap-2">
+                          <ActionMenu
+                            items={[
+                              can('anak-kos:update') && { label: 'Ubah', to: `/anak-kos/${a.id}/edit` },
+                              can('anak-kos:delete') && { label: 'Hapus', onClick: () => setToDelete(a), danger: true },
+                            ]}
+                          />
                         </div>
                       </td>
                     </tr>

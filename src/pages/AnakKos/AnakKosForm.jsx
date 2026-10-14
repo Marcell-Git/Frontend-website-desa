@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { anakKosApi } from '../../api/index.js'
-import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import { Alert, Button, Card, Field, FormActions, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import ScanCard from '../../components/ScanCard.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
 
@@ -124,15 +124,10 @@ export default function AnakKosForm() {
   if (loading) return <Spinner />
 
   return (
-    <div className="max-w-3xl">
+    <div>
       <PageHeader
         title={isEdit ? 'Ubah Data Anak Kos / Warga Kontrak' : 'Tambah Anak Kos / Warga Kontrak'}
-        description={isEdit ? 'Perbarui data anak kos/warga kontrak' : 'Isi data anak kos/warga kontrak baru'}
-      >
-        <Button variant="secondary" onClick={() => navigate(-1)}>
-          Kembali
-        </Button>
-      </PageHeader>
+        description={isEdit ? 'Perbarui data anak kos/warga kontrak' : 'Isi data anak kos/warga kontrak baru'} back />
 
       {error && (
         <div className="mb-4">
@@ -226,16 +221,15 @@ export default function AnakKosForm() {
               </Field>
             )}
           </div>
+          <FormActions>
+            <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
+              Batal
+            </Button>
+            <Button type="submit" disabled={submitting}>
+              {submitting ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Simpan Anak Kos / Warga Kontrak'}
+            </Button>
+          </FormActions>
         </Card>
-
-        <div className="mt-6 flex justify-end gap-2">
-          <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
-            Batal
-          </Button>
-          <Button type="submit" disabled={submitting}>
-            {submitting ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Simpan Anak Kos / Warga Kontrak'}
-          </Button>
-        </div>
       </form>
     </div>
   )
