@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { kasApi } from '../../api/index.js'
-import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import { Alert, Button, Card, Field, FormActions, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
 
 export default function KasForm() {
@@ -70,15 +70,10 @@ export default function KasForm() {
   if (loading) return <Spinner />
 
   return (
-    <div className="max-w-xl">
+    <div>
       <PageHeader
         title={isEdit ? 'Ubah Transaksi Kas' : 'Tambah Transaksi Kas'}
-        description={isEdit ? 'Perbarui data transaksi kas' : 'Isi data transaksi kas baru'}
-      >
-        <Button variant="secondary" onClick={() => navigate(-1)}>
-          Kembali
-        </Button>
-      </PageHeader>
+        description={isEdit ? 'Perbarui data transaksi kas' : 'Isi data transaksi kas baru'} back />
 
       {error && (
         <div className="mb-4">
@@ -88,7 +83,7 @@ export default function KasForm() {
 
       <form onSubmit={handleSubmit}>
         <Card className="p-6">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Field label="Tanggal" required error={errors.tanggal}>
               <input
                 type="date"
@@ -115,7 +110,7 @@ export default function KasForm() {
                 min="1"
               />
             </Field>
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-2 lg:col-span-3">
               <Field label="Keterangan" error={errors.keterangan}>
                 <textarea
                   className={inputClass}
@@ -127,16 +122,15 @@ export default function KasForm() {
               </Field>
             </div>
           </div>
+          <FormActions>
+            <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
+              Batal
+            </Button>
+            <Button type="submit" disabled={submitting}>
+              {submitting ? 'Menyimpan...' : 'Simpan'}
+            </Button>
+          </FormActions>
         </Card>
-
-        <div className="mt-6 flex justify-end gap-2">
-          <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
-            Batal
-          </Button>
-          <Button type="submit" disabled={submitting}>
-            {submitting ? 'Menyimpan...' : 'Simpan'}
-          </Button>
-        </div>
       </form>
     </div>
   )
