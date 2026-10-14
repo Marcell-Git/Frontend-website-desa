@@ -3,7 +3,9 @@ import { toast } from 'sonner'
 import { backupApi } from '../../api/index.js'
 import { errorMessage } from '../../api/client.js'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
+import { useAuth } from '../../auth/AuthContext.jsx'
 import {
+  ActionMenu,
   Alert,
   Button,
   Card,
@@ -12,7 +14,8 @@ import {
   PageHeader,
   Pagination,
   TableSkeleton,
-  inputClass,
+  toolbarClass,
+  toolbarSearchClass,
 } from '../../components/ui.jsx'
 
 function formatSize(bytes) {
@@ -23,6 +26,7 @@ function formatSize(bytes) {
 }
 
 export default function BackupList() {
+  const { can } = useAuth()
   const [data, setData] = useState({ data: [], pagination: {} })
   const [loading, setLoading] = useState(true)
   const [creating, setCreating] = useState(false)
@@ -134,10 +138,10 @@ export default function BackupList() {
       )}
 
       <Card>
-        <div className="border-b border-slate-200 p-4">
-          <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
+        <div className="border-b border-slate-100 p-4">
+          <form onSubmit={submitSearch} className={toolbarClass}>
             <input
-              className={`${inputClass} max-w-xs`}
+              className={toolbarSearchClass}
               placeholder="Cari nama file backup..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -176,29 +180,14 @@ export default function BackupList() {
                       <td className="whitespace-nowrap px-4 py-3 text-slate-600">{formatSize(item.ukuran_file)}</td>
                       <td className="px-4 py-3 text-slate-600">{item.dibuat_oleh || '-'}</td>
                       <td className="px-4 py-3">
-                        <div className="flex justify-end gap-1">
-                          <button
-                            className="rounded-lg px-2.5 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50"
-                            onClick={() => handleDownload(item)}
-                          >
-                            Unduh
-                          </button>
-                          <PermissionGate permission="backup:restore">
-                            <button
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-blue-700 hover:bg-blue-50"
-                              onClick={() => setRestoreTarget(item)}
-                            >
-                              Restore
-                            </button>
-                          </PermissionGate>
-                          <PermissionGate permission="backup:delete">
-                            <button
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                              onClick={() => setDeleteTarget(item)}
-                            >
-                              Hapus
-                            </button>
-                          </PermissionGate>
+                        <div className="flex items-center justify-end gap-2">
+                          <ActionMenu
+                            items={[
+                              { label: 'Unduh', onClick: () => handleDownload(item) },
+                              can('backup:restore') && { label: 'Restore', onClick: () => setRestoreTarget(item) },
+                              can('backup:delete') && { label: 'Hapus', onClick: () => setDeleteTarget(item), danger: true },
+                            ]}
+                          />
                         </div>
                       </td>
                     </tr>
