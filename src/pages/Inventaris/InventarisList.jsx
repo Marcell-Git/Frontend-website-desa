@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { inventarisApi } from '../../api/index.js'
-import { Button, Card, ConfirmModal, EmptyState, PageHeader, Pagination, TableSkeleton, inputClass } from '../../components/ui.jsx'
+import { ActionMenu, Button, Card, ConfirmModal, EmptyState, PageHeader, Pagination, TableSkeleton, rowLinkClass, toolbarClass, toolbarFieldClass, toolbarSearchClass } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { useAuth } from '../../auth/AuthContext.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -49,10 +49,10 @@ export default function InventarisList() {
         <PermissionGate permission="inventaris:create"><Link to="/kelola-inventaris/baru"><Button>Tambah</Button></Link></PermissionGate>
       </PageHeader>
       <Card>
-        <form onSubmit={(e) => { e.preventDefault(); setPage(1) }} className="flex flex-wrap gap-2 border-b border-slate-200 p-4">
-          <input className={`${inputClass} max-w-xs`} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari nama barang, lokasi..." />
-          <input className={`${inputClass} max-w-48`} value={kategori} onChange={(e) => { setKategori(e.target.value); setPage(1) }} placeholder="Filter kategori" />
-          <select className={`${inputClass} max-w-44`} value={kondisi} onChange={(e) => { setKondisi(e.target.value); setPage(1) }}>
+        <form onSubmit={(e) => { e.preventDefault(); setPage(1) }} className={`${toolbarClass} border-b border-slate-100 p-4`}>
+          <input className={toolbarSearchClass} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari nama barang, lokasi..." />
+          <input className={toolbarFieldClass} value={kategori} onChange={(e) => { setKategori(e.target.value); setPage(1) }} placeholder="Filter kategori" />
+          <select className={toolbarFieldClass} value={kondisi} onChange={(e) => { setKondisi(e.target.value); setPage(1) }}>
             <option value="">Semua kondisi</option>
             {KONDISI_OPTIONS.map((k) => (
               <option key={k.value} value={k.value}>{k.label}</option>
@@ -93,29 +93,14 @@ export default function InventarisList() {
                     <td className="px-4 py-3 text-slate-600">{item.lokasi_penyimpanan || '-'}</td>
                     <td className="px-4 py-3 text-slate-600">{item.penanggung_jawab || '-'}</td>
                     <td className="px-4 py-3">
-                      <div className="flex justify-end gap-2">
-                        <Link
-                          to={`/kelola-inventaris/${item.id}`}
-                          className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                        >
-                          Lihat
-                        </Link>
-                        {can('inventaris:update') && (
-                          <Link
-                            to={`/kelola-inventaris/${item.id}/edit`}
-                            className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                          >
-                            Ubah
-                          </Link>
-                        )}
-                        {can('inventaris:delete') && (
-                          <button
-                            onClick={() => setToDelete(item)}
-                            className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                          >
-                            Hapus
-                          </button>
-                        )}
+                      <div className="flex items-center justify-end gap-2">
+                        <Link to={`/kelola-inventaris/${item.id}`} className={rowLinkClass}>Lihat</Link>
+                        <ActionMenu
+                          items={[
+                            can('inventaris:update') && { label: 'Ubah', to: `/kelola-inventaris/${item.id}/edit` },
+                            can('inventaris:delete') && { label: 'Hapus', onClick: () => setToDelete(item), danger: true },
+                          ]}
+                        />
                       </div>
                     </td>
                   </tr>

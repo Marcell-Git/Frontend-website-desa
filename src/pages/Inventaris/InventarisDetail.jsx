@@ -84,11 +84,8 @@ export default function InventarisDetail() {
 
   return (
     <div>
-      <PageHeader title="Detail Inventaris" description={data?.nama_barang}>
+      <PageHeader title="Detail Inventaris" description={data?.nama_barang} back="/kelola-inventaris">
         <div className="flex items-center gap-2">
-          <Link to="/kelola-inventaris">
-            <Button variant="secondary">Kembali</Button>
-          </Link>
           {can('inventaris:update') && (
             <Link to={`/kelola-inventaris/${data.id}/edit`}>
               <Button variant="secondary">Ubah</Button>

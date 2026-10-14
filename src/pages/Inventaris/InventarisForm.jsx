@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { inventarisApi } from '../../api/index.js'
-import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import { Alert, Button, Card, Field, FormActions, FormSection, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
 import { assetUrl } from '../../api/config.js'
 import { getContrastTextColor } from '../LandingPage/format.js'
@@ -99,18 +99,79 @@ export default function InventarisForm() {
   if (loading) return <Spinner />
 
   return (
-    <div className="max-w-2xl">
-      <PageHeader title={isEdit ? 'Ubah Barang' : 'Tambah Barang'} description="Data inventaris akan tampil pada halaman publik.">
-        <Button variant="secondary" onClick={() => navigate(-1)}>Kembali</Button>
-      </PageHeader>
+    <div>
+      <PageHeader title={isEdit ? 'Ubah Barang' : 'Tambah Barang'} description="Data inventaris akan tampil pada halaman publik." back />
       {error && <div className="mb-4"><Alert>{error}</Alert></div>}
-      <form onSubmit={submit}>
-        <Card className="p-6">
+      <form onSubmit={submit} className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+        <Card className="p-6 xl:col-span-2">
           <div className="grid gap-4">
             <Field label="Nama Barang" required error={errors.nama_barang}>
               <input className={inputClass} value={form.nama_barang} onChange={set('nama_barang')} placeholder="Contoh: Kursi Lipat" />
             </Field>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Jumlah Barang" required error={errors.jumlah_barang}>
+                <input type="number" min={1} className={inputClass} value={form.jumlah_barang} onChange={set('jumlah_barang')} placeholder="1" />
+              </Field>
+              <Field label="Kondisi Barang" required error={errors.kondisi_barang}>
+                <select className={inputClass} value={form.kondisi_barang} onChange={set('kondisi_barang')}>
+                  {KONDISI_OPTIONS.map((k) => (
+                    <option key={k.value} value={k.value}>{k.label}</option>
+                  ))}
+                </select>
+              </Field>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Lokasi Penyimpanan" error={errors.lokasi_penyimpanan} hint="Opsional">
+                <input className={inputClass} value={form.lokasi_penyimpanan} onChange={set('lokasi_penyimpanan')} placeholder="Contoh: Balai RT 26" />
+              </Field>
+              <Field label="Penanggung Jawab" error={errors.penanggung_jawab} hint="Opsional">
+                <input className={inputClass} value={form.penanggung_jawab} onChange={set('penanggung_jawab')} placeholder="Contoh: Ketua RT" />
+              </Field>
+            </div>
+            <Field label="Periode Perolehan" error={errors.periode_perolehan} hint="Bulan dan tahun barang diperoleh. Opsional.">
+              <input type="month" className={inputClass} value={form.periode_perolehan} onChange={set('periode_perolehan')} />
+            </Field>
+            <Field label="Foto Barang" error={errors.foto}>
+              <div className="space-y-3">
+                {fotoPreview && !hapusFoto ? (
+                  <div className="flex items-start gap-4">
+                    <img src={fotoPreview} alt="Pratinjau" className="h-28 w-28 rounded-xl border border-slate-200 object-cover" />
+                    <div className="flex flex-col gap-2">
+                      <label className="cursor-pointer text-xs font-medium text-emerald-700 hover:underline">
+                        Ganti foto
+                        <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={pickFoto} />
+                      </label>
+                      {isEdit && (
+                        <button type="button" onClick={() => { setHapusFoto(true); setFotoPreview(null); setFotoFile(null) }} className="self-start text-xs font-medium text-red-600 hover:underline">
+                          Hapus foto
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-sm text-slate-500 transition hover:border-emerald-400 hover:bg-emerald-50/40">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 7a2 2 0 012-2h2l2-2h6l2 2h2a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m-3-3h6" />
+                    </svg>
+                    Unggah foto (JPG, PNG, WEBP - maks. 5 MB)
+                    <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={pickFoto} />
+                  </label>
+                )}
+                {fotoPreview && (
+                  <p className="text-xs text-emerald-700">Foto baru siap disimpan.</p>
+                )}
+              </div>
+            </Field>
+            <Field label="Keterangan" error={errors.keterangan} hint="Opsional">
+              <textarea className={inputClass} rows={4} value={form.keterangan} onChange={set('keterangan')} placeholder="Tambah catatan bila perlu..." />
+            </Field>
+          </div>
+        </Card>
 
+        <Card className="self-start p-6">
+          <FormSection title="Label" description="Kategori dan warna tampil sebagai label di halaman publik.">
+            <div className="grid gap-4">
             <Field label="Kategori" required error={errors.kategori} hint="Contoh: Perlengkapan Aula, Sound System, Meja & Kursi.">
               <input className={inputClass} list="kategori-inventaris" value={form.kategori} onChange={set('kategori')} placeholder="Pilih atau tulis kategori" />
               <datalist id="kategori-inventaris">
@@ -123,7 +184,7 @@ export default function InventarisForm() {
                     key={p.kategori}
                     type="button"
                     onClick={() => setForm((c) => ({ ...c, kategori: p.kategori, warna_label: p.warna }))}
-                    className="inline-flex items-center rounded-lg border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-700 transition hover:border-slate-300 hover:bg-white active:scale-95"
+                    className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700 transition hover:border-slate-300 hover:bg-white active:scale-95"
                   >
                     <span className="mr-1.5 h-2 w-2 rounded-full" style={{ backgroundColor: p.warna }} />
                     {p.kategori}
@@ -131,7 +192,6 @@ export default function InventarisForm() {
                 ))}
               </div>
             </Field>
-
             <Field label="Warna Label" error={errors.warna_label}>
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center gap-2">
@@ -169,7 +229,7 @@ export default function InventarisForm() {
                     type="color"
                     value={form.warna_label || '#047857'}
                     onChange={set('warna_label')}
-                    className="h-10 w-12 cursor-pointer rounded-lg border border-slate-300 bg-white p-1"
+                    className="h-10 w-12 cursor-pointer rounded-xl border border-slate-200 bg-white p-1"
                     aria-label="Pilih warna label"
                   />
                   <input
@@ -188,75 +248,13 @@ export default function InventarisForm() {
                 </div>
               </div>
             </Field>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Jumlah Barang" required error={errors.jumlah_barang}>
-                <input type="number" min={1} className={inputClass} value={form.jumlah_barang} onChange={set('jumlah_barang')} placeholder="1" />
-              </Field>
-              <Field label="Kondisi Barang" required error={errors.kondisi_barang}>
-                <select className={inputClass} value={form.kondisi_barang} onChange={set('kondisi_barang')}>
-                  {KONDISI_OPTIONS.map((k) => (
-                    <option key={k.value} value={k.value}>{k.label}</option>
-                  ))}
-                </select>
-              </Field>
             </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Lokasi Penyimpanan" error={errors.lokasi_penyimpanan} hint="Opsional">
-                <input className={inputClass} value={form.lokasi_penyimpanan} onChange={set('lokasi_penyimpanan')} placeholder="Contoh: Balai RT 26" />
-              </Field>
-              <Field label="Penanggung Jawab" error={errors.penanggung_jawab} hint="Opsional">
-                <input className={inputClass} value={form.penanggung_jawab} onChange={set('penanggung_jawab')} placeholder="Contoh: Ketua RT" />
-              </Field>
-            </div>
-
-            <Field label="Periode Perolehan" error={errors.periode_perolehan} hint="Bulan dan tahun barang diperoleh. Opsional.">
-              <input type="month" className={inputClass} value={form.periode_perolehan} onChange={set('periode_perolehan')} />
-            </Field>
-
-            <Field label="Foto Barang" error={errors.foto}>
-              <div className="space-y-3">
-                {fotoPreview && !hapusFoto ? (
-                  <div className="flex items-start gap-4">
-                    <img src={fotoPreview} alt="Pratinjau" className="h-28 w-28 rounded-xl border border-slate-200 object-cover" />
-                    <div className="flex flex-col gap-2">
-                      <label className="cursor-pointer text-xs font-medium text-emerald-700 hover:underline">
-                        Ganti foto
-                        <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={pickFoto} />
-                      </label>
-                      {isEdit && (
-                        <button type="button" onClick={() => { setHapusFoto(true); setFotoPreview(null); setFotoFile(null) }} className="self-start text-xs font-medium text-red-600 hover:underline">
-                          Hapus foto
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-sm text-slate-500 transition hover:border-emerald-400 hover:bg-emerald-50/40">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 7a2 2 0 012-2h2l2-2h6l2 2h2a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m-3-3h6" />
-                    </svg>
-                    Unggah foto (JPG, PNG, WEBP - maks. 5 MB)
-                    <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={pickFoto} />
-                  </label>
-                )}
-                {fotoPreview && (
-                  <p className="text-xs text-emerald-700">Foto baru siap disimpan.</p>
-                )}
-              </div>
-            </Field>
-
-            <Field label="Keterangan" error={errors.keterangan} hint="Opsional">
-              <textarea className={inputClass} rows={4} value={form.keterangan} onChange={set('keterangan')} placeholder="Tambah catatan bila perlu..." />
-            </Field>
-          </div>
+          </FormSection>
+          <FormActions>
+            <Button type="button" variant="secondary" onClick={() => navigate(-1)}>Batal</Button>
+            <Button type="submit" disabled={submitting}>{submitting ? 'Menyimpan...' : 'Simpan'}</Button>
+          </FormActions>
         </Card>
-        <div className="mt-6 flex justify-end gap-2">
-          <Button type="button" variant="secondary" onClick={() => navigate(-1)}>Batal</Button>
-          <Button type="submit" disabled={submitting}>{submitting ? 'Menyimpan...' : 'Simpan'}</Button>
-        </div>
       </form>
     </div>
   )
