@@ -9,7 +9,10 @@ import {
   PageHeader,
   Pagination,
   TableSkeleton,
-  inputClass,
+  rowLinkClass,
+  toolbarClass,
+  toolbarFieldClass,
+  toolbarSearchClass,
 } from '../../components/ui.jsx'
 import { errorMessage } from '../../api/client.js'
 
@@ -79,19 +82,19 @@ export default function AuditLogList() {
       <PageHeader title="Audit Log" description="Riwayat seluruh aktivitas sistem" />
 
       <Card>
-        <div className="border-b border-slate-200 p-4">
-          <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
+        <div className="border-b border-slate-100 p-4">
+          <form onSubmit={submitSearch} className={toolbarClass}>
             <input
-              className={`${inputClass} max-w-xs`}
+              className={toolbarSearchClass}
               placeholder="Cari user, modul, aktivitas..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
             <Button variant="secondary" type="submit">Cari</Button>
           </form>
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className={`mt-2 ${toolbarClass}`}>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterModul}
               onChange={(e) => { setFilterModul(e.target.value); setPage(1) }}
             >
@@ -101,7 +104,7 @@ export default function AuditLogList() {
               ))}
             </select>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterAktivitas}
               onChange={(e) => { setFilterAktivitas(e.target.value); setPage(1) }}
             >
@@ -112,14 +115,14 @@ export default function AuditLogList() {
             </select>
             <input
               type="date"
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterTanggalMulai}
               onChange={(e) => { setFilterTanggalMulai(e.target.value); setPage(1) }}
               placeholder="Dari tanggal"
             />
             <input
               type="date"
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterTanggalAkhir}
               onChange={(e) => { setFilterTanggalAkhir(e.target.value); setPage(1) }}
               placeholder="Sampai tanggal"
@@ -171,7 +174,7 @@ export default function AuditLogList() {
                         <div className="flex justify-end">
                           <Link
                             to={`/audit-log/${item.id}`}
-                            className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
+                            className={rowLinkClass}
                           >
                             Detail
                           </Link>

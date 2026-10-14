@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { auditLogApi } from '../../api/index.js'
 import { Badge, Button, Card, PageHeader, Spinner } from '../../components/ui.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -25,7 +25,6 @@ function JsonView({ label, data }) {
 
 export default function AuditLogDetail() {
   const { id } = useParams()
-  const navigate = useNavigate()
   const [item, setItem] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -58,11 +57,7 @@ export default function AuditLogDetail() {
 
   return (
     <div>
-      <PageHeader title="Detail Audit Log" description="Informasi lengkap catatan aktivitas">
-        <Button variant="secondary" onClick={() => navigate('/audit-log')}>
-          Kembali
-        </Button>
-      </PageHeader>
+      <PageHeader title="Detail Audit Log" description="Informasi lengkap catatan aktivitas" back="/audit-log" />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card className="p-6">
