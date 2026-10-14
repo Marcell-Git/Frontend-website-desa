@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { kkApi, exportApi } from '../../api/index.js'
 import {
+  ActionMenu,
   Badge,
   Button,
   Card,
@@ -11,7 +12,9 @@ import {
   PageHeader,
   Pagination,
   TableSkeleton,
-  inputClass,
+  rowLinkClass,
+  toolbarClass,
+  toolbarSearchClass,
 } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -19,7 +22,6 @@ import { useAuth } from '../../auth/AuthContext.jsx'
 
 export default function KKList() {
   const { can } = useAuth()
-  const navigate = useNavigate()
 
   const [data, setData] = useState(() => ({ data: [], pagination: {} }))
   const [loading, setLoading] = useState(true)
@@ -93,11 +95,11 @@ export default function KKList() {
       </PageHeader>
 
       <Card>
-        <div className="border-b border-slate-200 p-4">
-          <form onSubmit={submitSearch} className="flex max-w-md gap-2">
+        <div className="border-b border-slate-100 p-4">
+          <form onSubmit={submitSearch} className={toolbarClass}>
             <input
-              className={inputClass}
-              placeholder="Cari nomor KK, nama kepala keluarga, alamat..."
+              className={toolbarSearchClass}
+              placeholder="Cari nomor KK, nama/NIK warga, alamat..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -132,6 +134,11 @@ export default function KKList() {
                       <td className="px-4 py-3 font-medium text-slate-900">{kk.nomor_kk}</td>
                       <td className="px-4 py-3">
                         {kk.nama_kepala_keluarga || <span className="text-slate-400">-</span>}
+                        {kk.anggota_cocok && (
+                          <div className="mt-0.5 text-xs text-emerald-700">
+                            Anggota: {kk.anggota_cocok}
+                          </div>
+                        )}
                       </td>
                       <td className="max-w-[220px] truncate px-4 py-3 text-slate-600">
                         {kk.alamat}
@@ -143,29 +150,14 @@ export default function KKList() {
                         <Badge color="blue">{kk.jumlah_anggota} org</Badge>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex justify-end gap-2">
-                          <Link
-                            to={`/kartu-keluarga/${kk.id}`}
-                            className="rounded-lg px-2.5 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50"
-                          >
-                            Detail
-                          </Link>
-                          {can('kartu-keluarga:update') && (
-                            <Link
-                              to={`/kartu-keluarga/${kk.id}/edit`}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                            >
-                              Ubah
-                            </Link>
-                          )}
-                          {can('kartu-keluarga:delete') && (
-                            <button
-                              onClick={() => setToDelete(kk)}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                            >
-                              Hapus
-                            </button>
-                          )}
+                        <div className="flex items-center justify-end gap-2">
+                          <Link to={`/kartu-keluarga/${kk.id}`} className={rowLinkClass}>Detail</Link>
+                          <ActionMenu
+                            items={[
+                              can('kartu-keluarga:update') && { label: 'Ubah', to: `/kartu-keluarga/${kk.id}/edit` },
+                              can('kartu-keluarga:delete') && { label: 'Hapus', onClick: () => setToDelete(kk), danger: true },
+                            ]}
+                          />
                         </div>
                       </td>
                     </tr>

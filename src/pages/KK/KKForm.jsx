@@ -236,15 +236,10 @@ export default function KKForm() {
   if (loading) return <Spinner />
 
   return (
-    <div className="max-w-3xl">
+    <div>
       <PageHeader
         title={isEdit ? 'Ubah Kartu Keluarga' : 'Tambah Kartu Keluarga'}
-        description={isEdit ? 'Perbarui data KK' : 'Isi data kartu keluarga baru'}
-      >
-        <Button variant="secondary" onClick={() => navigate(-1)}>
-          Kembali
-        </Button>
-      </PageHeader>
+        description={isEdit ? 'Perbarui data KK' : 'Isi data kartu keluarga baru'} back />
 
       {error && (
         <div className="mb-4">
@@ -265,8 +260,8 @@ export default function KKForm() {
 
       <form onSubmit={handleSubmit}>
         <Card className="p-6">
-          <h3 className="mb-4 text-sm font-semibold text-slate-700">Data Kartu Keluarga</h3>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <h3 className="mb-4 text-base font-semibold text-slate-800">Data Kartu Keluarga</h3>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {!isEdit && (
               <div className="sm:col-span-2">
                 <Field label="Nomor KK" required error={errors.nomor_kk}>
@@ -304,21 +299,23 @@ export default function KKForm() {
             <Field label="Provinsi" required error={errors.provinsi}>
               <input className={inputClass} value={form.provinsi} onChange={set('provinsi')} />
             </Field>
-            <Field label="No. HP">
-              <input
-                className={inputClass}
-                value={form.nomor_hp}
-                onChange={set('nomor_hp')}
-                placeholder="Opsional"
-              />
-            </Field>
+            <div className="sm:col-span-2">
+              <Field label="No. HP">
+                <input
+                  className={inputClass}
+                  value={form.nomor_hp}
+                  onChange={set('nomor_hp')}
+                  placeholder="Opsional"
+                />
+              </Field>
+            </div>
           </div>
         </Card>
 
         {!isEdit && (
           <Card className="mt-4 p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-slate-700">Kepala Keluarga</h3>
+              <h3 className="text-base font-semibold text-slate-800">Kepala Keluarga</h3>
               <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-600">
                 <input
                   type="checkbox"
@@ -330,7 +327,7 @@ export default function KKForm() {
               </label>
             </div>
             {withKepala && (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <Field label="NIK" required error={errors.nik}>
                   <input
                     className={inputClass}
@@ -407,19 +404,19 @@ export default function KKForm() {
         {!isEdit && (
           <Card className="mt-4 p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-slate-700">Anggota Keluarga Lainnya</h3>
+              <h3 className="text-base font-semibold text-slate-800">Anggota Keluarga Lainnya</h3>
               <Button variant="secondary" size="sm" type="button" onClick={addAnggota}>
                 + Tambah Anggota
               </Button>
             </div>
             {anggota.length === 0 ? (
               <p className="text-sm text-slate-400">
-                Belum ada anggota. Scan KK atau tambahkan secara manual — anggota lain bisa juga ditambahkan nanti dari menu Anggota.
+                Belum ada anggota. Scan KK atau tambahkan secara manual — anggota lain bisa juga ditambahkan nanti dari halaman detail KK.
               </p>
             ) : (
               <div className="space-y-4">
                 {anggota.map((a, i) => (
-                  <div key={i} className="rounded-lg border border-slate-200 p-4">
+                  <div key={i} className="rounded-2xl bg-slate-50/70 p-4 ring-1 ring-slate-100">
                     <div className="mb-3 flex items-center justify-between">
                       <span className="text-xs font-medium text-slate-500">
                         Anggota {i + 1}
@@ -433,7 +430,7 @@ export default function KKForm() {
                         <FaXmark className="h-3.5 w-3.5" /> Hapus
                       </button>
                     </div>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                       <Field label="Hubungan Keluarga" required error={errors[`anggota_${i}_hubungan_keluarga`]}>
                         <select
                           className={inputClass}
@@ -520,7 +517,8 @@ export default function KKForm() {
           </Card>
         )}
 
-        <div className="mt-6 flex justify-end gap-2">
+        {/* Bar tombol menempel di bawah layar karena form ini panjang */}
+        <div className="sticky bottom-4 z-10 mt-4 flex justify-end gap-2 rounded-full bg-white/90 p-2 shadow-lg ring-1 ring-black/5 backdrop-blur">
           <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
             Batal
           </Button>

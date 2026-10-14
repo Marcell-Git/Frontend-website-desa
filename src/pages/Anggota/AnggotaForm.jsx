@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { anggotaApi, kkApi } from '../../api/index.js'
-import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import { Alert, Button, Card, Field, FormActions, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
 
 const emptyForm = {
@@ -129,15 +129,10 @@ export default function AnggotaForm() {
   ]
 
   return (
-    <div className="max-w-3xl">
+    <div>
       <PageHeader
         title={isEdit ? 'Ubah Anggota Keluarga' : 'Tambah Anggota Keluarga'}
-        description={isEdit ? 'Perbarui data anggota' : 'Isi data anggota keluarga baru'}
-      >
-        <Button variant="secondary" onClick={() => navigate(-1)}>
-          Kembali
-        </Button>
-      </PageHeader>
+        description={isEdit ? 'Perbarui data anggota' : 'Isi data anggota keluarga baru'} back />
 
       {error && (
         <div className="mb-4">
@@ -261,16 +256,15 @@ export default function AnggotaForm() {
               </Field>
             )}
           </div>
+          <FormActions>
+            <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
+              Batal
+            </Button>
+            <Button type="submit" disabled={submitting}>
+              {submitting ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Simpan Anggota'}
+            </Button>
+          </FormActions>
         </Card>
-
-        <div className="mt-6 flex justify-end gap-2">
-          <Button variant="secondary" type="button" onClick={() => navigate(-1)}>
-            Batal
-          </Button>
-          <Button type="submit" disabled={submitting}>
-            {submitting ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Simpan Anggota'}
-          </Button>
-        </div>
       </form>
     </div>
   )

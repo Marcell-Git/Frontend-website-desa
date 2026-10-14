@@ -22,7 +22,6 @@ import Profile from './pages/Profile.jsx'
 import KKList from './pages/KK/KKList.jsx'
 import KKForm from './pages/KK/KKForm.jsx'
 import KKDetail from './pages/KK/KKDetail.jsx'
-import AnggotaList from './pages/Anggota/AnggotaList.jsx'
 import AnggotaForm from './pages/Anggota/AnggotaForm.jsx'
 import AnggotaMove from './pages/Anggota/AnggotaMove.jsx'
 import KasList from './pages/Keuangan/KasList.jsx'
@@ -97,7 +96,8 @@ export default function App() {
         <Route path="/kartu-keluarga/baru" element={<KKForm />} />
         <Route path="/kartu-keluarga/:id" element={<KKDetail />} />
         <Route path="/kartu-keluarga/:id/edit" element={<KKForm />} />
-        <Route path="/anggota" element={<AnggotaList />} />
+        {/* Daftar anggota digabung ke pencarian Kartu Keluarga */}
+        <Route path="/anggota" element={<Navigate to="/kartu-keluarga" replace />} />
         <Route path="/anggota/baru" element={<AnggotaForm />} />
         <Route path="/anggota/:id/edit" element={<AnggotaForm />} />
         <Route path="/anggota/:id/pindah" element={<AnggotaMove />} />
