@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { pengaduanApi } from '../../api/index.js'
 import { Alert, Badge, Button, Card, ConfirmModal, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
@@ -30,7 +30,6 @@ const nextStatusLabel = {
 
 export default function PengaduanDetail() {
   const { id } = useParams()
-  const navigate = useNavigate()
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -132,11 +131,7 @@ export default function PengaduanDetail() {
 
   return (
     <div>
-      <PageHeader title="Detail Pengaduan" description={`Pengaduan dari ${data?.nama_pelapor || ''}`}>
-        <Link to="/kelola-pengaduan">
-          <Button variant="secondary">Kembali</Button>
-        </Link>
-      </PageHeader>
+      <PageHeader title="Detail Pengaduan" description={`Pengaduan dari ${data?.nama_pelapor || ''}`} back="/kelola-pengaduan" />
 
       {success && (
         <div className="mb-4">

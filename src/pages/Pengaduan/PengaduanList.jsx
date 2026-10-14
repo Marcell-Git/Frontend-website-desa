@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { pengaduanApi } from '../../api/index.js'
 import {
+  ActionMenu,
   Badge,
   Button,
   Card,
@@ -11,9 +12,12 @@ import {
   PageHeader,
   Pagination,
   TableSkeleton,
-  inputClass,
+  rowLinkClass,
+  toolbarClass,
+  toolbarFieldClass,
+  toolbarSearchClass,
 } from '../../components/ui.jsx'
-import { PermissionGate } from '../../components/ProtectedRoute.jsx'
+import { useAuth } from '../../auth/AuthContext.jsx'
 import { errorMessage } from '../../api/client.js'
 
 const months = [
@@ -34,6 +38,7 @@ const statusLabels = {
 }
 
 export default function PengaduanList() {
+  const { can } = useAuth()
   const [data, setData] = useState({ data: [], pagination: {} })
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -88,10 +93,10 @@ export default function PengaduanList() {
       <PageHeader title="Pengaduan" description="Kelola pengaduan dari warga" />
 
       <Card>
-        <div className="border-b border-slate-200 p-4">
-          <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
+        <div className="border-b border-slate-100 p-4">
+          <form onSubmit={submitSearch} className={toolbarClass}>
             <input
-              className={`${inputClass} max-w-xs`}
+              className={toolbarSearchClass}
               placeholder="Cari nama pelapor, lokasi..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -100,7 +105,7 @@ export default function PengaduanList() {
               Cari
             </Button>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterStatus}
               onChange={(e) => { setFilterStatus(e.target.value); setPage(1) }}
             >
@@ -110,7 +115,7 @@ export default function PengaduanList() {
               <option value="selesai">Selesai</option>
             </select>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterBulan}
               onChange={(e) => { setFilterBulan(e.target.value); setPage(1) }}
             >
@@ -120,7 +125,7 @@ export default function PengaduanList() {
               ))}
             </select>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterTahun}
               onChange={(e) => { setFilterTahun(e.target.value); setPage(1) }}
             >
@@ -164,21 +169,13 @@ export default function PengaduanList() {
                         </Badge>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex justify-end gap-2">
-                          <Link
-                            to={`/kelola-pengaduan/${item.id}`}
-                            className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                          >
-                            Detail
-                          </Link>
-                          <PermissionGate permission="pengaduan:delete">
-                            <button
-                              onClick={() => setToDelete(item)}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                            >
-                              Hapus
-                            </button>
-                          </PermissionGate>
+                        <div className="flex items-center justify-end gap-2">
+                          <Link to={`/kelola-pengaduan/${item.id}`} className={rowLinkClass}>Detail</Link>
+                          <ActionMenu
+                            items={[
+                              can('pengaduan:delete') && { label: 'Hapus', onClick: () => setToDelete(item), danger: true },
+                            ]}
+                          />
                         </div>
                       </td>
                     </tr>
