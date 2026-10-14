@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { beritaKegiatanApi } from '../../api/index.js'
-import { Alert, Button, Card, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
+import { Alert, Button, Card, Field, FormActions, FormSection, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { errorMessage, fieldErrors } from '../../api/client.js'
 import { getContrastTextColor } from '../LandingPage/format.js'
 import { COLOR_PRESETS, KATEGORI_PRESETS } from './constants.js'
@@ -70,14 +70,35 @@ export default function BeritaKegiatanForm() {
   if (loading) return <Spinner />
 
   return (
-    <div className="max-w-2xl">
-      <PageHeader title={isEdit ? 'Ubah Berita & Kegiatan' : 'Tambah Berita & Kegiatan'} description="Informasi akan langsung tampil pada halaman publik.">
-        <Button variant="secondary" onClick={() => navigate(-1)}>Kembali</Button>
-      </PageHeader>
+    <div>
+      <PageHeader title={isEdit ? 'Ubah Berita & Kegiatan' : 'Tambah Berita & Kegiatan'} description="Informasi akan langsung tampil pada halaman publik." back />
       {error && <div className="mb-4"><Alert>{error}</Alert></div>}
-      <form onSubmit={submit}>
-        <Card className="p-6">
+      <form onSubmit={submit} className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+        <Card className="p-6 xl:col-span-2">
           <div className="grid gap-4">
+            <Field label="Judul Kegiatan" required error={errors.judul}>
+              <input className={inputClass} value={form.judul} onChange={set('judul')} placeholder="Contoh: Kerja Bakti Lingkungan" />
+            </Field>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Tanggal" required error={errors.tanggal}>
+                <input type="date" className={inputClass} value={form.tanggal} onChange={set('tanggal')} />
+              </Field>
+              <Field label="Jam" required error={errors.jam}>
+                <input type="time" className={inputClass} value={form.jam} onChange={set('jam')} />
+              </Field>
+            </div>
+            <Field label="Lokasi" required error={errors.lokasi}>
+              <input className={inputClass} value={form.lokasi} onChange={set('lokasi')} placeholder="Contoh: Balai RT 26" />
+            </Field>
+            <Field label="Keterangan" error={errors.keterangan} hint="Opsional">
+              <textarea className={inputClass} rows={5} value={form.keterangan} onChange={set('keterangan')} placeholder="Tambahkan informasi pendukung bila diperlukan..." />
+            </Field>
+          </div>
+        </Card>
+
+        <Card className="self-start p-6">
+          <FormSection title="Label" description="Kategori dan warna tampil sebagai label di halaman publik.">
+            <div className="grid gap-4">
             <Field label="Kategori" required error={errors.kategori} hint="Contoh: Berita, Kegiatan, Sosial, atau Keamanan.">
               <input className={inputClass} list="kategori-berita-kegiatan" value={form.kategori} onChange={set('kategori')} placeholder="Pilih atau tulis kategori" />
               <datalist id="kategori-berita-kegiatan">
@@ -95,7 +116,7 @@ export default function BeritaKegiatanForm() {
                     key={p.kategori}
                     type="button"
                     onClick={() => setForm((c) => ({ ...c, kategori: p.kategori, warna_label: p.warna }))}
-                    className="inline-flex items-center rounded-lg border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-700 transition hover:border-slate-300 hover:bg-white active:scale-95"
+                    className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700 transition hover:border-slate-300 hover:bg-white active:scale-95"
                   >
                     <span className="mr-1.5 h-2 w-2 rounded-full" style={{ backgroundColor: p.warna }} />
                     {p.kategori}
@@ -140,7 +161,7 @@ export default function BeritaKegiatanForm() {
                     type="color"
                     value={form.warna_label || '#047857'}
                     onChange={set('warna_label')}
-                    className="h-10 w-12 cursor-pointer rounded-lg border border-slate-300 bg-white p-1"
+                    className="h-10 w-12 cursor-pointer rounded-xl border border-slate-200 bg-white p-1"
                     aria-label="Pilih warna label"
                   />
                   <input
@@ -162,29 +183,13 @@ export default function BeritaKegiatanForm() {
                 </div>
               </div>
             </Field>
-            <Field label="Judul Kegiatan" required error={errors.judul}>
-              <input className={inputClass} value={form.judul} onChange={set('judul')} placeholder="Contoh: Kerja Bakti Lingkungan" />
-            </Field>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Tanggal" required error={errors.tanggal}>
-                <input type="date" className={inputClass} value={form.tanggal} onChange={set('tanggal')} />
-              </Field>
-              <Field label="Jam" required error={errors.jam}>
-                <input type="time" className={inputClass} value={form.jam} onChange={set('jam')} />
-              </Field>
             </div>
-            <Field label="Lokasi" required error={errors.lokasi}>
-              <input className={inputClass} value={form.lokasi} onChange={set('lokasi')} placeholder="Contoh: Balai RT 26" />
-            </Field>
-            <Field label="Keterangan" error={errors.keterangan} hint="Opsional">
-              <textarea className={inputClass} rows={5} value={form.keterangan} onChange={set('keterangan')} placeholder="Tambahkan informasi pendukung bila diperlukan..." />
-            </Field>
-          </div>
+          </FormSection>
+          <FormActions>
+            <Button type="button" variant="secondary" onClick={() => navigate(-1)}>Batal</Button>
+            <Button type="submit" disabled={submitting}>{submitting ? 'Menyimpan...' : 'Simpan'}</Button>
+          </FormActions>
         </Card>
-        <div className="mt-6 flex justify-end gap-2">
-          <Button type="button" variant="secondary" onClick={() => navigate(-1)}>Batal</Button>
-          <Button type="submit" disabled={submitting}>{submitting ? 'Menyimpan...' : 'Simpan'}</Button>
-        </div>
       </form>
     </div>
   )

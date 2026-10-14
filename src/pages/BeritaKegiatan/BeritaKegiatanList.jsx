@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { beritaKegiatanApi } from '../../api/index.js'
-import { Button, Card, ConfirmModal, EmptyState, PageHeader, Pagination, TableSkeleton, inputClass } from '../../components/ui.jsx'
+import { ActionMenu, Button, Card, ConfirmModal, EmptyState, PageHeader, Pagination, TableSkeleton, toolbarClass, toolbarFieldClass, toolbarSearchClass } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { useAuth } from '../../auth/AuthContext.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -47,9 +47,9 @@ export default function BeritaKegiatanList() {
         <PermissionGate permission="berita-kegiatan:create"><Link to="/kelola-berita-kegiatan/baru"><Button>Tambah</Button></Link></PermissionGate>
       </PageHeader>
       <Card>
-        <form onSubmit={(e) => { e.preventDefault(); setPage(1) }} className="flex flex-wrap gap-2 border-b border-slate-200 p-4">
-          <input className={`${inputClass} max-w-xs`} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari judul, lokasi..." />
-          <input className={`${inputClass} max-w-xs`} value={kategori} onChange={(e) => { setKategori(e.target.value); setPage(1) }} placeholder="Filter kategori" />
+        <form onSubmit={(e) => { e.preventDefault(); setPage(1) }} className={`${toolbarClass} border-b border-slate-100 p-4`}>
+          <input className={toolbarSearchClass} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari judul, lokasi..." />
+          <input className={toolbarFieldClass} value={kategori} onChange={(e) => { setKategori(e.target.value); setPage(1) }} placeholder="Filter kategori" />
           <Button type="submit" variant="secondary">Cari</Button>
         </form>
         {error && <p className="p-4 text-sm text-red-600">{error}</p>}
@@ -78,23 +78,13 @@ export default function BeritaKegiatanList() {
                   <td className="px-4 py-3 text-slate-600">{item.lokasi}</td>
                   <td className="px-4 py-3 text-slate-600">{item.nama_user || '-'}</td>
                   <td className="px-4 py-3">
-                    <div className="flex justify-end gap-2">
-                      {can('berita-kegiatan:update') && (
-                        <Link
-                          to={`/kelola-berita-kegiatan/${item.id}/edit`}
-                          className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                        >
-                          Ubah
-                        </Link>
-                      )}
-                      {can('berita-kegiatan:delete') && (
-                        <button
-                          onClick={() => setToDelete(item)}
-                          className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                        >
-                          Hapus
-                        </button>
-                      )}
+                    <div className="flex items-center justify-end gap-2">
+                      <ActionMenu
+                        items={[
+                          can('berita-kegiatan:update') && { label: 'Ubah', to: `/kelola-berita-kegiatan/${item.id}/edit` },
+                          can('berita-kegiatan:delete') && { label: 'Hapus', onClick: () => setToDelete(item), danger: true },
+                        ]}
+                      />
                     </div>
                   </td>
                 </tr>
