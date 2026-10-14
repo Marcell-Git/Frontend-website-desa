@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { jenisIuranApi } from '../../api/index.js'
 import {
+  ActionMenu,
   Button,
   Card,
   ConfirmModal,
@@ -10,7 +11,8 @@ import {
   PageHeader,
   Pagination,
   TableSkeleton,
-  inputClass,
+  toolbarClass,
+  toolbarSearchClass,
 } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -70,10 +72,10 @@ export default function JenisIuranList() {
       </PageHeader>
 
       <Card>
-        <div className="border-b border-slate-200 p-4">
-          <form onSubmit={submitSearch} className="flex max-w-md gap-2">
+        <div className="border-b border-slate-100 p-4">
+          <form onSubmit={submitSearch} className={toolbarClass}>
             <input
-              className={inputClass}
+              className={toolbarSearchClass}
               placeholder="Cari nama jenis iuran..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -108,23 +110,13 @@ export default function JenisIuranList() {
                         {item.deskripsi || <span className="text-slate-400">-</span>}
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex justify-end gap-2">
-                          {can('jenis-iuran:update') && (
-                            <Link
-                              to={`/jenis-iuran/${item.id}/edit`}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                            >
-                              Ubah
-                            </Link>
-                          )}
-                          {can('jenis-iuran:delete') && (
-                            <button
-                              onClick={() => setToDelete(item)}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                            >
-                              Hapus
-                            </button>
-                          )}
+                        <div className="flex items-center justify-end gap-2">
+                          <ActionMenu
+                            items={[
+                              can('jenis-iuran:update') && { label: 'Ubah', to: `/jenis-iuran/${item.id}/edit` },
+                              can('jenis-iuran:delete') && { label: 'Hapus', onClick: () => setToDelete(item), danger: true },
+                            ]}
+                          />
                         </div>
                       </td>
                     </tr>
