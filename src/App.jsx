@@ -50,6 +50,7 @@ import RoleList from './pages/RoleManagement/RoleList.jsx'
 import RoleForm from './pages/RoleManagement/RoleForm.jsx'
 import RoleDetail from './pages/RoleManagement/RoleDetail.jsx'
 import SettingsPage from './pages/Settings/SettingsPage.jsx'
+import VisiMisiPage from './pages/VisiMisi/VisiMisiPage.jsx'
 import BeritaKegiatanList from './pages/BeritaKegiatan/BeritaKegiatanList.jsx'
 import BeritaKegiatanForm from './pages/BeritaKegiatan/BeritaKegiatanForm.jsx'
 import InventarisList from './pages/Inventaris/InventarisList.jsx'
@@ -133,6 +134,7 @@ export default function App() {
         <Route path="/kelola-peraturan/baru" element={<PeraturanForm />} />
         <Route path="/kelola-peraturan/:id/edit" element={<PeraturanForm />} />
         <Route path="/kelola-pengurus" element={<PengurusList />} />
+        <Route path="/kelola-visi-misi" element={<VisiMisiPage />} />
         <Route path="/kelola-pengaduan" element={<PengaduanList />} />
         <Route path="/kelola-pengaduan/:id" element={<PengaduanDetail />} />
         <Route path="/kelola-laporan" element={<LaporanPage />} />

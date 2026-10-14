@@ -28,6 +28,7 @@ const PAGE_LABELS = [
   ['/inventaris', 'Inventaris Barang RT'],
   ['/peraturan', 'Peraturan RT'],
   ['/kelola-peraturan', 'Kelola Peraturan RT'],
+  ['/kelola-visi-misi', 'Kelola Visi & Misi'],
   ['/pengurus', 'Pengurus RT'],
   ['/pendataan-anak-kos', 'Pendataan Anak Kos / Warga Kontrak'],
   ['/statistik', 'Statistik Warga'],

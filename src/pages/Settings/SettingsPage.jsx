@@ -78,12 +78,9 @@ export default function SettingsPage() {
         youtube: form.youtube,
         tiktok: form.tiktok,
         copyright: form.copyright,
-        visi: form.visi,
-        misi: (form.misi || []).map((item) => item.trim()).filter(Boolean),
         show_pengumuman: form.show_pengumuman,
         show_laporan: form.show_laporan,
         show_pengaduan: form.show_pengaduan,
-        show_visi_misi: form.show_visi_misi,
         show_peraturan: form.show_peraturan,
         show_statistik: form.show_statistik,
       }
@@ -115,21 +112,11 @@ export default function SettingsPage() {
     }
   }
 
-  const updateMisi = (index, value) => {
-    setForm((f) => ({ ...f, misi: (f.misi || []).map((item, i) => (i === index ? value : item)) }))
-  }
-
-  const addMisi = () => setForm((f) => ({ ...f, misi: [...(f.misi || []), ''] }))
-
-  const removeMisi = (index) => {
-    setForm((f) => ({ ...f, misi: (f.misi || []).filter((_, i) => i !== index) }))
-  }
-
   if (loading) return <Spinner />
   if (!form) return <Alert type="error">Gagal memuat pengaturan</Alert>
 
   return (
-    <div className="max-w-3xl">
+    <div>
       <PageHeader title="Pengaturan Website" description="Konfigurasi informasi dan tampilan website" />
 
       {error && (
@@ -143,9 +130,9 @@ export default function SettingsPage() {
         </div>
       )}
 
-      <form onSubmit={handleSave}>
-        <Card className="mb-6 p-6">
-          <h3 className="mb-4 text-sm font-semibold text-slate-900">Informasi Umum</h3>
+      <form onSubmit={handleSave} className="grid grid-cols-1 items-start gap-4 xl:grid-cols-2">
+        <Card className="p-6">
+          <h3 className="mb-4 text-base font-semibold text-slate-800">Informasi Umum</h3>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Nama Website">
               <input className={inputClass} value={form.nama_website || ''} onChange={set('nama_website')} />
@@ -168,8 +155,8 @@ export default function SettingsPage() {
           </div>
         </Card>
 
-        <Card className="mb-6 p-6">
-          <h3 className="mb-4 text-sm font-semibold text-slate-900">Kontak</h3>
+        <Card className="p-6">
+          <h3 className="mb-4 text-base font-semibold text-slate-800">Kontak</h3>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Telepon">
               <input className={inputClass} value={form.telepon || ''} onChange={set('telepon')} placeholder="0274-xxxxxxx" />
@@ -188,8 +175,8 @@ export default function SettingsPage() {
           </div>
         </Card>
 
-        <Card className="mb-6 p-6">
-          <h3 className="mb-1 text-sm font-semibold text-slate-900">Titik Peta</h3>
+        <Card className="p-6">
+          <h3 className="mb-1 text-base font-semibold text-slate-800">Titik Peta</h3>
           <p className="mb-4 text-xs text-slate-400">
             Dipakai untuk pin peta di footer halaman publik. Kosongkan keduanya untuk memakai pencarian
             alamat di atas.
@@ -233,8 +220,8 @@ export default function SettingsPage() {
           )}
         </Card>
 
-        <Card className="mb-6 p-6">
-          <h3 className="mb-1 text-sm font-semibold text-slate-900">Media Sosial</h3>
+        <Card className="p-6">
+          <h3 className="mb-1 text-base font-semibold text-slate-800">Media Sosial</h3>
           <p className="mb-4 text-xs text-slate-400">
             Isi dengan URL lengkap. Link ini muncul sebagai ikon di footer halaman publik. Kosongkan bila
             tidak dipakai.
@@ -255,8 +242,8 @@ export default function SettingsPage() {
           </div>
         </Card>
 
-        <Card className="mb-6 p-6">
-          <h3 className="mb-4 text-sm font-semibold text-slate-900">Branding</h3>
+        <Card className="p-6">
+          <h3 className="mb-4 text-base font-semibold text-slate-800">Branding</h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">Logo</label>
@@ -280,8 +267,8 @@ export default function SettingsPage() {
           </div>
         </Card>
 
-        <Card className="mb-6 p-6">
-          <h3 className="mb-4 text-sm font-semibold text-slate-900">Visibilitas Landing Page</h3>
+        <Card className="p-6">
+          <h3 className="mb-4 text-base font-semibold text-slate-800">Visibilitas Landing Page</h3>
           <div className="space-y-3">
             <label className="flex items-center gap-3">
               <input type="checkbox" checked={form.show_pengumuman} onChange={toggle('show_pengumuman')} className="h-4 w-4 rounded text-emerald-600" />
@@ -296,10 +283,6 @@ export default function SettingsPage() {
               <span className="text-sm text-slate-700">Tampilkan seksi Form Pengaduan</span>
             </label>
             <label className="flex items-center gap-3">
-              <input type="checkbox" checked={form.show_visi_misi} onChange={toggle('show_visi_misi')} className="h-4 w-4 rounded text-emerald-600" />
-              <span className="text-sm text-slate-700">Tampilkan halaman Visi &amp; Misi</span>
-            </label>
-            <label className="flex items-center gap-3">
               <input type="checkbox" checked={form.show_peraturan} onChange={toggle('show_peraturan')} className="h-4 w-4 rounded text-emerald-600" />
               <span className="text-sm text-slate-700">Tampilkan halaman Peraturan RT</span>
             </label>
@@ -307,35 +290,13 @@ export default function SettingsPage() {
               <input type="checkbox" checked={form.show_statistik} onChange={toggle('show_statistik')} className="h-4 w-4 rounded text-emerald-600" />
               <span className="text-sm text-slate-700">Tampilkan Statistik Warga di Beranda</span>
             </label>
+            <p className="border-t border-slate-100 pt-3 text-xs text-slate-400">
+              Tampil/sembunyi halaman Visi &amp; Misi diatur di menu Informasi → Visi &amp; Misi.
+            </p>
           </div>
         </Card>
 
-        <Card className="mb-6 p-6">
-          <h3 className="mb-4 text-sm font-semibold text-slate-900">Visi &amp; Misi</h3>
-          <div className="space-y-4">
-            <Field label="Visi">
-              <textarea className={inputClass} rows={3} value={form.visi || ''} onChange={set('visi')} />
-            </Field>
-            <div>
-              <div className="mb-1 flex items-center justify-between gap-3">
-                <label className="text-sm font-medium text-slate-700">Misi</label>
-                <Button type="button" variant="secondary" size="sm" onClick={addMisi}>Tambah butir</Button>
-              </div>
-              <div className="space-y-2">
-                {(form.misi || []).map((item, index) => (
-                  <div key={index} className="flex items-start gap-2">
-                    <span className="mt-2.5 w-5 shrink-0 text-right text-sm font-semibold text-emerald-700">{index + 1}.</span>
-                    <input className={inputClass} value={item} onChange={(e) => updateMisi(index, e.target.value)} aria-label={`Butir misi ${index + 1}`} />
-                    <Button type="button" variant="ghost" size="sm" className="mt-0.5 text-red-600 hover:bg-red-50 hover:text-red-700" onClick={() => removeMisi(index)} aria-label={`Hapus butir misi ${index + 1}`}>Hapus</Button>
-                  </div>
-                ))}
-              </div>
-              {(form.misi || []).length === 0 && <p className="mt-2 text-xs text-slate-400">Belum ada butir misi. Tambahkan setidaknya satu butir.</p>}
-            </div>
-          </div>
-        </Card>
-
-        <div className="flex justify-end">
+        <div className="sticky bottom-4 z-10 flex justify-end rounded-full bg-white/90 p-2 shadow-lg ring-1 ring-black/5 backdrop-blur xl:col-span-2">
           <Button type="submit" disabled={saving}>
             {saving ? 'Menyimpan...' : 'Simpan Pengaturan'}
           </Button>
