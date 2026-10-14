@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { pengeluaranApi, kategoriPengeluaranApi } from '../../api/index.js'
 import {
+  ActionMenu,
   Badge,
   Button,
   Card,
@@ -11,7 +12,9 @@ import {
   PageHeader,
   Pagination,
   TableSkeleton,
-  inputClass,
+  toolbarClass,
+  toolbarFieldClass,
+  toolbarSearchClass,
 } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
@@ -95,10 +98,10 @@ export default function PengeluaranList() {
       </PageHeader>
 
       <Card>
-        <div className="border-b border-slate-200 p-4">
-          <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
+        <div className="border-b border-slate-100 p-4">
+          <form onSubmit={submitSearch} className={toolbarClass}>
             <input
-              className={`${inputClass} max-w-xs`}
+              className={toolbarSearchClass}
               placeholder="Cari kategori, keterangan..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -107,7 +110,7 @@ export default function PengeluaranList() {
               Cari
             </Button>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterKategori}
               onChange={(e) => { setFilterKategori(e.target.value); setPage(1) }}
             >
@@ -117,7 +120,7 @@ export default function PengeluaranList() {
               ))}
             </select>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterBulan}
               onChange={(e) => { setFilterBulan(e.target.value); setPage(1) }}
             >
@@ -127,7 +130,7 @@ export default function PengeluaranList() {
               ))}
             </select>
             <select
-              className={`${inputClass} max-w-xs`}
+              className={toolbarFieldClass}
               value={filterTahun}
               onChange={(e) => { setFilterTahun(e.target.value); setPage(1) }}
             >
@@ -175,23 +178,13 @@ export default function PengeluaranList() {
                       </td>
                       <td className="px-4 py-3 text-slate-600">{item.nama_user}</td>
                       <td className="px-4 py-3">
-                        <div className="flex justify-end gap-2">
-                          {can('pengeluaran:update') && (
-                            <Link
-                              to={`/pengeluaran/${item.id}/edit`}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
-                            >
-                              Ubah
-                            </Link>
-                          )}
-                          {can('pengeluaran:delete') && (
-                            <button
-                              onClick={() => setToDelete(item)}
-                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
-                            >
-                              Hapus
-                            </button>
-                          )}
+                        <div className="flex items-center justify-end gap-2">
+                          <ActionMenu
+                            items={[
+                              can('pengeluaran:update') && { label: 'Ubah', to: `/pengeluaran/${item.id}/edit` },
+                              can('pengeluaran:delete') && { label: 'Hapus', onClick: () => setToDelete(item), danger: true },
+                            ]}
+                          />
                         </div>
                       </td>
                     </tr>
