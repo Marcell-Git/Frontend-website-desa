@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { publicApi } from '../../api/index.js'
 import { assetUrl } from '../../api/config.js'
+import { formatTanggal } from '../../lib/tanggal.js'
 
 const IconBook = () => (
   <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6} aria-hidden="true">
@@ -18,7 +19,7 @@ function formatDate(value) {
   if (!value) return null
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return null
-  return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(date)
+  return formatTanggal(date)
 }
 
 export default function PeraturanPublik() {

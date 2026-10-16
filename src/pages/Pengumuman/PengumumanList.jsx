@@ -19,6 +19,7 @@ import {
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
 import { useAuth } from '../../auth/AuthContext.jsx'
+import { formatTanggal } from '../../lib/tanggal.js'
 
 const months = [
   '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -153,7 +154,7 @@ export default function PengumumanList() {
                     <tr key={item.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
                       <td className="px-4 py-3 font-medium text-slate-900">{item.judul}</td>
                       <td className="px-4 py-3 text-slate-600">
-                        {new Date(item.tanggal_publikasi).toLocaleDateString('id-ID')}
+                        {formatTanggal(item.tanggal_publikasi)}
                       </td>
                       <td className="px-4 py-3">
                         <Badge variant={item.status === 'published' ? 'green' : 'slate'}>

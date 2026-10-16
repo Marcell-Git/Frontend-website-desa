@@ -19,6 +19,7 @@ import {
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
 import { useAuth } from '../../auth/AuthContext.jsx'
+import { formatTanggal } from '../../lib/tanggal.js'
 
 export default function AnakKosList() {
   const { can } = useAuth()
@@ -71,12 +72,6 @@ export default function AnakKosList() {
   const submitSearch = (e) => {
     e.preventDefault()
     setPage(1)
-  }
-
-  const formatTanggal = (t) => {
-    if (!t) return '-'
-    const d = new Date(t)
-    return d.toLocaleDateString('id-ID')
   }
 
   const handlePrint = async () => {

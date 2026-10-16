@@ -19,6 +19,7 @@ import { Badge, Card, Spinner, EmptyState } from '../components/ui.jsx'
 import { GrafikKeuangan } from '../components/GrafikKeuangan.jsx'
 import { errorMessage } from '../api/client.js'
 import '../lib/chartjs.js'
+import { formatTanggal } from '../lib/tanggal.js'
 
 function ArrowButton({ featured }) {
   return (
@@ -240,7 +241,7 @@ function PengaduanTerbaru() {
                   <div className="min-w-0">
                     <div className="truncate text-sm font-medium text-slate-800">{p.nama_pelapor}</div>
                     <div className="truncate text-xs text-slate-400">
-                      {p.lokasi} &middot; {new Date(p.created_at).toLocaleDateString('id-ID')}
+                      {p.lokasi} &middot; {formatTanggal(p.created_at)}
                     </div>
                   </div>
                   <Badge color={st.color}>{st.label}</Badge>

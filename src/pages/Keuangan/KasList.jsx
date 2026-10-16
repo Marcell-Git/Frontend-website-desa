@@ -19,6 +19,7 @@ import {
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
 import { useAuth } from '../../auth/AuthContext.jsx'
+import { formatTanggal } from '../../lib/tanggal.js'
 
 const formatRupiah = (n) =>
   new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n)
@@ -145,7 +146,7 @@ export default function KasList() {
                   {data.data.map((item) => (
                     <tr key={item.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
                       <td className="px-4 py-3 text-slate-600">
-                        {new Date(item.tanggal).toLocaleDateString('id-ID')}
+                        {formatTanggal(item.tanggal)}
                       </td>
                       <td className="px-4 py-3 font-medium text-slate-900">{item.sumber_kas}</td>
                       <td className="max-w-[200px] truncate px-4 py-3 text-slate-600">

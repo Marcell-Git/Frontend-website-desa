@@ -19,6 +19,7 @@ import {
 } from '../../components/ui.jsx'
 import { useAuth } from '../../auth/AuthContext.jsx'
 import { errorMessage } from '../../api/client.js'
+import { formatTanggal } from '../../lib/tanggal.js'
 
 const months = [
   '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -161,7 +162,7 @@ export default function PengaduanList() {
                       <td className="px-4 py-3 font-medium text-slate-900">{item.nama_pelapor}</td>
                       <td className="px-4 py-3 text-slate-600">{item.lokasi}</td>
                       <td className="px-4 py-3 text-slate-600">
-                        {new Date(item.created_at).toLocaleDateString('id-ID')}
+                        {formatTanggal(item.created_at)}
                       </td>
                       <td className="px-4 py-3">
                         <Badge color={statusColors[item.status] || 'slate'}>

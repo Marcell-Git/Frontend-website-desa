@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { auditLogApi } from '../../api/index.js'
 import { Badge, Button, Card, PageHeader, Spinner } from '../../components/ui.jsx'
 import { errorMessage } from '../../api/client.js'
+import { formatTanggalWaktu } from '../../lib/tanggal.js'
 
 function JsonView({ label, data }) {
   if (!data || Object.keys(data).length === 0) {
@@ -70,10 +71,7 @@ export default function AuditLogDetail() {
             <div className="flex justify-between">
               <dt className="text-slate-500">Waktu</dt>
               <dd className="text-slate-900">
-                {new Date(item.created_at).toLocaleString('id-ID', {
-                  weekday: 'long', day: '2-digit', month: 'long', year: 'numeric',
-                  hour: '2-digit', minute: '2-digit', second: '2-digit',
-                })}
+                {formatTanggalWaktu(item.created_at, { detik: true })}
               </dd>
             </div>
             <div className="flex justify-between">

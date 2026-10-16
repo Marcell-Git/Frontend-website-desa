@@ -20,6 +20,7 @@ import {
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
 import { useAuth } from '../../auth/AuthContext.jsx'
+import { formatTanggal } from '../../lib/tanggal.js'
 
 export default function UserList() {
   const { can } = useAuth()
@@ -201,7 +202,7 @@ export default function UserList() {
                       </td>
                       <td className="px-4 py-3 text-slate-600">
                         {item.last_login
-                          ? new Date(item.last_login).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
+                          ? formatTanggal(item.last_login)
                           : '-'}
                       </td>
                       <td className="px-4 py-3">

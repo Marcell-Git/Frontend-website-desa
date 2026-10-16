@@ -5,6 +5,7 @@ import { pengaduanApi } from '../../api/index.js'
 import { Alert, Badge, Button, Card, ConfirmModal, Field, PageHeader, Spinner, inputClass } from '../../components/ui.jsx'
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
+import { formatTanggal, formatTanggalWaktu } from '../../lib/tanggal.js'
 
 const statusColors = {
   menunggu: 'amber',
@@ -163,9 +164,7 @@ export default function PengaduanDetail() {
               <div>
                 <div className="text-xs text-slate-500">Tanggal</div>
                 <div className="mt-1 text-sm text-slate-900">
-                  {data?.created_at ? new Date(data.created_at).toLocaleDateString('id-ID', {
-                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-                  }) : '-'}
+                  {formatTanggal(data?.created_at)}
                 </div>
               </div>
             </div>
@@ -197,7 +196,7 @@ export default function PengaduanDetail() {
                           {statusLabels[r.status] || r.status}
                         </Badge>
                         <span className="text-xs text-slate-500">
-                          {new Date(r.created_at).toLocaleString('id-ID')}
+                          {formatTanggalWaktu(r.created_at)}
                         </span>
                       </div>
                       <span className="text-xs text-slate-600">{r.ditangani_oleh}</span>

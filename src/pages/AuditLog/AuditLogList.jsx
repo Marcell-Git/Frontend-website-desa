@@ -15,6 +15,7 @@ import {
   toolbarSearchClass,
 } from '../../components/ui.jsx'
 import { errorMessage } from '../../api/client.js'
+import { formatTanggalWaktu } from '../../lib/tanggal.js'
 
 const modulOptions = [
   '', 'Authentication', 'Backup Database', 'Jenis Iuran', 'Kategori Pengeluaran', 'Master Data',
@@ -154,10 +155,7 @@ export default function AuditLogList() {
                   {data.data.map((item) => (
                     <tr key={item.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
                       <td className="whitespace-nowrap px-4 py-3 text-slate-600">
-                        {new Date(item.created_at).toLocaleString('id-ID', {
-                          day: '2-digit', month: 'short', year: 'numeric',
-                          hour: '2-digit', minute: '2-digit',
-                        })}
+                        {formatTanggalWaktu(item.created_at)}
                       </td>
                       <td className="px-4 py-3 font-medium text-slate-900">
                         {item.nama_user || <span className="text-slate-400">-</span>}

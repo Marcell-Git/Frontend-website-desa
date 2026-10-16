@@ -1,3 +1,5 @@
+import { formatTanggal } from '../../lib/tanggal.js'
+
 export function rupiah(value) {
   return new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -8,14 +10,7 @@ export function rupiah(value) {
 }
 
 export function tanggalIndo(value) {
-  if (!value) return '-'
-  const d = new Date(value)
-  if (Number.isNaN(d.getTime())) return '-'
-  return new Intl.DateTimeFormat('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).format(d)
+  return formatTanggal(value)
 }
 
 export const NAMA_BULAN = [

@@ -7,13 +7,7 @@ import { ActionMenu, Button, Card, ConfirmModal, EmptyState, PageHeader, Paginat
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { useAuth } from '../../auth/AuthContext.jsx'
 import { errorMessage } from '../../api/client.js'
-
-function formatDate(value) {
-  if (!value) return '-'
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return '-'
-  return new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).format(date)
-}
+import { formatTanggal } from '../../lib/tanggal.js'
 
 export default function PeraturanList() {
   const { can } = useAuth()
@@ -69,7 +63,7 @@ export default function PeraturanList() {
                     <p className="font-medium text-slate-900">{item.judul}</p>
                     {item.nama_user && <p className="mt-0.5 text-xs text-slate-400">oleh {item.nama_user}</p>}
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{formatDate(item.created_at)}</td>
+                  <td className="px-4 py-3 text-slate-600">{formatTanggal(item.created_at)}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
                       <a href={assetUrl(item.file_pdf)} target="_blank" rel="noopener noreferrer" className={rowLinkClass}>Buka</a>

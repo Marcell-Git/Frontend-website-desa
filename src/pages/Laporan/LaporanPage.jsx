@@ -12,6 +12,7 @@ import {
 } from '../../components/ui.jsx'
 import { errorMessage } from '../../api/client.js'
 import { useAuth } from '../../auth/AuthContext.jsx'
+import { formatTanggal } from '../../lib/tanggal.js'
 
 const formatRupiah = (n) =>
   new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n)
@@ -128,7 +129,7 @@ export default function LaporanPage() {
         {data.map((it, i) => (
           <tr key={i} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
             <td className="px-4 py-3 text-slate-600">
-              {new Date(it.tanggal).toLocaleDateString('id-ID')}
+              {formatTanggal(it.tanggal)}
             </td>
             <td className="px-4 py-3 font-medium text-slate-900">{it.sumber_kas}</td>
             <td className="px-4 py-3 text-right font-medium text-emerald-700">
@@ -168,7 +169,7 @@ export default function LaporanPage() {
         {data.map((it, i) => (
           <tr key={i} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
             <td className="px-4 py-3 text-slate-600">
-              {new Date(it.tanggal).toLocaleDateString('id-ID')}
+              {formatTanggal(it.tanggal)}
             </td>
             <td className="px-4 py-3 font-medium text-slate-900">{it.jenis_iuran}</td>
             <td className="px-4 py-3 text-right font-medium text-emerald-700">
@@ -208,7 +209,7 @@ export default function LaporanPage() {
         {data.map((it, i) => (
           <tr key={i} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
             <td className="px-4 py-3 text-slate-600">
-              {new Date(it.tanggal).toLocaleDateString('id-ID')}
+              {formatTanggal(it.tanggal)}
             </td>
             <td className="px-4 py-3 font-medium text-slate-900">{it.kategori_pengeluaran}</td>
             <td className="px-4 py-3 text-right font-medium text-emerald-700">
@@ -272,7 +273,7 @@ export default function LaporanPage() {
                 <tbody>
                   {summaryKas.map((it, i) => (
                     <tr key={i} className="border-b border-slate-100 last:border-0">
-                      <td className="w-1/4 px-4 py-2 text-slate-600">{new Date(it.tanggal).toLocaleDateString('id-ID')}</td>
+                      <td className="w-1/4 px-4 py-2 text-slate-600">{formatTanggal(it.tanggal)}</td>
                       <td className="w-1/4 px-4 py-2 font-medium text-slate-900">{it.sumber_kas}</td>
                       <td className="w-1/4 px-4 py-2 text-right text-emerald-700">{formatRupiah(it.nominal)}</td>
                       <td className="w-1/4 px-4 py-2 text-slate-600">{it.keterangan || '-'}</td>
@@ -300,7 +301,7 @@ export default function LaporanPage() {
                 <tbody>
                   {summaryIuran.map((it, i) => (
                     <tr key={i} className="border-b border-slate-100 last:border-0">
-                      <td className="w-1/4 px-4 py-2 text-slate-600">{new Date(it.tanggal).toLocaleDateString('id-ID')}</td>
+                      <td className="w-1/4 px-4 py-2 text-slate-600">{formatTanggal(it.tanggal)}</td>
                       <td className="w-1/4 px-4 py-2 font-medium text-slate-900">{it.jenis_iuran}</td>
                       <td className="w-1/4 px-4 py-2 text-right text-emerald-700">{formatRupiah(it.nominal)}</td>
                       <td className="w-1/4 px-4 py-2 text-slate-600">{it.keterangan || '-'}</td>
@@ -328,7 +329,7 @@ export default function LaporanPage() {
                 <tbody>
                   {summaryPengeluaran.map((it, i) => (
                     <tr key={i} className="border-b border-slate-100 last:border-0">
-                      <td className="w-1/4 px-4 py-2 text-slate-600">{new Date(it.tanggal).toLocaleDateString('id-ID')}</td>
+                      <td className="w-1/4 px-4 py-2 text-slate-600">{formatTanggal(it.tanggal)}</td>
                       <td className="w-1/4 px-4 py-2 font-medium text-slate-900">{it.kategori_pengeluaran}</td>
                       <td className="w-1/4 px-4 py-2 text-right text-red-600">{formatRupiah(it.nominal)}</td>
                       <td className="w-1/4 px-4 py-2 text-slate-600">{it.keterangan || '-'}</td>

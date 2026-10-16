@@ -17,6 +17,7 @@ import {
   toolbarClass,
   toolbarSearchClass,
 } from '../../components/ui.jsx'
+import { formatTanggalWaktu } from '../../lib/tanggal.js'
 
 function formatSize(bytes) {
   if (bytes == null) return '-'
@@ -172,10 +173,7 @@ export default function BackupList() {
                     <tr key={item.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
                       <td className="px-4 py-3 font-medium text-slate-900">{item.nama_file}</td>
                       <td className="whitespace-nowrap px-4 py-3 text-slate-600">
-                        {new Date(item.tanggal_backup).toLocaleString('id-ID', {
-                          day: '2-digit', month: 'short', year: 'numeric',
-                          hour: '2-digit', minute: '2-digit',
-                        })}
+                        {formatTanggalWaktu(item.tanggal_backup)}
                       </td>
                       <td className="whitespace-nowrap px-4 py-3 text-slate-600">{formatSize(item.ukuran_file)}</td>
                       <td className="px-4 py-3 text-slate-600">{item.dibuat_oleh || '-'}</td>

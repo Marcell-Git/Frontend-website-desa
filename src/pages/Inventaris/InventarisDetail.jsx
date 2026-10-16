@@ -9,6 +9,7 @@ import { errorMessage } from '../../api/client.js'
 import { assetUrl } from '../../api/config.js'
 import { getContrastTextColor, NAMA_BULAN } from '../LandingPage/format.js'
 import { KONDISI_META } from './constants.js'
+import { formatTanggal } from '../../lib/tanggal.js'
 
 function periodeIndo(value) {
   if (!value || !/^\d{4}-\d{2}$/.test(value)) return value || null
@@ -132,9 +133,7 @@ export default function InventarisDetail() {
               <Field label="Periode Perolehan">{periodeIndo(data.periode_perolehan) || '-'}</Field>
               <Field label="Dibuat Oleh">{data.nama_user || '-'}</Field>
               <Field label="Terakhir Diperbarui">
-                {data.updated_at ? new Date(data.updated_at).toLocaleDateString('id-ID', {
-                  weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-                }) : '-'}
+                {formatTanggal(data.updated_at)}
               </Field>
             </div>
 
