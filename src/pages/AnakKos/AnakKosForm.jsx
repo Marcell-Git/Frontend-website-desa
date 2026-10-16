@@ -14,6 +14,7 @@ const emptyForm = {
   agama: '',
   pekerjaan: '',
   nomor_hp: '',
+  alamat_kos: '',
   alamat_asal: '',
   status: true,
 }
@@ -44,6 +45,7 @@ export default function AnakKosForm() {
           agama: a.agama,
           pekerjaan: a.pekerjaan || '',
           nomor_hp: a.nomor_hp || '',
+          alamat_kos: a.alamat_kos || '',
           alamat_asal: a.alamat_asal || '',
           status: a.status,
         }),
@@ -93,6 +95,7 @@ export default function AnakKosForm() {
           agama: form.agama,
           pekerjaan: form.pekerjaan || null,
           nomor_hp: form.nomor_hp || null,
+          alamat_kos: form.alamat_kos,
           alamat_asal: form.alamat_asal,
           status: form.status,
         })
@@ -107,6 +110,7 @@ export default function AnakKosForm() {
           agama: form.agama,
           pekerjaan: form.pekerjaan || null,
           nomor_hp: form.nomor_hp || null,
+          alamat_kos: form.alamat_kos,
           alamat_asal: form.alamat_asal,
           status: form.status,
         })
@@ -196,6 +200,17 @@ export default function AnakKosForm() {
             <Field label="No. HP" error={errors.nomor_hp}>
               <input className={inputClass} value={form.nomor_hp} onChange={set('nomor_hp')} />
             </Field>
+            <div className="sm:col-span-2">
+              <Field label="Alamat Kos / Kontrakan" required error={errors.alamat_kos}>
+                <textarea
+                  className={inputClass}
+                  value={form.alamat_kos}
+                  onChange={set('alamat_kos')}
+                  rows={2}
+                  placeholder="Alamat tempat tinggal di RT 26 (nama kos/pemilik, nomor rumah)"
+                />
+              </Field>
+            </div>
             <div className="sm:col-span-2">
               <Field label="Alamat Asal" required error={errors.alamat_asal}>
                 <textarea

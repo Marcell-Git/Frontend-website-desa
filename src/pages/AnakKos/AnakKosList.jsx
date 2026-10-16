@@ -113,7 +113,7 @@ export default function AnakKosList() {
           <form onSubmit={submitSearch} className={toolbarClass}>
             <input
               className={toolbarSearchClass}
-              placeholder="Cari NIK, nama, pekerjaan..."
+              placeholder="Cari NIK, nama, pekerjaan, alamat..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -158,13 +158,14 @@ export default function AnakKosList() {
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-slate-200 text-xs uppercase text-slate-500">
-                    <th className="px-4 py-3">Nama</th>
-                    <th className="px-4 py-3">NIK</th>
+                    <th className="px-4 py-3">Nama / NIK</th>
                     <th className="px-4 py-3">Tanggal Lahir</th>
                     <th className="px-4 py-3">Jenis Kelamin</th>
                     <th className="px-4 py-3">Agama</th>
                     <th className="px-4 py-3">Pekerjaan</th>
                     <th className="px-4 py-3">No. HP</th>
+                    <th className="px-4 py-3">Alamat Kos</th>
+                    <th className="px-4 py-3">Alamat Asal</th>
                     <th className="px-4 py-3">Status</th>
                     <th className="px-4 py-3 text-right">Aksi</th>
                   </tr>
@@ -172,13 +173,17 @@ export default function AnakKosList() {
                 <tbody>
                   {data.data.map((a) => (
                     <tr key={a.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                      <td className="px-4 py-3 font-medium text-slate-900">{a.nama_lengkap}</td>
-                      <td className="px-4 py-3 text-slate-600">{a.nik}</td>
+                      <td className="px-4 py-3">
+                        <div className="font-medium text-slate-900">{a.nama_lengkap}</div>
+                        <div className="text-xs text-slate-500">{a.nik}</div>
+                      </td>
                       <td className="px-4 py-3 text-slate-600">{formatTanggal(a.tanggal_lahir)}</td>
                       <td className="px-4 py-3 text-slate-600">{a.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</td>
                       <td className="px-4 py-3 text-slate-600">{a.agama}</td>
                       <td className="px-4 py-3 text-slate-600">{a.pekerjaan || '-'}</td>
                       <td className="px-4 py-3 text-slate-600">{a.nomor_hp || '-'}</td>
+                      <td className="min-w-48 px-4 py-3 text-slate-600">{a.alamat_kos || '-'}</td>
+                      <td className="min-w-48 px-4 py-3 text-slate-600">{a.alamat_asal || '-'}</td>
                       <td className="px-4 py-3">
                         {a.status ? <Badge color="green">Aktif</Badge> : <Badge color="red">Nonaktif</Badge>}
                       </td>

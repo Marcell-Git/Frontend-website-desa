@@ -10,6 +10,7 @@ const emptyForm = {
   agama: '',
   pekerjaan: '',
   nomor_hp: '',
+  alamat_kos: '',
   alamat_asal: '',
 }
 
@@ -41,6 +42,7 @@ export default function PendataanAnakKosPublik() {
     if (!form.nama_lengkap.trim()) errs.nama_lengkap = 'Nama lengkap wajib diisi'
     if (!form.tanggal_lahir) errs.tanggal_lahir = 'Tanggal lahir wajib diisi'
     if (!form.agama) errs.agama = 'Agama wajib diisi'
+    if (!form.alamat_kos.trim()) errs.alamat_kos = 'Alamat kos/kontrakan wajib diisi'
     if (!form.alamat_asal.trim()) errs.alamat_asal = 'Alamat asal wajib diisi'
     return errs
   }
@@ -66,9 +68,11 @@ export default function PendataanAnakKosPublik() {
         agama: form.agama,
         pekerjaan: form.pekerjaan.trim() || null,
         nomor_hp: form.nomor_hp.trim() || null,
+        alamat_kos: form.alamat_kos.trim(),
         alamat_asal: form.alamat_asal.trim(),
       })
       setSuccess(true)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err) {
       setErrors(fieldErrors(err))
       setError(errorMessage(err))
@@ -81,7 +85,7 @@ export default function PendataanAnakKosPublik() {
 
   if (success) {
     return (
-      <section className="mx-auto max-w-6xl px-4 pb-20">
+      <section className="mx-auto max-w-6xl px-4 py-16">
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-8 text-center sm:p-12">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-600 text-white">
             <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -254,6 +258,24 @@ export default function PendataanAnakKosPublik() {
                   placeholder="08xxxxxxxxxx"
                   className={inputCls}
                 />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label htmlFor="pendataan_alamat_kos" className="mb-1 block text-sm font-medium text-slate-700">
+                  Alamat Kos / Kontrakan <span className="ml-0.5 text-red-500">*</span>
+                </label>
+                <textarea
+                  id="pendataan_alamat_kos"
+                  name="alamat_kos"
+                  rows={2}
+                  value={form.alamat_kos}
+                  onChange={handleChange}
+                  placeholder="Alamat tempat tinggal di RT 26 (nama kos/pemilik, nomor rumah)"
+                  className={`${inputCls} resize-y`}
+                />
+                {fieldError('alamat_kos') && (
+                  <p className="mt-1 text-xs text-red-600">{fieldError('alamat_kos')}</p>
+                )}
               </div>
 
               <div className="sm:col-span-2">
