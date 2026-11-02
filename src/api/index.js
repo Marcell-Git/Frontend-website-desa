@@ -113,6 +113,11 @@ export const kasApi = {
   update: (id, body) =>
     client.put(`/kas/${id}`, body).then((r) => r.data.data),
   remove: (id) => client.delete(`/kas/${id}`).then((r) => r.data.data),
+  pengaturan: () => client.get('/kas/pengaturan').then((r) => r.data.data),
+  updatePengaturan: (body) => client.put('/kas/pengaturan', body).then((r) => r.data.data),
+  pembayaran: (params) => client.get('/kas/pembayaran', { params }).then((r) => r.data.data),
+  konfirmasi: (body) => client.post('/kas/pembayaran', body).then((r) => r.data.data),
+  batalKonfirmasi: (id) => client.delete(`/kas/pembayaran/${id}`).then((r) => r.data.data),
 }
 
 export const jenisIuranApi = {
@@ -134,6 +139,9 @@ export const iuranApi = {
   update: (id, body) =>
     client.put(`/iuran/${id}`, body).then((r) => r.data.data),
   remove: (id) => client.delete(`/iuran/${id}`).then((r) => r.data.data),
+  pembayaran: (params) => client.get('/iuran/pembayaran', { params }).then((r) => r.data.data),
+  konfirmasi: (body) => client.post('/iuran/pembayaran', body).then((r) => r.data.data),
+  batalKonfirmasi: (id) => client.delete(`/iuran/pembayaran/${id}`).then((r) => r.data.data),
 }
 
 export const kategoriPengeluaranApi = {

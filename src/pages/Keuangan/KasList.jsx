@@ -11,7 +11,10 @@ import {
   EmptyState,
   PageHeader,
   Pagination,
+  Field,
   TableSkeleton,
+  Tabs,
+  inputClass,
   toolbarClass,
   toolbarFieldClass,
   toolbarSearchClass,
@@ -20,6 +23,7 @@ import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
 import { useAuth } from '../../auth/AuthContext.jsx'
 import { formatTanggal } from '../../lib/tanggal.js'
+import PembayaranBulanan, { PeriodePicker, periodeSekarang } from '../../components/PembayaranBulanan.jsx'
 
 const formatRupiah = (n) =>
   new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n)
@@ -29,7 +33,131 @@ const months = [
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
 ]
 
+const tabs = [
+  { key: 'pembayaran', label: 'Pembayaran Bulanan' },
+  { key: 'transaksi', label: 'Semua Transaksi' },
+]
+
+function KasPembayaran() {
+  const { can } = useAuth()
+  const [periode, setPeriode] = useState(periodeSekarang())
+  const [nominal, setNominal] = useState(null)
+  const [editOpen, setEditOpen] = useState(false)
+  const [nominalInput, setNominalInput] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [reloadKey, setReloadKey] = useState(0)
+
+  useEffect(() => {
+    kasApi
+      .pengaturan()
+      .then((res) => setNominal(res?.nominal_bulanan ?? 0))
+      .catch((err) => toast.error(errorMessage(err)))
+  }, [])
+
+  const simpanNominal = async () => {
+    setSaving(true)
+    try {
+      await kasApi.updatePengaturan({ nominal_bulanan: Number(nominalInput) })
+      setNominal(Number(nominalInput))
+      setEditOpen(false)
+      setReloadKey((k) => k + 1)
+      toast.success('Nominal kas bulanan diperbarui')
+    } catch (err) {
+      toast.error(errorMessage(err))
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <PeriodePicker value={periode} onChange={setPeriode} />
+        {nominal !== null && (
+          <div className="flex items-center gap-3 rounded-full bg-white py-1.5 pl-4 pr-1.5 text-sm shadow-sm ring-1 ring-black/5">
+            <span className="text-slate-500">
+              Kas per KK / bulan: <span className="font-semibold text-slate-900">{formatRupiah(nominal)}</span>
+            </span>
+            {can('kas:update') && (
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => {
+                  setNominalInput(nominal ? String(nominal) : '')
+                  setEditOpen(true)
+                }}
+              >
+                Ubah
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {nominal === 0 && (
+        <div className="rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+          Nominal kas bulanan belum diatur. Atur nominal terlebih dahulu sebelum mengonfirmasi pembayaran.
+        </div>
+      )}
+
+      <PembayaranBulanan
+        key={reloadKey}
+        periode={periode}
+        namaTagihan="kas"
+        permissionPrefix="kas"
+        fetchList={kasApi.pembayaran}
+        konfirmasi={kasApi.konfirmasi}
+        batal={kasApi.batalKonfirmasi}
+      />
+
+      <ConfirmModal
+        open={editOpen}
+        title="Nominal Kas Bulanan"
+        message="Nominal ini ditagihkan ke setiap kepala keluarga tiap bulan. Pembayaran yang sudah dikonfirmasi tidak berubah."
+        onConfirm={simpanNominal}
+        onCancel={() => setEditOpen(false)}
+        loading={saving}
+        confirmText="Simpan"
+        danger={false}
+      >
+        <div className="mt-4">
+          <Field label="Nominal (Rp)" required>
+            <input
+              type="number"
+              min="1"
+              className={inputClass}
+              value={nominalInput}
+              onChange={(e) => setNominalInput(e.target.value)}
+              placeholder="Contoh: 10000"
+            />
+          </Field>
+        </div>
+      </ConfirmModal>
+    </div>
+  )
+}
+
 export default function KasList() {
+  const [tab, setTab] = useState('pembayaran')
+
+  return (
+    <div>
+      <PageHeader title="Rekap Kas" description="Pembayaran kas bulanan per kepala keluarga dan transaksi kas RT 26">
+        {tab === 'transaksi' && (
+          <PermissionGate permission="kas:create">
+            <Link to="/kas/baru">
+              <Button>Tambah Transaksi</Button>
+            </Link>
+          </PermissionGate>
+        )}
+      </PageHeader>
+      <Tabs tabs={tabs} value={tab} onChange={setTab} className="mb-4" />
+      {tab === 'pembayaran' ? <KasPembayaran /> : <KasTransaksi />}
+    </div>
+  )
+}
+
+function KasTransaksi() {
   const { can } = useAuth()
   const [data, setData] = useState({ data: [], pagination: {} })
   const [loading, setLoading] = useState(true)
@@ -80,14 +208,6 @@ export default function KasList() {
 
   return (
     <div>
-      <PageHeader title="Rekap Kas" description="Daftar transaksi kas RT 26">
-        <PermissionGate permission="kas:create">
-          <Link to="/kas/baru">
-            <Button>Tambah Transaksi</Button>
-          </Link>
-        </PermissionGate>
-      </PageHeader>
-
       <Card>
         <div className="border-b border-slate-100 p-4">
           <form onSubmit={submitSearch} className={toolbarClass}>
@@ -148,7 +268,14 @@ export default function KasList() {
                       <td className="px-4 py-3 text-slate-600">
                         {formatTanggal(item.tanggal)}
                       </td>
-                      <td className="px-4 py-3 font-medium text-slate-900">{item.sumber_kas}</td>
+                      <td className="px-4 py-3 font-medium text-slate-900">
+                        {item.sumber_kas}
+                        {item.dari_pembayaran && (
+                          <div className="mt-1">
+                            <Badge color="blue">Pembayaran bulanan</Badge>
+                          </div>
+                        )}
+                      </td>
                       <td className="max-w-[200px] truncate px-4 py-3 text-slate-600">
                         {item.keterangan || <span className="text-slate-400">-</span>}
                       </td>
@@ -160,8 +287,8 @@ export default function KasList() {
                         <div className="flex items-center justify-end gap-2">
                           <ActionMenu
                             items={[
-                              can('kas:update') && { label: 'Ubah', to: `/kas/${item.id}/edit` },
-                              can('kas:delete') && { label: 'Hapus', onClick: () => setToDelete(item), danger: true },
+                              can('kas:update') && !item.dari_pembayaran && { label: 'Ubah', to: `/kas/${item.id}/edit` },
+                              can('kas:delete') && !item.dari_pembayaran && { label: 'Hapus', onClick: () => setToDelete(item), danger: true },
                             ]}
                           />
                         </div>

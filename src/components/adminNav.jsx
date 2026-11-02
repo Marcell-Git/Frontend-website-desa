@@ -49,8 +49,8 @@ export const navGroups = [
     items: [
       { to: '/kas', label: 'Rekap Kas', permission: 'kas:view', icon: FaWallet },
       { to: '/iuran', label: 'Rekap Iuran', permission: 'iuran:view', icon: FaCoins },
-      { to: '/pengeluaran', label: 'Rekap Pengeluaran', permission: 'pengeluaran:view', icon: FaReceipt },
       { to: '/jenis-iuran', label: 'Jenis Iuran', permission: 'jenis-iuran:view', icon: FaTags },
+      { to: '/pengeluaran', label: 'Rekap Pengeluaran', permission: 'pengeluaran:view', icon: FaReceipt },
       { to: '/kategori-pengeluaran', label: 'Kategori Pengeluaran', permission: 'kategori-pengeluaran:view', icon: FaLayerGroup },
       { to: '/kelola-laporan', label: 'Laporan', permission: 'laporan:view', icon: FaFileLines },
     ],

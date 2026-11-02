@@ -17,6 +17,8 @@ import {
 import { PermissionGate } from '../../components/ProtectedRoute.jsx'
 import { errorMessage } from '../../api/client.js'
 import { useAuth } from '../../auth/AuthContext.jsx'
+import { formatRupiah } from '../../components/PembayaranBulanan.jsx'
+import { labelBerlaku } from './jenisIuran.js'
 
 export default function JenisIuranList() {
   const { can } = useAuth()
@@ -88,7 +90,7 @@ export default function JenisIuranList() {
 
         {error && <div className="p-4 text-sm text-red-600">{error}</div>}
         {loading ? (
-          <TableSkeleton cols={3} />
+          <TableSkeleton cols={5} />
         ) : data.data.length === 0 ? (
           <EmptyState message="Belum ada data jenis iuran." />
         ) : (
@@ -98,6 +100,8 @@ export default function JenisIuranList() {
                 <thead>
                   <tr className="border-b border-slate-200 text-xs uppercase text-slate-500">
                     <th className="px-4 py-3">Nama</th>
+                    <th className="px-4 py-3 text-right">Nominal / Bulan</th>
+                    <th className="px-4 py-3">Masa Berlaku</th>
                     <th className="px-4 py-3">Deskripsi</th>
                     <th className="px-4 py-3 text-right">Aksi</th>
                   </tr>
@@ -106,6 +110,10 @@ export default function JenisIuranList() {
                   {data.data.map((item) => (
                     <tr key={item.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
                       <td className="px-4 py-3 font-medium text-slate-900">{item.nama}</td>
+                      <td className="px-4 py-3 text-right font-medium text-slate-700">
+                        {item.nominal > 0 ? formatRupiah(item.nominal) : <span className="text-slate-400">Belum diatur</span>}
+                      </td>
+                      <td className="px-4 py-3 text-slate-600">{labelBerlaku(item)}</td>
                       <td className="max-w-[300px] truncate px-4 py-3 text-slate-600">
                         {item.deskripsi || <span className="text-slate-400">-</span>}
                       </td>
