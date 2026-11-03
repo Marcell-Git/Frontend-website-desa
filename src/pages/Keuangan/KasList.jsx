@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import { kasApi } from '../../api/index.js'
+import { exportApi, kasApi } from '../../api/index.js'
 import {
   ActionMenu,
   Badge,
@@ -108,6 +108,8 @@ function KasPembayaran() {
         fetchList={kasApi.pembayaran}
         konfirmasi={kasApi.konfirmasi}
         batal={kasApi.batalKonfirmasi}
+        exportPdf={() => exportApi.pembayaranKasPdf(periode)}
+        exportExcel={() => exportApi.pembayaranKasExcel(periode)}
       />
 
       <ConfirmModal

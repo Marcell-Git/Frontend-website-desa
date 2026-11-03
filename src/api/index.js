@@ -307,6 +307,14 @@ export const exportApi = {
     downloadBlob(buildExportUrl('/export/pengeluaran/pdf', params), `laporan-pengeluaran-${Date.now()}.pdf`),
   pengeluaranExcel: (params) =>
     downloadBlob(buildExportUrl('/export/pengeluaran/excel', params), `laporan-pengeluaran-${Date.now()}.xlsx`),
+  pembayaranKasPdf: (periode) =>
+    downloadBlob(`/export/kas/pembayaran/pdf?periode=${periode}`, `pembayaran-kas-${periode}.pdf`),
+  pembayaranKasExcel: (periode) =>
+    downloadBlob(`/export/kas/pembayaran/excel?periode=${periode}`, `pembayaran-kas-${periode}.xlsx`),
+  pembayaranIuranPdf: (periode, jenisIuranId) =>
+    downloadBlob(`/export/iuran/pembayaran/pdf?periode=${periode}&jenis_iuran_id=${jenisIuranId}`, `pembayaran-iuran-${periode}.pdf`),
+  pembayaranIuranExcel: (periode, jenisIuranId) =>
+    downloadBlob(`/export/iuran/pembayaran/excel?periode=${periode}&jenis_iuran_id=${jenisIuranId}`, `pembayaran-iuran-${periode}.xlsx`),
 }
 
 export const backupApi = {

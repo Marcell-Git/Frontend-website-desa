@@ -7,7 +7,6 @@ import {
   ConfirmModal,
   EmptyState,
   Field,
-  Pagination,
   TableSkeleton,
   inputClass,
   toolbarClass,
@@ -111,9 +110,10 @@ function StatCard({ label, value, hint, tone = 'slate' }) {
 
 /**
  * Daftar seluruh KK beserta status bayar untuk satu tagihan bulanan.
- * - fetchList(params) → { data, pagination, ringkasan }
+ * - fetchList(params) → { data, ringkasan }
  * - konfirmasi({ kartu_keluarga_id, periode, tanggal_bayar })
  * - batal(pembayaranId)
+ * - exportPdf() / exportExcel()
  */
 export default function PembayaranBulanan({
   periode,
@@ -122,16 +122,18 @@ export default function PembayaranBulanan({
   fetchList,
   konfirmasi,
   batal,
+  exportPdf,
+  exportExcel,
   onChanged,
 }) {
   const { can } = useAuth()
-  const [data, setData] = useState({ data: [], pagination: {}, ringkasan: null })
+  const [data, setData] = useState({ data: [], ringkasan: null })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
   const [appliedSearch, setAppliedSearch] = useState('')
   const [status, setStatus] = useState('')
-  const [page, setPage] = useState(1)
+  const [exporting, setExporting] = useState('')
   const [toConfirm, setToConfirm] = useState(null)
   const [tanggalBayar, setTanggalBayar] = useState(hariIni())
   const [nominalBayar, setNominalBayar] = useState('')
@@ -141,22 +143,29 @@ export default function PembayaranBulanan({
   const load = useCallback(() => {
     setLoading(true)
     setError('')
-    fetchList({ periode, page, limit: 10, status: status || undefined, search: appliedSearch || undefined })
-      .then((res) => setData({ data: res?.data ?? [], pagination: res?.pagination ?? {}, ringkasan: res?.ringkasan ?? null }))
+    fetchList({ periode, status: status || undefined, search: appliedSearch || undefined })
+      .then((res) => setData({ data: res?.data ?? [], ringkasan: res?.ringkasan ?? null }))
       .catch((err) => {
-        setData({ data: [], pagination: {}, ringkasan: null })
+        setData({ data: [], ringkasan: null })
         setError(errorMessage(err))
       })
       .finally(() => setLoading(false))
-  }, [fetchList, periode, page, status, appliedSearch])
+  }, [fetchList, periode, status, appliedSearch])
 
   useEffect(() => {
     load()
   }, [load])
 
-  useEffect(() => {
-    setPage(1)
-  }, [periode])
+  const handleExport = async (type, fn) => {
+    setExporting(type)
+    try {
+      await fn()
+    } catch (err) {
+      toast.error(errorMessage(err))
+    } finally {
+      setExporting('')
+    }
+  }
 
   const r = data.ringkasan
   const nominal = r?.nominal_tagihan ?? 0
@@ -242,7 +251,6 @@ export default function PembayaranBulanan({
             className={toolbarClass}
             onSubmit={(e) => {
               e.preventDefault()
-              setPage(1)
               setAppliedSearch(search)
             }}
           >
@@ -258,16 +266,23 @@ export default function PembayaranBulanan({
             <select
               className={toolbarFieldClass}
               value={status}
-              onChange={(e) => {
-                setStatus(e.target.value)
-                setPage(1)
-              }}
+              onChange={(e) => setStatus(e.target.value)}
               aria-label="Status pembayaran"
             >
               <option value="">Semua Status</option>
               <option value="belum">Belum Bayar</option>
               <option value="lunas">Sudah Bayar</option>
             </select>
+            {can(`${permissionPrefix}:export`) && (
+              <div className="flex gap-2 lg:ml-auto">
+                <Button type="button" variant="secondary" size="sm" disabled={!!exporting} onClick={() => handleExport('pdf', exportPdf)}>
+                  {exporting === 'pdf' ? 'Download...' : 'Export PDF'}
+                </Button>
+                <Button type="button" size="sm" disabled={!!exporting} onClick={() => handleExport('excel', exportExcel)}>
+                  {exporting === 'excel' ? 'Download...' : 'Export Excel'}
+                </Button>
+              </div>
+            )}
           </form>
         </div>
 
@@ -277,70 +292,67 @@ export default function PembayaranBulanan({
         ) : data.data.length === 0 ? (
           !error && <EmptyState message="Tidak ada kartu keluarga yang cocok." />
         ) : (
-          <>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b border-slate-200 text-xs uppercase text-slate-500">
-                    <th className="px-4 py-3">Kepala Keluarga</th>
-                    <th className="px-4 py-3">Alamat</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3 text-right">Nominal</th>
-                    <th className="px-4 py-3 text-right">Aksi</th>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-slate-200 text-xs uppercase text-slate-500">
+                  <th className="px-4 py-3">Kepala Keluarga</th>
+                  <th className="px-4 py-3">Alamat</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3 text-right">Nominal</th>
+                  <th className="px-4 py-3 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.data.map((item) => (
+                  <tr key={item.kartu_keluarga_id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-slate-900">{nama(item)}</div>
+                      <div className="text-xs text-slate-500">No. KK {item.nomor_kk}</div>
+                    </td>
+                    <td className="max-w-[220px] truncate px-4 py-3 text-slate-600">{item.alamat || '-'}</td>
+                    <td className="px-4 py-3">
+                      {item.lunas ? (
+                        <div className="flex flex-col items-start gap-1">
+                          <Badge color="green">Sudah bayar</Badge>
+                          <span className="text-xs text-slate-500">{formatTanggal(item.tanggal_bayar)}</span>
+                        </div>
+                      ) : (
+                        <Badge color="red">Belum bayar</Badge>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right font-medium text-slate-700">
+                      {item.lunas ? (
+                        <>
+                          {formatRupiah(item.nominal)}
+                          {item.nominal > item.nominal_tagihan && (
+                            <div className="text-xs font-normal text-emerald-700">
+                              lebih {formatRupiah(item.nominal - item.nominal_tagihan)}
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <span className="text-slate-400">-</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      {item.lunas
+                        ? can(`${permissionPrefix}:delete`) && (
+                            <Button size="sm" variant="ghost" onClick={() => setToCancel(item)}>
+                              Batalkan
+                            </Button>
+                          )
+                        : can(`${permissionPrefix}:create`) && (
+                            <Button size="sm" onClick={() => openConfirm(item)} disabled={nominal <= 0}>
+                              Konfirmasi
+                            </Button>
+                          )}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {data.data.map((item) => (
-                    <tr key={item.kartu_keluarga_id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                      <td className="px-4 py-3">
-                        <div className="font-medium text-slate-900">{nama(item)}</div>
-                        <div className="text-xs text-slate-500">No. KK {item.nomor_kk}</div>
-                      </td>
-                      <td className="max-w-[220px] truncate px-4 py-3 text-slate-600">{item.alamat || '-'}</td>
-                      <td className="px-4 py-3">
-                        {item.lunas ? (
-                          <div className="flex flex-col items-start gap-1">
-                            <Badge color="green">Sudah bayar</Badge>
-                            <span className="text-xs text-slate-500">{formatTanggal(item.tanggal_bayar)}</span>
-                          </div>
-                        ) : (
-                          <Badge color="red">Belum bayar</Badge>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-right font-medium text-slate-700">
-                        {item.lunas ? (
-                          <>
-                            {formatRupiah(item.nominal)}
-                            {item.nominal > item.nominal_tagihan && (
-                              <div className="text-xs font-normal text-emerald-700">
-                                lebih {formatRupiah(item.nominal - item.nominal_tagihan)}
-                              </div>
-                            )}
-                          </>
-                        ) : (
-                          <span className="text-slate-400">-</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        {item.lunas
-                          ? can(`${permissionPrefix}:delete`) && (
-                              <Button size="sm" variant="ghost" onClick={() => setToCancel(item)}>
-                                Batalkan
-                              </Button>
-                            )
-                          : can(`${permissionPrefix}:create`) && (
-                              <Button size="sm" onClick={() => openConfirm(item)} disabled={nominal <= 0}>
-                                Konfirmasi
-                              </Button>
-                            )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <Pagination page={data.pagination.page} totalPage={data.pagination.total_page} onChange={setPage} />
-          </>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </Card>
 

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import { iuranApi, jenisIuranApi } from '../../api/index.js'
+import { exportApi, iuranApi, jenisIuranApi } from '../../api/index.js'
 import {
   ActionMenu,
   Badge,
@@ -102,6 +102,8 @@ function IuranPembayaran() {
             fetchList={fetchList}
             konfirmasi={(body) => iuranApi.konfirmasi({ ...body, jenis_iuran_id: jenisId })}
             batal={iuranApi.batalKonfirmasi}
+            exportPdf={() => exportApi.pembayaranIuranPdf(periode, jenisId)}
+            exportExcel={() => exportApi.pembayaranIuranExcel(periode, jenisId)}
           />
         )
       )}
